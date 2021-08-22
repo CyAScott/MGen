@@ -140,19 +140,8 @@ namespace MGen.Builder
             return false;
         }
 
-        protected void AppendTypeConstraint(ITypeSymbol typeSymbol, NullableAnnotation nullableAnnotation)
-        {
-            String
-                .Append(' ')
-                .Append(typeSymbol.ContainingNamespace)
-                .Append('.')
-                .Append(typeSymbol.Name);
-
-            if (nullableAnnotation == NullableAnnotation.Annotated)
-            {
-                String.Append('?');
-            }
-        }
+        protected void AppendTypeConstraint(ITypeSymbol typeSymbol) =>
+            String.Append(' ').AppendType(typeSymbol);
 
         protected void AppendTypeConstraints(ITypeParameterSymbol typeParameter)
         {
@@ -163,7 +152,7 @@ namespace MGen.Builder
                     String.Append(',');
                 }
 
-                AppendTypeConstraint(typeParameter.ConstraintTypes[index], typeParameter.ConstraintNullableAnnotations[index]);
+                AppendTypeConstraint(typeParameter.ConstraintTypes[index]);
             }
         }
     }

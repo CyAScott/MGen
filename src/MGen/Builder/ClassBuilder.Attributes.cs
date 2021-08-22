@@ -32,10 +32,7 @@ namespace MGen.Builder
 
                 Append('[');
 
-                String
-                    .Append(attribute.AttributeClass.ContainingNamespace)
-                    .Append('.')
-                    .Append(attribute.AttributeClass.Name);
+                String.AppendType(attribute.AttributeClass);
 
                 if (attribute.ConstructorArguments.Length > 0 ||
                     attribute.NamedArguments.Length > 0)
@@ -119,7 +116,7 @@ namespace MGen.Builder
             switch (constant.Type?.TypeKind)
             {
                 case TypeKind.Enum:
-                    String.Append('(').Append(constant.Type.ContainingNamespace).Append('.').Append(constant.Type.Name).Append(')');
+                    String.Append('(').AppendType(constant.Type).Append(')');
 
                     if (constant.Value is int integer)
                     {
@@ -157,7 +154,7 @@ namespace MGen.Builder
 
             var values = constant.Values;
 
-            String.Append("new ").Append(elementType.ContainingNamespace).Append('.').Append(elementType.Name);
+            String.Append("new ").AppendType(elementType);
 
             if (values.Length == 0)
             {

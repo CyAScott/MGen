@@ -7,20 +7,6 @@ using System.Collections.Generic;
 
 namespace MGen.Collections
 {
-    /*
-     * 
-System.Collections.ObjectModel.KeyedCollection<TKey,TItem>
-System.Collections.ObjectModel.ReadOnlyDictionary<TKey, TValue>
-System.Collections.Specialized.ListDictionary
-System.Collections.Specialized.StringDictionaryWithComparer
-**System.Collections.CollectionBase
-**System.Collections.DictionaryBase
-**System.Collections.ReadOnlyCollectionBase
-System.Collections.Immutable.*
-System.Span<T>
-System.ReadOnlySpan<T>
-    Memory<T>, ReadOnlyMemory<T>, IMemoryOwner<T>
-     */
     public class CollectionGenerators
     {
         public CollectionGenerators(GeneratorExecutionContext context)
