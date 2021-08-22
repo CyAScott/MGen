@@ -47,7 +47,7 @@ namespace MGen.Builder.Writers
                 WriteGetSet(context, next);
             }
 
-            context.Builder.AppendLine("");
+            context.Builder.AppendLine();
         }
 
         public void WriteExplicitGetSet(PropertyBuilderContext context)
@@ -80,7 +80,7 @@ namespace MGen.Builder.Writers
 
             if (context.FieldName != null)
             {
-                context.Builder.AppendLine(builder => builder.Append("private ").AppendType(context.Primary.Type).Append(' ').Append(context.FieldName).Append(';'));
+                context.Builder.AppendLine(builder => builder.Append("private ").Append(context.HasSet ? "" : "readonly ").AppendType(context.Primary.Type).Append(' ').Append(context.FieldName).Append(';'));
             }
         }
 
