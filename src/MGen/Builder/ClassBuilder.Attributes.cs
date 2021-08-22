@@ -3,6 +3,14 @@ using System.Linq;
 
 namespace MGen.Builder
 {
+    public partial interface IClassBuilder
+    {
+        /// <summary>
+        /// Append the attributes for a symbol.
+        /// </summary>
+        IClassBuilder AppendAttributes(ISymbol symbol);
+    }
+
     partial class ClassBuilder
     {
         public IClassBuilder AppendAttributes(ISymbol symbol)
@@ -71,7 +79,7 @@ namespace MGen.Builder
             return this;
         }
 
-        void AppendConstant(Location? location, TypedConstant constant)
+        protected void AppendConstant(Location? location, TypedConstant constant)
         {
             if (constant.IsNull)
             {
@@ -143,7 +151,7 @@ namespace MGen.Builder
             }
         }
 
-        void AppendConstant(Location? location, TypedConstant constant, IArrayTypeSymbol arrayTypeSymbol)
+        protected void AppendConstant(Location? location, TypedConstant constant, IArrayTypeSymbol arrayTypeSymbol)
         {
             var elementType = arrayTypeSymbol.ElementType;
 
@@ -172,7 +180,7 @@ namespace MGen.Builder
             }
         }
 
-        void AppendConstant(string? value)
+        protected void AppendConstant(string? value)
         {
             if (value == null)
             {

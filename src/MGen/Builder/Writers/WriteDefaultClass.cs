@@ -1,7 +1,6 @@
 ﻿using MGen.Builder.BuilderContext;
 using Microsoft.CodeAnalysis;
 using System;
-using System.Collections.Immutable;
 
 namespace MGen.Builder.Writers
 {
@@ -22,46 +21,18 @@ namespace MGen.Builder.Writers
 
             var typeArguments = (context.Interface as INamedTypeSymbol)?.TypeArguments;
 
-            if (typeArguments != null && typeArguments.Value.Length > 0)
-            {
-                Write(context, typeArguments.Value);
-            }
+            context.Builder.AppendGenericNames(typeArguments);
 
             builder.Append(" : ").Append(context.Interface.Name);
 
-            if (typeArguments != null && typeArguments.Value.Length > 0)
-            {
-                Write(context, typeArguments.Value);
-
-                //todo: write generic constraints
-            }
-
-            context.Builder.AppendLine();
-
-            context.Builder.OpenBrace();
+            context.Builder
+                .AppendGenericNames(typeArguments).AppendLine()
+                .AppendGenericConstraints(typeArguments)
+                .OpenBrace();
 
             next();
 
             context.Builder.CloseBrace();
-        }
-
-        public void Write(ClassBuilderContext context, ImmutableArray<ITypeSymbol> genericArguments)
-        {
-            var builder = context.Builder.String;
-
-            builder.Append('<');
-
-            for (var index = 0; index < genericArguments.Length; index++)
-            {
-                if (index > 0)
-                {
-                    builder.Append(", ");
-                }
-
-                builder.Append(genericArguments[index]);
-            }
-
-            builder.Append('>');
         }
     }
 

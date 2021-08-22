@@ -32,16 +32,14 @@ namespace MGen.Builder.Writers
 
             context.Builder.String.Append(context.Method.Name);
 
-            //todo: append generic args
-
-            context.Builder.Append("(").AppendParameters(context.Method.Parameters).AppendLine(")");
-
-            //todo: append generic constraints
-
-            context.Builder.OpenBrace();
-            context.Builder.AppendLine("throw new System.NotImplementedException();");
-            context.Builder.CloseBrace();
-            context.Builder.AppendLine();
+            context.Builder
+                .AppendGenericNames(context.Method.TypeArguments)
+                .Append("(").AppendParameters(context.Method.Parameters).AppendLine(")")
+                .AppendGenericConstraints(context.Method.TypeArguments)
+                .OpenBrace()
+                .AppendLine("throw new System.NotImplementedException();")
+                .CloseBrace()
+                .AppendLine();
         }
     }
 }

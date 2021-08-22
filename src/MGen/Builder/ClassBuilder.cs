@@ -6,13 +6,8 @@ using System.Text;
 
 namespace MGen.Builder
 {
-    public interface IClassBuilder
+    public partial interface IClassBuilder
     {
-        /// <summary>
-        /// Appends a constructor to the class.
-        /// </summary>
-        IClassBuilder AppendConstructor(ClassBuilderContext context, ConstructorBuilder constructor);
-
         /// <summary>
         /// Appends some text to the class.
         /// If this is the first text for the line, it will be automatically indented.
@@ -30,11 +25,6 @@ namespace MGen.Builder
         /// If this is the first text for the line, it will be automatically indented.
         /// </summary>
         IClassBuilder Append(object? obj = null);
-
-        /// <summary>
-        /// Append the attributes for a symbol.
-        /// </summary>
-        IClassBuilder AppendAttributes(ISymbol symbol);
 
         /// <summary>
         /// If the line is not already indented then an indent will be appended.
@@ -65,11 +55,6 @@ namespace MGen.Builder
         IClassBuilder AppendParameters(ImmutableArray<IParameterSymbol> parameters);
 
         /// <summary>
-        /// Append the XML comments for a symbol.
-        /// </summary>
-        IClassBuilder AppendXmlComments(ISymbol symbol);
-
-        /// <summary>
         /// Opens a brace for a block of code.
         /// </summary>
         IClassBuilder CloseBrace(int repeat = 1);
@@ -88,11 +73,6 @@ namespace MGen.Builder
         /// The current number of indents.
         /// </summary>
         int IndentLevel { get; set; }
-
-        /// <summary>
-        /// Adds a nested class to implement.
-        /// </summary>
-        string Append(ClassBuilderContext context, ITypeSymbol @interface);
     }
 
     /// <summary>
@@ -222,31 +202,6 @@ namespace MGen.Builder
                 }
 
                 Append(parameters[index].Type).String.Append(" ").Append(parameters[index].Name);
-            }
-
-            return this;
-        }
-
-        public IClassBuilder AppendXmlComments(ISymbol symbol)
-        {
-            var comments = symbol.GetDocumentationCommentXml();
-            if (string.IsNullOrEmpty(comments))
-            {
-                return this;
-            }
-
-            var lines = comments?.Split('\n') ?? new string[0];
-
-            foreach (var rawLine in lines)
-            {
-                var line = rawLine.TrimStart().TrimEnd('\r');
-                if (!string.IsNullOrEmpty(line) &&
-                    !rawLine.StartsWith("<member name=") &&
-                    !rawLine.StartsWith("</member>"))
-                {
-                    Append("/// ");
-                    AppendLine(line);
-                }
             }
 
             return this;

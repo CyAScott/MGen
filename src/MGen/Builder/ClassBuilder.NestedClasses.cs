@@ -5,6 +5,14 @@ using System.Collections.Generic;
 
 namespace MGen.Builder
 {
+    public partial interface IClassBuilder
+    {
+        /// <summary>
+        /// Adds a nested class to implement.
+        /// </summary>
+        string Append(ClassBuilderContext context, ITypeSymbol @interface);
+    }
+
     partial class ClassBuilder
     {
         protected Dictionary<string, ITypeSymbol> NestedClasses { get; } = new();

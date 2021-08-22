@@ -3,6 +3,14 @@ using MGen.Builder.Writers;
 
 namespace MGen.Builder
 {
+    public partial interface IClassBuilder
+    {
+        /// <summary>
+        /// Appends a constructor to the class.
+        /// </summary>
+        IClassBuilder AppendConstructor(ClassBuilderContext context, ConstructorBuilder constructor);
+    }
+
     partial class ClassBuilder
     {
         protected IHandleBuildingConstructors[] ConstructorBuilders { get; } = new IHandleBuildingConstructors[]
