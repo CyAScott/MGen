@@ -17,8 +17,10 @@ namespace MGen.Builder.Writers
                     return;
                 }
 
-                context.Builder.AppendXmlComments(context.Member);
-                context.Builder.Append("public ");
+                context.Builder
+                    .AppendXmlComments(context.Member)
+                    .AppendAttributes(context.Member)
+                    .Append("public ");
             }
 
             context.Builder.Append(context.Method.ReturnType).String.Append(' ');

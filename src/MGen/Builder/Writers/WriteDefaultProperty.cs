@@ -14,6 +14,7 @@ namespace MGen.Builder.Writers
             {
                 context.Builder
                     .AppendXmlComments(context.Member)
+                    .AppendAttributes(context.Primary)
                     .Append("public ");
             }
             else if (context.Modifiers.Any(it => it.ValueText == "partial"))

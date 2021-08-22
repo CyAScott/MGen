@@ -11,8 +11,10 @@ namespace MGen.Builder.Writers
         {
             if (!context.Explicit)
             {
-                context.Builder.AppendXmlComments(context.Member);
-                context.Builder.Append("public ");
+                context.Builder
+                    .AppendXmlComments(context.Member)
+                    .AppendAttributes(context.Member)
+                    .Append("public ");
             }
 
             context.Builder.Append("event ").String.AppendType(context.Event.Type).Append(' ');

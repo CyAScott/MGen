@@ -32,6 +32,11 @@ namespace MGen.Builder
         IClassBuilder Append(object? obj = null);
 
         /// <summary>
+        /// Append the attributes for a symbol.
+        /// </summary>
+        IClassBuilder AppendAttributes(ISymbol symbol);
+
+        /// <summary>
         /// If the line is not already indented then an indent will be appended.
         /// </summary>
         IClassBuilder AppendIndent();
@@ -95,7 +100,11 @@ namespace MGen.Builder
     /// </summary>
     partial class ClassBuilder : IClassBuilder
     {
+        private GeneratorExecutionContext _generatorExecutionContext;
         private bool _lineStarted;
+
+        public ClassBuilder(GeneratorExecutionContext generatorExecutionContext) =>
+            _generatorExecutionContext = generatorExecutionContext;
 
         public IClassBuilder Append(Action<StringBuilder> builder)
         {

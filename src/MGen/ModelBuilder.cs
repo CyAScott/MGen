@@ -13,7 +13,7 @@ namespace MGen
     {
         public static IEnumerable<(string FullName, string Code)> GenerateCode(this List<InterfaceInfo> interfaces, GeneratorExecutionContext generatorExecutionContext)
         {
-            var builder = new ClassBuilder();
+            var builder = new ClassBuilder(generatorExecutionContext);
             var collectionGenerators = new CollectionGenerators(generatorExecutionContext);
 
             foreach (var @interface in interfaces)
