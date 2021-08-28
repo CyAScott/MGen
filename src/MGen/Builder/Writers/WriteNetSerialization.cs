@@ -11,18 +11,21 @@ namespace MGen.Builder.Writers
         public WriteNetSerialization()
         {
             DeserializeConstructor.XmlComments.Add("<summary>");
-            DeserializeConstructor.XmlComments.Add($"Deserializes the class.");
+            DeserializeConstructor.XmlComments.Add("Deserializes the class.");
             DeserializeConstructor.XmlComments.Add("</summary>");
             DeserializeConstructor.Modifier = "protected";
             DeserializeConstructor.Body.Add(ctx => ctx.Builder
                 .AppendLine("if (info == null) throw new System.ArgumentNullException(\"info\");")
-                .AppendLine("if (context == null) throw new System.ArgumentNullException(\"context\");")
-                .AppendLine());
+                .AppendLine()
+                .AppendLine("foreach (var it in info)")
+                .OpenBrace()
+                .AppendLine("switch (it.Name)")
+                .OpenBrace());
         }
 
         public ConstructorBuilder DeserializeConstructor { get; } = new();
 
-        public List<string> SerializerBody { get; } = new();
+        public List<Action<ClassBuilderContext>> SerializerBody { get; } = new();
 
         public bool SupportsSerialization { get; set; }
 
@@ -61,6 +64,8 @@ namespace MGen.Builder.Writers
 
                     SupportsSerialization = true;
 
+                    context.ClassAttributes.Add("System.Serializable");
+
                     break;
                 }
             }
@@ -72,18 +77,18 @@ namespace MGen.Builder.Writers
                 return;
             }
 
-            context.Builder.AppendConstructor(context, DeserializeConstructor);
+            DeserializeConstructor.Body.Add(ctx => ctx.Builder.CloseBrace(2));
 
+            context.Builder
+                .AppendConstructor(context, DeserializeConstructor)
+                .AppendLine("void System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)")
+                .OpenBrace()
+                .AppendLine("if (info == null) throw new System.ArgumentNullException(\"info\");")
+                .AppendLine();
 
-            context.Builder.AppendLine("void System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)");
-            context.Builder.OpenBrace();
-
-            context.Builder.AppendLine("if (info == null) throw new System.ArgumentNullException(\"info\");");
-            context.Builder.AppendLine("if (context == null) throw new System.ArgumentNullException(\"context\");");
-
-            foreach (var line in SerializerBody)
+            foreach (var action in SerializerBody)
             {
-                context.Builder.AppendLine(line);
+                action(context);
             }
 
             context.Builder.CloseBrace();
@@ -99,7 +104,7 @@ namespace MGen.Builder.Writers
                 context.Method.Name != "GetObjectData" ||
                 context.Method.ContainingSymbol.ContainingAssembly.Name != "System.Runtime" ||
                 context.Method.ContainingSymbol.ContainingNamespace.Name != "Serialization" ||
-                context.Method.ContainingSymbol.ContainingSymbol.Name != "ISerializable")
+                context.Method.ContainingSymbol.Name != "ISerializable")
             {
                 next();
             }
@@ -108,20 +113,103 @@ namespace MGen.Builder.Writers
 
     partial class WriteNetSerialization : IHandleBuildingProperties
     {
+        public void WriteSerializationForValue(PropertyBuilderContext context)
+        {
+            var name = context.Primary.Name;
+            var type = context.Primary.Type;
+            var typeString = type.ToCsString();
+
+            if (!type.IsSerializable())
+            {
+                context.GeneratorExecutionContext.ReportDiagnostic(Diagnostic.Create(
+                    new DiagnosticDescriptor(
+                        "MG0020",
+                        "Serialization Issue",
+                        "Some values will not be serialized.",
+                        "SerializationIssue",
+                        DiagnosticSeverity.Warning,
+                    true), context.Primary.Locations.FirstOrDefault()));
+                return;
+            }
+
+            if (type.IsValueType)
+            {
+                SerializerBody.Add(ctx => ctx.Builder.AppendLine(builder => builder
+                    .Append("info.AddValue(\"").Append(name).Append("\", ")
+                    .Append(context.FieldName).Append(", ")
+                    .Append("typeof(").Append(typeString).Append("));")));
+            }
+            else
+            {
+                SerializerBody.Add(ctx => ctx.Builder.AppendLine(builder => builder
+                    .Append("info.AddValue(\"").Append(name).Append("\", ")
+                    .Append(context.FieldName).Append(", ")
+                    .Append(context.FieldName).Append("?.GetType() ?? typeof(").Append(typeString).Append("));")));
+            }
+
+            DeserializeConstructor.Body.Add(ctx =>
+            {
+                ctx.Builder.AppendLine(builder => builder.Append("case \"").Append(name).Append("\":"));
+                ctx.Builder.IndentLevel++;
+                ctx.Builder.AppendLine(builder => builder.Append("this.").Append(context.FieldName).Append(" = (").Append(typeString).Append(")").Append("it.Value;"));
+                ctx.Builder.AppendLine("break;");
+                ctx.Builder.IndentLevel--;
+            });
+        }
+
         public void Handle(PropertyBuilderContext context, Action next)
         {
             next();
 
-            if (!SupportsSerialization || context.FieldName == null)
+            if (SupportsSerialization && context.FieldName != null)
             {
-                return;
+                WriteSerializationForValue(context);
+            }
+        }
+    }
+
+    static class NetSerializationExtensions
+    {
+        public static bool IsSerializable(this ITypeSymbol type)
+        {
+            if (type.IsValueType ||
+                type.SpecialType == SpecialType.System_String ||
+                type.SpecialType == SpecialType.System_Array)
+            {
+                return true;
             }
 
-            //todo: serialize / deserialize collections and arrays
+            if (type is IArrayTypeSymbol arrayType)
+            {
+                return arrayType.ElementType.IsSerializable();
+            }
 
-            DeserializeConstructor.Body.Add(ctx => ctx.Builder.AppendLine(builder => builder
-                .Append(context.FieldName).Append(" = (").AppendType(context.Primary.Type).Append(")info.GetValue(\"").Append(context.Primary.Name).Append("\", typeof(").AppendType(context.Primary.Type).Append("));")));
-            SerializerBody.Add($"info.AddValue(\"{context.Primary.Name}\", {context.FieldName}, typeof({context.Primary.Type}));");
+            var interfaces = type.AllInterfaces;
+
+            for (var index = 0; index < interfaces.Length; index++)
+            {
+                var @interface = interfaces[index];
+
+                if (@interface.ContainingAssembly.Name == "System.Runtime" &&
+                    @interface.ContainingNamespace.Name == "Serialization" &&
+                    @interface.Name == "ISerializable")
+                {
+                    return true;
+                }
+            }
+
+            foreach (var attribute in type.GetAttributes())
+            {
+                if (attribute.AttributeClass != null &&
+                    attribute.AttributeClass.ContainingAssembly.Name == "System.Runtime" &&
+                    attribute.AttributeClass.ContainingNamespace.Name == "System" &&
+                    attribute.AttributeClass.Name == "SerializableAttribute")
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

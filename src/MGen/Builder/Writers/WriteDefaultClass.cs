@@ -12,6 +12,11 @@ namespace MGen.Builder.Writers
         {
             context.Builder.AppendXmlComments(context.Interface);
 
+            foreach (var attribute in context.ClassAttributes)
+            {
+                context.Builder.AppendLine(builder => builder.Append('[').Append(attribute).Append(']'));
+            }
+
             var builder = context.Builder.AppendIndent().String;
             foreach (var modifier in context.Modifiers)
             {
@@ -31,8 +36,6 @@ namespace MGen.Builder.Writers
                 .OpenBrace();
 
             next();
-
-            context.Builder.CloseBrace();
         }
     }
 

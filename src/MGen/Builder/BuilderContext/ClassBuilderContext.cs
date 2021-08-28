@@ -1,6 +1,7 @@
 ﻿using MGen.Collections;
 using Microsoft.CodeAnalysis;
 using System;
+using System.Collections.Generic;
 
 namespace MGen.Builder.BuilderContext
 {
@@ -9,6 +10,7 @@ namespace MGen.Builder.BuilderContext
         internal ClassBuilderContext(ClassBuilderContext context)
         {
             Builder = context.Builder;
+            ClassAttributes = context.ClassAttributes;
             ClassName = context.ClassName;
             CollectionGenerators = context.CollectionGenerators;
             GenerateAttribute = context.GenerateAttribute;
@@ -61,6 +63,11 @@ namespace MGen.Builder.BuilderContext
         /// The interface that is being implemented.
         /// </summary>
         public ITypeSymbol Interface { get; }
+
+        /// <summary>
+        /// The list of attributes to add to the generated class.
+        /// </summary>
+        public List<string> ClassAttributes { get; } = new();
 
         /// <summary>
         /// The orignal declaration of the interface.

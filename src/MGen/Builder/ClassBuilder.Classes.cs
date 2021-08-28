@@ -9,10 +9,10 @@ namespace MGen.Builder
     {
         protected IHandleBuildingClasses[] ClassBuilders { get; } = new IHandleBuildingClasses[]
         {
-            WriteDefaultClass.Instance,
             WriteCloneSupport.Instance,
             WriteNetSerialization.Instance,
             WritePropertyBinders.Instance,
+            WriteDefaultClass.Instance,
             WriteReadOnlyConstructor.Instance,
             WriteDefaultConstructor.Instance
         };
@@ -37,7 +37,11 @@ namespace MGen.Builder
 
             if (ClassBuilders.Length > 0)
             {
+                var originalIndentLevel = IndentLevel;
+
                 AppendClass(context, @interface);
+
+                CloseBrace(IndentLevel - originalIndentLevel);
             }
 
             AppendNestedClasses(context);

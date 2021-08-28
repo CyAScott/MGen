@@ -21,10 +21,10 @@ namespace MGen.Builder
 
         protected IHandleBuildingNestedClasses[] NestedClassBuilders { get; } = new IHandleBuildingNestedClasses[]
         {
-            WriteDefaultClass.Instance,
             WriteCloneSupport.Instance,
             WriteNetSerialization.Instance,
             WritePropertyBinders.Instance,
+            WriteDefaultClass.Instance,
             WriteReadOnlyConstructor.Instance,
             WriteDefaultConstructor.Instance
         };
@@ -42,6 +42,9 @@ namespace MGen.Builder
                 if (WrittenClasses.Add(pair.Key))
                 {
                     AppendLine();
+
+                    var originalIndentLevel = IndentLevel;
+
                     AppendNestedClass(
                         new NestedClassBuilderContext(context, pair.Value, pair.Key),
                         new InterfaceInfo(
@@ -49,6 +52,8 @@ namespace MGen.Builder
                             pair.Value,
                             context.Modifiers,
                             pair.Value.GetMGenAttributes()));
+
+                    CloseBrace(IndentLevel - originalIndentLevel);
                 }
             }
         }
