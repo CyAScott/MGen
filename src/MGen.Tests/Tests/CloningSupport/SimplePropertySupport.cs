@@ -29,13 +29,13 @@ namespace MGen.Tests.CloningSupport
             var type = AssemblyScanner.FindImplementationFor<IHaveASimplePorperty>();
             Assert.IsNotNull(type);
 
-            var constructers = type.GetConstructors();
-            Assert.AreEqual(2, constructers.Length);
+            var constructors = type.GetConstructors();
+            Assert.AreEqual(2, constructors.Length);
 
-            var defaultCtor = constructers.SingleOrDefault(it => it.GetParameters().Length == 0);
+            var defaultCtor = constructors.SingleOrDefault(it => it.GetParameters().Length == 0);
             Assert.IsNotNull(defaultCtor);
 
-            var cloneCtor = constructers.SingleOrDefault(it => it.GetParameters().Length == 1);
+            var cloneCtor = constructors.SingleOrDefault(it => it.GetParameters().Length == 1);
             Assert.IsNotNull(cloneCtor);
 
             var parameters = cloneCtor.GetParameters();
