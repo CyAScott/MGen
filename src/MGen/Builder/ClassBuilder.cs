@@ -153,8 +153,7 @@ namespace MGen.Builder
 
             if (type != null)
             {
-                String.AppendType(type);
-                String.AppendLine();
+                String.AppendType(type).AppendLine();
             }
             else
             {

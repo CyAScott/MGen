@@ -158,20 +158,20 @@ namespace MGen.Builder.Writers
             
             if (type.IsValueType || type.SpecialType == SpecialType.System_String)
             {
-                source.Enumerate(variablePostFix, (value, indices) => target.Upsert(indices, value));
+                source.Enumerate(variablePostFix, (getElementValueExpression, indices) => target.Upsert(indices, getElementValueExpression));
             }
             else if (context.CollectionGenerators.TryToGet(context, type, "collection" + nextVariablePostFix, out var targetElement))
             {
-                source.Enumerate(variablePostFix, (value, indices) =>
+                source.Enumerate(variablePostFix, (getElementValueExpression, indices) =>
                 {
-                    context.CollectionGenerators.TryToGet(context, type, value, out var sourceElement);
+                    context.CollectionGenerators.TryToGet(context, type, getElementValueExpression, out var sourceElement);
 
                     CloneCollection(context, targetElement, sourceElement, nextVariablePostFix, () => target.Upsert(indices, targetElement.VariableName));
                 });
             }
             else if (type.IsCloneable())
             {
-                source.Enumerate(variablePostFix, (value, indices) => target.Upsert(indices, "(" + type.ToCsString() + ")((System.ICloneable)" + value + ")?.Clone()"));
+                source.Enumerate(variablePostFix, (getElementValueExpression, indices) => target.Upsert(indices, "(" + type.ToCsString() + ")((System.ICloneable)" + getElementValueExpression + ")?.Clone()"));
             }
             else
             {
@@ -183,7 +183,7 @@ namespace MGen.Builder.Writers
                         "CloningIssue",
                         DiagnosticSeverity.Warning,
                     true), context.Primary.Locations.FirstOrDefault()));
-                source.Enumerate(variablePostFix, (value, indices) => target.Upsert(indices, CloneObjectStatement(type,  value)));
+                source.Enumerate(variablePostFix, (getElementValueExpression, indices) => target.Upsert(indices, CloneObjectStatement(type,  getElementValueExpression)));
             }
 
             if (variablePostFix == 0)

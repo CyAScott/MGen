@@ -9,7 +9,7 @@ namespace MGen.Builder.BuilderContext
         /// <summary>
         /// The lines for the constructor body.
         /// </summary>
-        public List<Action<ConstructorBuilderContext>> Body { get; } = new List<Action<ConstructorBuilderContext>>();
+        public List<Action<ConstructorBuilderContext>> Body { get; } = new();
 
         /// <summary>
         /// The optional XML comments for the class constructor.
