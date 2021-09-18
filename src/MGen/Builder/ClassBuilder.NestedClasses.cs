@@ -11,6 +11,11 @@ namespace MGen.Builder
         /// Adds a nested class to implement.
         /// </summary>
         string Append(ClassBuilderContext context, ITypeSymbol @interface);
+
+        /// <summary>
+        /// Gets the class name for a nested class.
+        /// </summary>
+        bool TryGetNameForImplementation(ITypeSymbol @interface, out string? name);
     }
 
     partial class ClassBuilder
@@ -22,6 +27,7 @@ namespace MGen.Builder
         protected IHandleBuildingNestedClasses[] NestedClassBuilders { get; } = new IHandleBuildingNestedClasses[]
         {
             WriteCloneSupport.Instance,
+            WriteConversionSupport.Instance,
             WriteNetSerialization.Instance,
             WritePropertyBinders.Instance,
             WriteDefaultClass.Instance,
@@ -63,6 +69,21 @@ namespace MGen.Builder
             var className = context.GenerateAttribute.DestinationNamePattern.GetDestinationName(context.GenerateAttribute.SourceNamePattern ?? "", @interface) ?? "";
             NestedClasses[className] = @interface;
             return className;
+        }
+
+        public bool TryGetNameForImplementation(ITypeSymbol @interface, out string? name)
+        {
+            foreach (var pair in NestedClasses)
+            {
+                if (SymbolEqualityComparer.Default.Equals(@interface, pair.Value))
+                {
+                    name = pair.Key;
+                    return true;
+                }
+            }
+
+            name = null;
+            return false;
         }
 
         protected void AppendNestedClass(NestedClassBuilderContext context, InterfaceInfo @interface, int index = 0) =>

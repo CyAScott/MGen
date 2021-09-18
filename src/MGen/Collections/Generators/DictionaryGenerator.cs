@@ -27,9 +27,11 @@ namespace MGen.Collections.Generators
         public DictionaryGenerator(ClassBuilderContext context, ITypeSymbol type, ITypeSymbol implementation, string variableName)
             : base(context, type, implementation, variableName)
         {
+            KeyType = TypeArguments.Length > 0 ? TypeArguments[0] : GeneratorExecutionContext.Compilation.GetTypeByMetadataName("System.Object") ?? throw new InvalidOperationException("Unable to resolve System.Object");
             HasComparer = type.Name == "Dictionary";
         }
 
+        public override ITypeSymbol KeyType { get; }
         public override bool HasComparer { get; }
     }
 
@@ -39,9 +41,9 @@ namespace MGen.Collections.Generators
         {
             var keyValuePair = "_0_" + variablePostFix;
 
-            Builder.AppendLine(builder => builder.Append("foreach (var ").Append(keyValuePair).Append(" in ").Append(InternalName).Append(')'));
-
-            Builder.OpenBrace();
+            Builder
+                .AppendLine(builder => builder.Append("foreach (var ").Append(keyValuePair).Append(" in ").Append(InternalName).Append(')'))
+                .OpenBrace();
 
             body(this, keyValuePair + ".Value", keyValuePair + ".Key");
 

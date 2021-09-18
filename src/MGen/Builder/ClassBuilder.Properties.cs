@@ -8,6 +8,7 @@ namespace MGen.Builder
         protected IHandleBuildingProperties[] PropertyBuilders { get; } = new IHandleBuildingProperties[]
         {
             WriteCloneSupport.Instance,
+            WriteConversionSupport.Instance,
             WriteNetSerialization.Instance,
             WriteReadOnlyConstructor.Instance,
             WriteNestedClass.Instance,

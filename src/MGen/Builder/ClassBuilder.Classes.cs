@@ -10,6 +10,7 @@ namespace MGen.Builder
         protected IHandleBuildingClasses[] ClassBuilders { get; } = new IHandleBuildingClasses[]
         {
             WriteCloneSupport.Instance,
+            WriteConversionSupport.Instance,
             WriteNetSerialization.Instance,
             WritePropertyBinders.Instance,
             WriteDefaultClass.Instance,

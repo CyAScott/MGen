@@ -123,7 +123,7 @@ namespace MGen.Builder.Writers
             {
                 context.GeneratorExecutionContext.ReportDiagnostic(Diagnostic.Create(
                     new DiagnosticDescriptor(
-                        "MG0020",
+                        "MG0030",
                         "Serialization Issue",
                         "Some values will not be serialized.",
                         "SerializationIssue",

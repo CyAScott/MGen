@@ -8,6 +8,7 @@ namespace MGen.Builder
         protected IHandleBuildingMethods[] MethodBuilders { get; } = new IHandleBuildingMethods[]
         {
             WriteCloneSupport.Instance,
+            WriteConversionSupport.Instance,
             WriteNetSerialization.Instance,
             WriteDefaultMethod.Instance
         };

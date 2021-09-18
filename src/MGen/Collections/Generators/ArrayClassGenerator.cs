@@ -51,10 +51,10 @@ namespace MGen.Collections.Generators
             var indices = "_0_" +  variablePostFix;
             var value = "_1_" + variablePostFix;
 
-            Builder.AppendLine(builder => builder.Append("foreach (int[] ").Append(indices).Append(" in MGen.ArrayHelper.GetIndices(").Append(InternalName).Append("))"));
-            Builder.OpenBrace();
-
-            Builder.AppendLine(builder => builder.Append("var ").Append(value).Append(" = ").Append(InternalName).Append(".GetValue(").Append(indices).Append(");"));
+            Builder
+                .AppendLine(builder => builder.Append("foreach (int[] ").Append(indices).Append(" in MGen.ArrayHelper.GetIndices(").Append(InternalName).Append("))"))
+                .OpenBrace()
+                .AppendLine(builder => builder.Append("var ").Append(value).Append(" = ").Append(InternalName).Append(".GetValue(").Append(indices).Append(");"));
 
             body(this, value, indices);
 

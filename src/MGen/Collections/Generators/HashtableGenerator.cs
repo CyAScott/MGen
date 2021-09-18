@@ -67,11 +67,10 @@ namespace MGen.Collections.Generators
         {
             var keyValuePair = "_0_" + variablePostFix;
 
-            Builder.AppendLine(builder => builder.Append("var ").Append(keyValuePair).Append(" = ").Append(InternalName).Append(".GetEnumerator();"));
-
-            Builder.AppendLine(builder => builder.Append("while (").Append(keyValuePair).Append(".MoveNext())"));
-
-            Builder.OpenBrace();
+            Builder
+                .AppendLine(builder => builder.Append("var ").Append(keyValuePair).Append(" = ").Append(InternalName).Append(".GetEnumerator();"))
+                .AppendLine(builder => builder.Append("while (").Append(keyValuePair).Append(".MoveNext())"))
+                .OpenBrace();
 
             body(this, keyValuePair + ".Value", keyValuePair + ".Key");
 
@@ -83,7 +82,7 @@ namespace MGen.Collections.Generators
 
     partial class HashtableGenerator
     {
-        public override bool HasAdd => false;
+        public override bool HasAdd => true;
         public override bool HasKeys => true;
 
         public override CollectionGenerator Add(Action<CollectionGenerator> key, Action<CollectionGenerator> value)

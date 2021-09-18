@@ -5,13 +5,13 @@ namespace MGen
 {
     public static class AssemblyScanner
     {
-        public static Type FindType(Func<Type, bool> filter) =>
+        public static Type? FindType(Func<Type, bool> filter) =>
             typeof(AssemblyScanner)
                 .Assembly
                 .ExportedTypes
                 .SingleOrDefault(filter);
 
-        public static Type FindImplementationFor(Type interfaceType) =>
+        public static Type? FindImplementationFor(Type interfaceType) =>
             FindType(type =>
             {
                 if (!type.IsClass ||
@@ -37,6 +37,6 @@ namespace MGen
                 return interfaceGenericArgs.Length == typeArgs.Length;
             });
 
-        public static Type FindImplementationFor<TInterface>() => FindImplementationFor(typeof(TInterface));
+        public static Type? FindImplementationFor<TInterface>() => FindImplementationFor(typeof(TInterface));
     }
 }
