@@ -47,7 +47,7 @@ namespace MGen.Tests.SerializationSupport.DotNet
             var integer = instanceA.Integer = 3;
             var @string = instanceA.String = "Hello World";
 
-            var instanceB = instanceA.Clone();
+            var instanceB = instanceA.CloneViaDotNetSerialization();
             Assert.IsNotNull(instanceB);
             Assert.IsFalse(ReferenceEquals(instanceA, instanceB));
             Assert.AreEqual(dateTime, instanceB.DateTime);

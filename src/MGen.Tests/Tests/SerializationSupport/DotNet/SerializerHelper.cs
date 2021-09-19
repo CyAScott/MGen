@@ -10,7 +10,7 @@ namespace MGen.Tests.SerializationSupport.DotNet
     {
         static readonly BinaryFormatter formatter = new();
 
-        public static T Clone<T>(this T value)
+        public static T CloneViaDotNetSerialization<T>(this T value)
             where T : ISerializable
         {
             var stream = new MemoryStream();

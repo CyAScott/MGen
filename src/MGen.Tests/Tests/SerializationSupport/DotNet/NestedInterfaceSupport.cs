@@ -34,7 +34,7 @@ namespace MGen.Tests.SerializationSupport.DotNet
 
             var childId = child.Id = Guid.NewGuid();
 
-            var clone = instance.Clone();
+            var clone = instance.CloneViaDotNetSerialization();
 
             Assert.IsNotNull(clone);
             Assert.IsFalse(ReferenceEquals(instance.Child, clone.Child));

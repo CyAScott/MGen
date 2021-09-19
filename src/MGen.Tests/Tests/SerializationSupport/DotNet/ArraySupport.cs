@@ -8,10 +8,6 @@ namespace MGen.Tests.SerializationSupport.DotNet
     [Generate]
     public interface IArraySerializable : ISerializable
     {
-        Array Values { get; set; }
-        Array ValueArrays { get; set; }
-        Array ValueTable { get; set; }
-
         DateTime[] DateTimes { get; set; }
         DateTime[][] DateTimeArrays { get; set; }
         DateTime[,] DateTimeTable { get; set; }
@@ -19,10 +15,6 @@ namespace MGen.Tests.SerializationSupport.DotNet
         Guid[] Ids { get; set; }
         Guid[][] IdArrays { get; set; }
         Guid[,] IdTable { get; set; }
-
-        IArrayElement[] Array { get; set; }
-        IArrayElement[][] ArrayArrays { get; set; }
-        IArrayElement[,] Table { get; set; }
 
         SimpleEnumForAnArray[] SimpleEnums { get; set; }
         SimpleEnumForAnArray[][] SimpleEnumArrays { get; set; }
@@ -37,11 +29,6 @@ namespace MGen.Tests.SerializationSupport.DotNet
         string[,] StringTable { get; set; }
     }
 
-    public interface IArrayElement : ISerializable
-    {
-        Guid Id { get; set; }
-    }
-
     public enum SimpleEnumForAnArray
     {
         Zero = 0,
@@ -52,9 +39,6 @@ namespace MGen.Tests.SerializationSupport.DotNet
     {
         public void Init(IArraySerializable instance)
         {
-            instance.Values = new[] { DateTime.UtcNow };
-            instance.ValueArrays = new[] { new[] { DateTime.UtcNow } };
-            instance.ValueTable = new[,] { { DateTime.UtcNow } };
             instance.DateTimes = new[] { DateTime.UtcNow };
             instance.DateTimeArrays = new[] { new[] { DateTime.UtcNow } };
             instance.DateTimeTable = new[,] { { DateTime.UtcNow } };
@@ -92,16 +76,13 @@ namespace MGen.Tests.SerializationSupport.DotNet
 
             Init(instanceA);
 
-            var instanceB = instanceA.Clone();
+            var instanceB = instanceA.CloneViaDotNetSerialization();
             AreEqual(instanceA, instanceB);
         }
 
         public void AreEqual(IArraySerializable a, IArraySerializable b)
         {
             Assert.IsNotNull(b);
-            AreEqual(a.Values, b.Values);
-            AreEqual(a.ValueArrays, b.ValueArrays);
-            AreEqual(a.ValueTable, b.ValueTable);
             AreEqual(a.DateTimes, b.DateTimes);
             AreEqual(a.DateTimeArrays, b.DateTimeArrays);
             AreEqual(a.Ids, b.Ids);
@@ -112,37 +93,6 @@ namespace MGen.Tests.SerializationSupport.DotNet
             AreEqual(a.IntegerArrays, b.IntegerArrays);
             AreEqual(a.Strings, b.Strings);
             AreEqual(a.StringArrays, b.StringArrays);
-        }
-
-        public void AreEqual(Array a, Array b)
-        {
-            Assert.IsFalse(ReferenceEquals(a, b));
-            Assert.AreEqual(a?.Rank, b?.Rank);
-
-            if (a == null)
-            {
-                return;
-            }
-
-            var indcies = new int[a.Rank];
-
-            bool TryToScanDimension(int dimension)
-            {
-                if (dimension < indcies.Length)
-                {
-                    for (indcies[dimension] = a.GetLowerBound(dimension); indcies[dimension] < a.GetLength(dimension); indcies[dimension]++)
-                    {
-                        if (!TryToScanDimension(dimension + 1))
-                        {
-                            Assert.AreEqual(a.GetValue(indcies), b.GetValue(indcies));
-                        }
-                    }
-                    return true;
-                }
-                return false;
-            }
-
-            TryToScanDimension(0);
         }
 
         public void AreEqual<T>(T[] a, T[] b)
@@ -168,24 +118,6 @@ namespace MGen.Tests.SerializationSupport.DotNet
                 for (var index = 0; index < a.Length; index++)
                 {
                     AreEqual(a[index], b[index]);
-                }
-            }
-        }
-
-        public void AreEqual<T>(T[,] a, T[,] b)
-        {
-            Assert.IsFalse(ReferenceEquals(a, b));
-            Assert.AreEqual(a?.GetLength(0), b?.GetLength(0));
-            Assert.AreEqual(a?.GetLength(1), b?.GetLength(1));
-
-            if (a != null)
-            {
-                for (var index0 = 0; index0 < a.GetLength(0); index0++)
-                {
-                    for (var index1 = 0; index1 < a.GetLength(1); index1++)
-                    {
-                        Assert.AreEqual(a[index0, index1], b[index0, index1]);
-                    }
                 }
             }
         }
