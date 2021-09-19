@@ -5,7 +5,7 @@ namespace MGen.Builder
 {
     partial class ClassBuilder
     {
-        protected IHandleBuildingProperties[] PropertyBuilders { get; } = new IHandleBuildingProperties[]
+        protected IHandleBuildingProperties[] PropertyBuilders { get; } =
         {
             WriteCloneSupport.Instance,
             WriteConversionSupport.Instance,

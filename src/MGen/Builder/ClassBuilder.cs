@@ -1,5 +1,4 @@
-﻿using MGen.Builder.BuilderContext;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Immutable;
 using System.Text;
@@ -50,7 +49,7 @@ namespace MGen.Builder
         IClassBuilder AppendLine(object? obj = null);
 
         /// <summary>
-        /// Appends paramters to a method, indexer property, or constructor.
+        /// Appends parameters to a method, indexer property, or constructor.
         /// </summary>
         IClassBuilder AppendParameters(ImmutableArray<IParameterSymbol> parameters);
 
@@ -80,7 +79,7 @@ namespace MGen.Builder
     /// </summary>
     partial class ClassBuilder : IClassBuilder
     {
-        private GeneratorExecutionContext _generatorExecutionContext;
+        private readonly GeneratorExecutionContext _generatorExecutionContext;
         private bool _lineStarted;
 
         public ClassBuilder(GeneratorExecutionContext generatorExecutionContext) =>

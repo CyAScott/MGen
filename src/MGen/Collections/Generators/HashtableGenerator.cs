@@ -39,7 +39,7 @@ namespace MGen.Collections.Generators
         public override CollectionGenerator Create(CollectionGenerator? source = null)
         {
             var builder = Builder.AppendIndent().String
-                .Append("var ").Append(InternalName).Append(" = new ").Append(Implmentation.ContainingNamespace).Append('.').Append(Implmentation.Name);
+                .Append("var ").Append(InternalName).Append(" = new ").Append(Implementation.ContainingNamespace).Append('.').Append(Implementation.Name);
 
             if (TypeArguments.Length == 2)
             {

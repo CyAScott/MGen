@@ -5,7 +5,7 @@ namespace MGen.Builder.Writers
 {
     partial class WriteReadOnlyConstructor
     {
-        public ConstructorBuilder ReadOnlyConstructor { get; } = new ConstructorBuilder();
+        public ConstructorBuilder ReadOnlyConstructor { get; } = new();
 
         public static readonly WriteReadOnlyConstructor Instance = new();
     }
@@ -31,7 +31,7 @@ namespace MGen.Builder.Writers
 
             if (!string.IsNullOrEmpty(comments))
             {
-                var lines = comments?.Split('\n') ?? new string[0];
+                var lines = comments?.Split('\n') ?? Array.Empty<string>();
 
                 foreach (var rawLine in lines)
                 {

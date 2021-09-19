@@ -78,7 +78,7 @@ namespace MGen.Builder.Writers
             if (context.CollectionGenerators.TryToGet(context, type, "collection", out var target) &&
                 context.CollectionGenerators.TryToGet(context, type, "clone." + context.FieldName, out var source))
             {
-                CloneConstructor.Body.Add(ctx => CloneCollection(context, target, source));
+                CloneConstructor.Body.Add(_ => CloneCollection(context, target, source));
                 return true;
             }
 
@@ -210,10 +210,8 @@ namespace MGen.Builder.Writers
         {
             var interfaces = type.AllInterfaces;
 
-            for (var index = 0; index < interfaces.Length; index++)
+            foreach (var @interface in interfaces)
             {
-                var @interface = interfaces[index];
-
                 if (@interface.ContainingAssembly.Name == "System.Runtime" &&
                     @interface.ContainingNamespace.Name == "System" &&
                     @interface.Name == "ICloneable")

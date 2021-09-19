@@ -11,7 +11,7 @@ namespace MGen.Builder
         IClassBuilder AppendGenericNames(ImmutableArray<ITypeSymbol>? genericArguments);
 
         /// <summary>
-        /// Appends the generic contraints (i.e. where TKey : struct)
+        /// Appends the generic constraints (i.e. where TKey : struct)
         /// </summary>
         IClassBuilder AppendGenericConstraints(ImmutableArray<ITypeSymbol>? genericArguments);
     }
@@ -53,9 +53,9 @@ namespace MGen.Builder
 
             IndentLevel++;
 
-            for (var index = 0; index < genericArguments.Value.Length; index++)
+            foreach (var type in genericArguments.Value)
             {
-                if (genericArguments.Value[index] is ITypeParameterSymbol typeParameter)
+                if (type is ITypeParameterSymbol typeParameter)
                 {
                     AppendGenericConstraint(typeParameter);
                 }

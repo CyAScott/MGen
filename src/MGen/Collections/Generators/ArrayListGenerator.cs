@@ -5,9 +5,9 @@ using System;
 
 namespace MGen.Collections.Generators
 {
-    class ArrrayListDetector : CollectionTypeDetector
+    class ArrayListDetector : CollectionTypeDetector
     {
-        public ArrrayListDetector(GeneratorExecutionContext context) =>
+        public ArrayListDetector(GeneratorExecutionContext context) =>
             ArrayList = context.Compilation.GetTypeByMetadataName("System.Collections.ArrayList") ?? throw new InvalidOperationException("Unable to resolve System.Collections.ArrayList");
 
         public override CollectionGenerator Create(ClassBuilderContext context, ITypeSymbol type, string variableName) =>
@@ -53,7 +53,7 @@ namespace MGen.Collections.Generators
         {
             var builder = Builder.Append("var ").String.Append(InternalName)
                 .Append(" = new ")
-                .Append(Implmentation.ContainingNamespace).Append('.').Append(Implmentation.Name);
+                .Append(Implementation.ContainingNamespace).Append('.').Append(Implementation.Name);
 
             if (TypeArguments.Length > 0)
             {

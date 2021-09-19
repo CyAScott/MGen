@@ -3,7 +3,7 @@ using System;
 
 namespace MGen.Builder.Writers
 {
-    partial class WriteDefaultEvent : IHandleBuildingEvents
+    class WriteDefaultEvent : IHandleBuildingEvents
     {
         public static readonly WriteDefaultEvent Instance = new();
 

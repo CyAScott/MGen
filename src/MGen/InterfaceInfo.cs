@@ -10,7 +10,7 @@ namespace MGen
     /// <summary>
     /// Represents an interface with it's MGen attributes and members.
     /// </summary>
-    [DebuggerDisplay("{NamedTypeSymbol.ContainingNamespace.Name}.{NamedTypeSymbol.Name}")]
+    [DebuggerDisplay("{Type.ContainingNamespace.Name}.{Type.Name}")]
     class InterfaceInfo : Dictionary<string, InterfaceMemberInfo>
     {
         protected ITypeSymbol GetReturnType(ISymbol member)

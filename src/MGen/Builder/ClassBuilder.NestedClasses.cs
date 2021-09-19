@@ -22,7 +22,7 @@ namespace MGen.Builder
     {
         protected Dictionary<string, ITypeSymbol> NestedClasses { get; } = new();
 
-        protected HashSet<string> WrittenClasses { get; } = new HashSet<string>();
+        protected HashSet<string> WrittenClasses { get; } = new();
 
         protected IHandleBuildingNestedClasses[] NestedClassBuilders { get; } = new IHandleBuildingNestedClasses[]
         {
@@ -66,7 +66,7 @@ namespace MGen.Builder
 
         public string Append(ClassBuilderContext context, ITypeSymbol @interface)
         {
-            var className = context.GenerateAttribute.DestinationNamePattern.GetDestinationName(context.GenerateAttribute.SourceNamePattern ?? "", @interface) ?? "";
+            var className = context.GenerateAttribute.DestinationNamePattern.GetDestinationName(context.GenerateAttribute.SourceNamePattern, @interface);
             NestedClasses[className] = @interface;
             return className;
         }

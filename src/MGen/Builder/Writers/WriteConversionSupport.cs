@@ -9,7 +9,7 @@ namespace MGen.Builder.Writers
 {
     partial class WriteConversionSupport
     {
-        public ConstructorBuilder ConversionConstructor { get; } = new ConstructorBuilder
+        public ConstructorBuilder ConversionConstructor { get; } = new()
         {
             Modifier = "protected"
         };
@@ -388,9 +388,9 @@ namespace MGen.Builder.Writers
 
             var indentLevel = context.Builder.IndentLevel;
 
-            var key = GetElementKey(collection.KeyType, elementVarName);
+            var key = GetElementKey(keyType, elementVarName);
             var value = GetElementValue(context,
-                collection.ValueType ?? throw new InvalidOperationException(),
+                valueType,
                 elementVarName,
                 depth + 1);
 

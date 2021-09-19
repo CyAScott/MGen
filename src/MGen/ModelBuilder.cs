@@ -67,15 +67,10 @@ namespace MGen
                     baseType.BaseType.Name != "MGenAttribute"
                 ))
             {
-                baseType = baseType?.BaseType;
+                baseType = baseType.BaseType;
             }
 
-            if (baseType?.BaseType == null)
-            {
-                return false;
-            }
-
-            return true;
+            return baseType?.BaseType != null;
         }
 
         public static bool TryCreateInstance(AttributeData attribute, out MGenAttribute instance, out Type type)

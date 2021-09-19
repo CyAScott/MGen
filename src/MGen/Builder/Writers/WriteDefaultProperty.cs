@@ -6,7 +6,7 @@ namespace MGen.Builder.Writers
 {
     class WriteDefaultProperty : IHandleBuildingProperties
     {
-        public static WriteDefaultProperty Instance = new();
+        public static readonly WriteDefaultProperty Instance = new();
 
         public void Handle(PropertyBuilderContext context, Action next)
         {
@@ -59,14 +59,7 @@ namespace MGen.Builder.Writers
                 context.Builder.String.Append("get; ");
             }
 
-            if (context.HasSet)
-            {
-                context.Builder.AppendLine("set; }");
-            }
-            else
-            {
-                context.Builder.AppendLine("}");
-            }
+            context.Builder.AppendLine(context.HasSet ? "set; }" : "}");
         }
 
         public void WriteGetSet(PropertyBuilderContext context, Action next)
