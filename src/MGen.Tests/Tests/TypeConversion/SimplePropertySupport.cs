@@ -4,7 +4,7 @@ using System;
 namespace MGen.Tests.TypeConversion
 {
     [Generate]
-    public interface IHaveASimplePorperty : ISupportConversion
+    public interface IHaveASimpleProperty : ISupportConversion
     {
         DateTime DateTime { get; set; }
         Guid Id { get; set; }
@@ -20,7 +20,7 @@ namespace MGen.Tests.TypeConversion
     }
 
     [Generate]
-    public interface IHaveCommonPropertiesToSimplePorperty : ISupportConversion
+    public interface IHaveCommonPropertiesToSimpleProperty : ISupportConversion
     {
         DateTime DateTime { get; set; }
         Guid Id { get; set; }
@@ -30,7 +30,7 @@ namespace MGen.Tests.TypeConversion
     }
 
     [Generate]
-    public interface IHaveCommonPropertiesAsStringsToSimplePorperty : ISupportConversion
+    public interface IHaveCommonPropertiesAsStringsToSimpleProperty : ISupportConversion
     {
         string DateTime { get; set; }
         string Id { get; set; }
@@ -44,10 +44,10 @@ namespace MGen.Tests.TypeConversion
         [Test]
         public void Test()
         {
-            var type = AssemblyScanner.FindImplementationFor<IHaveASimplePorperty>();
+            var type = AssemblyScanner.FindImplementationFor<IHaveASimpleProperty>();
             Assert.IsNotNull(type);
 
-            var original = Activator.CreateInstance(type) as IHaveASimplePorperty;
+            var original = Activator.CreateInstance(type) as IHaveASimpleProperty;
             Assert.IsNotNull(original);
 
             var dateTime = original.DateTime = DateTime.UtcNow;
@@ -56,9 +56,9 @@ namespace MGen.Tests.TypeConversion
             var integer = original.Integer = 3;
             var @string = original.String = "Hello World";
 
-            var commonPropertiesType = AssemblyScanner.FindImplementationFor<IHaveCommonPropertiesToSimplePorperty>();
+            var commonPropertiesType = AssemblyScanner.FindImplementationFor<IHaveCommonPropertiesToSimpleProperty>();
             Assert.IsNotNull(commonPropertiesType);
-            var commonPropertiesInstance = Convert.ChangeType(original, commonPropertiesType) as IHaveCommonPropertiesToSimplePorperty;
+            var commonPropertiesInstance = Convert.ChangeType(original, commonPropertiesType) as IHaveCommonPropertiesToSimpleProperty;
             Assert.IsNotNull(commonPropertiesInstance);
             Assert.AreEqual(dateTime, commonPropertiesInstance.DateTime);
             Assert.AreEqual(id, commonPropertiesInstance.Id);
@@ -66,9 +66,9 @@ namespace MGen.Tests.TypeConversion
             Assert.AreEqual(integer, commonPropertiesInstance.Integer);
             Assert.AreEqual(@string, commonPropertiesInstance.String);
 
-            var commonPropertiesAsStringsType = AssemblyScanner.FindImplementationFor<IHaveCommonPropertiesAsStringsToSimplePorperty>();
+            var commonPropertiesAsStringsType = AssemblyScanner.FindImplementationFor<IHaveCommonPropertiesAsStringsToSimpleProperty>();
             Assert.IsNotNull(commonPropertiesAsStringsType);
-            var commonPropertiesAsStringsInstance = Convert.ChangeType(original, commonPropertiesAsStringsType) as IHaveCommonPropertiesAsStringsToSimplePorperty;
+            var commonPropertiesAsStringsInstance = Convert.ChangeType(original, commonPropertiesAsStringsType) as IHaveCommonPropertiesAsStringsToSimpleProperty;
             Assert.IsNotNull(commonPropertiesAsStringsInstance);
             Assert.AreEqual(dateTime.ToString(), commonPropertiesAsStringsInstance.DateTime);
             Assert.AreEqual(id.ToString(), commonPropertiesAsStringsInstance.Id);
@@ -76,7 +76,7 @@ namespace MGen.Tests.TypeConversion
             Assert.AreEqual(integer.ToString(), commonPropertiesAsStringsInstance.Integer);
             Assert.AreEqual(@string.ToString(), commonPropertiesAsStringsInstance.String);
 
-            var originalFromCopy = Convert.ChangeType(commonPropertiesAsStringsInstance, type) as IHaveASimplePorperty;
+            var originalFromCopy = Convert.ChangeType(commonPropertiesAsStringsInstance, type) as IHaveASimpleProperty;
             Assert.IsNotNull(originalFromCopy);
             Assert.AreEqual(dateTime.ToString(), originalFromCopy.DateTime.ToString());
             Assert.AreEqual(id, originalFromCopy.Id);

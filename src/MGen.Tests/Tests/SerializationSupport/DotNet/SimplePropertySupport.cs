@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace MGen.Tests.SerializationSupport.DotNet
 {
     [Generate]
-    public interface IHaveASimplePorperty : ISerializable
+    public interface IHaveASimpleProperty : ISerializable
     {
         DateTime DateTime { get; set; }
         Guid Id { get; set; }
@@ -26,7 +26,7 @@ namespace MGen.Tests.SerializationSupport.DotNet
         [Test]
         public void Test()
         {
-            var type = AssemblyScanner.FindImplementationFor<IHaveASimplePorperty>();
+            var type = AssemblyScanner.FindImplementationFor<IHaveASimpleProperty>();
             Assert.IsNotNull(type);
 
             var defaultCtor = type.GetConstructor(Type.EmptyTypes);
@@ -38,7 +38,7 @@ namespace MGen.Tests.SerializationSupport.DotNet
                 null);
             Assert.IsNotNull(serializationCtor);
 
-            var instanceA = defaultCtor.Invoke(new object[0]) as IHaveASimplePorperty;
+            var instanceA = defaultCtor.Invoke(new object[0]) as IHaveASimpleProperty;
             Assert.IsNotNull(instanceA);
 
             var dateTime = instanceA.DateTime = DateTime.UtcNow;

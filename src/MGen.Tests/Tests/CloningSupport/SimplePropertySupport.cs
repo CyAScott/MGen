@@ -6,7 +6,7 @@ using System.Linq;
 namespace MGen.Tests.CloningSupport
 {
     [Generate]
-    public interface IHaveASimplePorperty : ICloneable
+    public interface IHaveASimpleProperty : ICloneable
     {
         DateTime DateTime { get; set; }
         Guid Id { get; set; }
@@ -26,7 +26,7 @@ namespace MGen.Tests.CloningSupport
         [Test]
         public void Test()
         {
-            var type = AssemblyScanner.FindImplementationFor<IHaveASimplePorperty>();
+            var type = AssemblyScanner.FindImplementationFor<IHaveASimpleProperty>();
             Assert.IsNotNull(type);
 
             var constructors = type.GetConstructors();
@@ -43,7 +43,7 @@ namespace MGen.Tests.CloningSupport
 
             Assert.IsTrue(Attribute.IsDefined(parameters[0], typeof(NotNullAttribute)));
 
-            var instanceA = defaultCtor.Invoke(new object[0]) as IHaveASimplePorperty;
+            var instanceA = defaultCtor.Invoke(new object[0]) as IHaveASimpleProperty;
             Assert.IsNotNull(instanceA);
 
             var dateTime = instanceA.DateTime = DateTime.UtcNow;
@@ -52,7 +52,7 @@ namespace MGen.Tests.CloningSupport
             var integer = instanceA.Integer = 3;
             var @string = instanceA.String = "Hello World";
 
-            var instanceB = instanceA.Clone() as IHaveASimplePorperty;
+            var instanceB = instanceA.Clone() as IHaveASimpleProperty;
             Assert.IsNotNull(instanceB);
             Assert.IsFalse(ReferenceEquals(instanceA, instanceB));
             Assert.AreEqual(dateTime, instanceB.DateTime);
@@ -61,7 +61,7 @@ namespace MGen.Tests.CloningSupport
             Assert.AreEqual(integer, instanceB.Integer);
             Assert.AreEqual(@string, instanceB.String);
 
-            var instanceC = cloneCtor.Invoke(new object[] { instanceA }) as IHaveASimplePorperty;
+            var instanceC = cloneCtor.Invoke(new object[] { instanceA }) as IHaveASimpleProperty;
             Assert.IsNotNull(instanceC);
             Assert.AreEqual(dateTime, instanceC.DateTime);
             Assert.AreEqual(id, instanceC.Id);
