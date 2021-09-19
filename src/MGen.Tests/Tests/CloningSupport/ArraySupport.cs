@@ -92,7 +92,7 @@ namespace MGen.Tests.CloningSupport
 
             Assert.IsTrue(Attribute.IsDefined(parameters[0], typeof(NotNullAttribute)));
 
-            var instanceA = defaultCtor.Invoke(new object[0]) as IArrayClone;
+            var instanceA = defaultCtor.Invoke(Array.Empty<object>()) as IArrayClone;
             Assert.IsNotNull(instanceA);
 
             Init(instanceA);
