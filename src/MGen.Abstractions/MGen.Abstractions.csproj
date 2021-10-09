@@ -1,10 +1,44 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <LangVersion>preview</LangVersion>
-    <Nullable>enable</Nullable>
-    <RootNamespace>MGen</RootNamespace>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<LangVersion>preview</LangVersion>
+		<Nullable>enable</Nullable>
+		<RootNamespace>MGen</RootNamespace>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
 
+	<PropertyGroup>
+		<Copyright>Copyright © 2021</Copyright>
+		<Description>Abstractions used for generating class files from interfaces.</Description>
+		<IncludeSymbols>true</IncludeSymbols>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageId>MGen.Abstractions</PackageId>
+		<PackageProjectUrl>https://github.com/CyAScott/MGen</PackageProjectUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageTags>Models Classes Source Generators</PackageTags>
+		<PackageVersion>0.0.1-beta</PackageVersion>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
+		<Title>MGen Abstractions</Title>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>bin\Debug\MGen.Abstractions.xml</DocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DocumentationFile>bin\Release\MGen.Abstractions.xml</DocumentationFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="bin\Release\MGen.Abstractions.xml">
+			<PackagePath>content\docs</PackagePath>
+			<Pack>true</Pack>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 </Project>

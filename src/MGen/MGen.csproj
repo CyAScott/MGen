@@ -1,18 +1,52 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>preview</LangVersion>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<LangVersion>preview</LangVersion>
+		<NoWarn>CS1591,CS0419</NoWarn>
+		<Nullable>enable</Nullable>
+		<RootNamespace>MGen</RootNamespace>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
-  </ItemGroup>
+	<PropertyGroup>
+		<Copyright>Copyright © 2021</Copyright>
+		<Description>A nuget that generates class files from interfaces.</Description>
+		<IncludeSymbols>true</IncludeSymbols>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageId>MGen</PackageId>
+		<PackageProjectUrl>https://github.com/CyAScott/MGen</PackageProjectUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageTags>Models Classes Source Generators</PackageTags>
+		<PackageVersion>0.0.1-beta</PackageVersion>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
+		<Title>MGen</Title>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MGen.Abstractions\MGen.Abstractions.csproj" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>bin\Debug\MGen.xml</DocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DocumentationFile>bin\Release\MGen.xml</DocumentationFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="bin\Release\MGen.xml">
+			<PackagePath>content\docs</PackagePath>
+			<Pack>true</Pack>
+		</None>
+	</ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+         <ProjectReference Include="..\MGen.Abstractions\MGen.Abstractions.csproj" />
+    </ItemGroup>
 
 </Project>

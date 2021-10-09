@@ -4,6 +4,9 @@ using System.Collections.Specialized;
 
 namespace MGen
 {
+    /// <summary>
+    /// Exention methods for collections.
+    /// </summary>
     public static class CollectionHelper
     {
         static IEnumerable<KeyValuePair<object?, object?>> AsEnumerable(this IDictionaryEnumerator dictionaryEnumerator)
@@ -30,6 +33,9 @@ namespace MGen
             }
         }
 
+        /// <summary>
+        /// Attempts to get an <see cref="IEnumerable"/> from an object that might be a collection.
+        /// </summary>
         public static bool TryToGetEnumerable(this object collection, out IEnumerable<KeyValuePair<object?, object?>>? enumerable)
         {
             if (collection is NameValueCollection nameValueCollection)

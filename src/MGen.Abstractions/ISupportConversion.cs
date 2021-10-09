@@ -2,6 +2,9 @@
 
 namespace MGen
 {
+    /// <summary>
+    /// Adds type conversion support to a class.
+    /// </summary>
     public interface ISupportConversion : IConvertible
     {
         /// <summary>
