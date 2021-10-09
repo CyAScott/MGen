@@ -14,7 +14,7 @@ namespace MGen.Builder.BuilderContext
         /// <summary>
         /// The optional XML comments for the class constructor.
         /// </summary>
-        public List<string> XmlComments { get; } = new List<string>();
+        public List<string> XmlComments { get; } = new();
 
         /// <summary>
         /// The constructor modifier (i.e. public, internal, etc.)

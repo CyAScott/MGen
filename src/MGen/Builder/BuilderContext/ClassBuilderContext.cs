@@ -70,7 +70,7 @@ namespace MGen.Builder.BuilderContext
         public List<string> ClassAttributes { get; } = new();
 
         /// <summary>
-        /// The orignal declaration of the interface.
+        /// The original declaration of the interface.
         /// </summary>
         public SyntaxTokenList Modifiers { get; }
 

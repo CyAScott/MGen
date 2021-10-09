@@ -38,7 +38,7 @@ namespace MGen.Tests.SerializationSupport.DotNet
                 null);
             Assert.IsNotNull(serializationCtor);
 
-            var instanceA = defaultCtor.Invoke(new object[0]) as IHaveASimpleProperty;
+            var instanceA = defaultCtor.Invoke(Array.Empty<object>()) as IHaveASimpleProperty;
             Assert.IsNotNull(instanceA);
 
             var dateTime = instanceA.DateTime = DateTime.UtcNow;

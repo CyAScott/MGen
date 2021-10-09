@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+using Microsoft.CodeAnalysis;
 
 namespace MGen.Builder
 {
@@ -20,7 +21,7 @@ namespace MGen.Builder
                 return this;
             }
 
-            var lines = comments?.Split('\n') ?? new string[0];
+            var lines = comments?.Split('\n') ?? Array.Empty<string>();
 
             foreach (var rawLine in lines)
             {

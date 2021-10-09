@@ -8,7 +8,7 @@ namespace MGen.Builder
     {
         protected void AppendClassMembers(ClassBuilderContext context, InterfaceInfo @interface)
         {
-            var membrNames = new HashSet<string>();
+            var memberNames = new HashSet<string>();
 
             foreach (var memberInfo in @interface.Values)
             {
@@ -24,7 +24,7 @@ namespace MGen.Builder
                     {
                         var symbol = symbols[index];
 
-                        membrNames.Add(symbol.Name);
+                        memberNames.Add(symbol.Name);
 
                         switch (symbol)
                         {
@@ -44,12 +44,12 @@ namespace MGen.Builder
                                     if (!primaryProperty.IsIndexer)
                                     {
                                         fieldName = "_" + primaryProperty.Name;
-                                        while (membrNames.Contains(fieldName))
+                                        while (memberNames.Contains(fieldName))
                                         {
                                             fieldName = "_" + fieldName;
                                         }
 
-                                        membrNames.Add(fieldName);
+                                        memberNames.Add(fieldName);
                                     }
 
                                     AppendProperty(new PropertyBuilderContext(context, primaryProperty, @explicit, secondaryProperty, fieldName));

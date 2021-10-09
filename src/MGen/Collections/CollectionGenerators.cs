@@ -11,7 +11,7 @@ namespace MGen.Collections
     {
         public CollectionGenerators(GeneratorExecutionContext context)
         {
-            void add(CollectionTypeDetector generator)
+            void Add(CollectionTypeDetector generator)
             {
                 foreach (var fullName in generator.Types)
                 {
@@ -23,29 +23,29 @@ namespace MGen.Collections
                 }
             }
 
-            add(new ArrayClassDetector());
-            add(new ArrrayListDetector(context));
-            add(new BitArrayDetector());
-            add(new BlockingCollectionDetector());
-            add(new ConcurrentBagDetector());
-            add(new ConcurrentDictionaryDetector());
-            add(new DictionaryDetector(context));
-            add(new HashtableDetector(context));
-            add(new LinkedListDetector());
-            add(new ListDetector(context));
-            add(new NameValueCollectionDetector(context));
-            add(new StringCollectionDetector());
-            add(new ObservableCollectionDetector());
-            add(new OrderedDictionaryDetector(context));
-            add(new ReadOnlyObservableCollectionDetector(context));
-            add(new QueueDetector());
-            add(new SetDetector(context));
-            add(new SortedDictionaryDetector());
-            add(new SortedListDetector());
-            add(new SortedSetDetector());
-            add(new StackDetector());
-            add(new StringCollectionDetector());
-            add(new StringDictionaryDetector());
+            Add(new ArrayClassDetector());
+            Add(new ArrayListDetector(context));
+            Add(new BitArrayDetector());
+            Add(new BlockingCollectionDetector());
+            Add(new ConcurrentBagDetector());
+            Add(new ConcurrentDictionaryDetector());
+            Add(new DictionaryDetector(context));
+            Add(new HashtableDetector(context));
+            Add(new LinkedListDetector());
+            Add(new ListDetector(context));
+            Add(new NameValueCollectionDetector(context));
+            Add(new StringCollectionDetector());
+            Add(new ObservableCollectionDetector());
+            Add(new OrderedDictionaryDetector(context));
+            Add(new ReadOnlyObservableCollectionDetector(context));
+            Add(new QueueDetector());
+            Add(new SetDetector(context));
+            Add(new SortedDictionaryDetector());
+            Add(new SortedListDetector());
+            Add(new SortedSetDetector());
+            Add(new StackDetector());
+            Add(new StringCollectionDetector());
+            Add(new StringDictionaryDetector());
         }
 
         public Dictionary<string, CollectionTypeDetector> Generators { get; } = new();

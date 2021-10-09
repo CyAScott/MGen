@@ -43,7 +43,7 @@ namespace MGen.Builder.Writers
 
             var constructor = context.Constructor;
 
-            foreach (var line in constructor.XmlComments.SkipWhile(line => string.IsNullOrEmpty(line)))
+            foreach (var line in constructor.XmlComments.SkipWhile(string.IsNullOrEmpty))
             {
                 context.Builder.AppendLine(builder => builder.Append("/// ").Append(line));
             }

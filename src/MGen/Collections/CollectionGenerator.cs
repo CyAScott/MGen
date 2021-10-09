@@ -7,17 +7,17 @@ namespace MGen.Collections
 {
     public abstract partial class CollectionGenerator : ClassBuilderContext
     {
-        protected CollectionGenerator(ClassBuilderContext context, ITypeSymbol type, ITypeSymbol implmentation, string variableName)
+        protected CollectionGenerator(ClassBuilderContext context, ITypeSymbol type, ITypeSymbol implementation, string variableName)
             : base(context)
         {
-            Implmentation = implmentation;
+            Implementation = implementation;
             Type = type;
             VariableName = variableName;
 
             if (type is IArrayTypeSymbol arrayTypeSymbol)
             {
                 TypeArguments = new ImmutableArray<ITypeSymbol>();
-                rank = arrayTypeSymbol.Rank;
+                _rank = arrayTypeSymbol.Rank;
                 KeyType = null;
                 ValueType = arrayTypeSymbol.ElementType;
             }
@@ -52,10 +52,10 @@ namespace MGen.Collections
         public ImmutableArray<ITypeSymbol> TypeArguments { get; }
 
         /// <summary>
-        /// The implmentation of <see cref="Type"/>.
-        /// If <see cref="Type"/> is IDictionary&lt;string, int&gt; then the implmentation would Dictionary&lt;string, int&gt;
+        /// The implementation of <see cref="Type"/>.
+        /// If <see cref="Type"/> is IDictionary&lt;string, int&gt; then the implementation would Dictionary&lt;string, int&gt;
         /// </summary>
-        public virtual ITypeSymbol Implmentation { get; }
+        public virtual ITypeSymbol Implementation { get; }
 
         /// <summary>
         /// The type for the key for the collection.
@@ -87,7 +87,7 @@ namespace MGen.Collections
     partial class CollectionGenerator
     {
         /// <summary>
-        /// Generates code that creates an instance of <see cref="Implmentation"/>.
+        /// Generates code that creates an instance of <see cref="Implementation"/>.
         /// </summary>
         /// <param name="source">
         /// The original copy of this type.
@@ -102,7 +102,7 @@ namespace MGen.Collections
             Enumerate(variablePostFix, (_, value, indices) => body(value, indices));
 
         public CollectionGenerator Enumerate(int variablePostFix, Action<string[]> body) =>
-            Enumerate(variablePostFix, (_, __, indices) => body(indices));
+            Enumerate(variablePostFix, (_, _, indices) => body(indices));
 
         /// <summary>
         /// Generates a loop for enumerating over the structure.
@@ -121,7 +121,7 @@ namespace MGen.Collections
         /// <summary>
         /// True if the structure has an add method.
         /// </summary>
-        public virtual bool HasAdd { get; }
+        public virtual bool HasAdd => false;
 
         /// <summary>
         /// Generates code of adding a value to this structure.
@@ -172,7 +172,7 @@ namespace MGen.Collections
         /// <summary>
         /// True if the structure has a comparer property.
         /// </summary>
-        public virtual bool HasComparer { get; }
+        public virtual bool HasComparer => false;
 
         /// <summary>
         /// Generates code getting the comparer property.
@@ -193,7 +193,7 @@ namespace MGen.Collections
         /// <summary>
         /// True if the structure has a get method.
         /// </summary>
-        public virtual bool HasGet { get; }
+        public virtual bool HasGet => false;
 
         /// <summary>
         /// Generates code of getting a value from this structure.
@@ -214,7 +214,7 @@ namespace MGen.Collections
         /// <summary>
         /// True if the structure has a key like a dictionary does.
         /// </summary>
-        public virtual bool HasKeys { get; }
+        public virtual bool HasKeys => false;
 
         /// <summary>
         /// Generates code of adding a key and value to this structure.
@@ -241,13 +241,13 @@ namespace MGen.Collections
         /// <summary>
         /// True if the structure has a length value.
         /// </summary>
-        public virtual bool HasLength { get; }
+        public virtual bool HasLength => false;
 
         /// <summary>
         /// The number of lengths in the array.
         /// </summary>
-        public virtual int Rank => HasLength ? rank : 0;
-        private readonly int rank;
+        public virtual int Rank => HasLength ? _rank : 0;
+        private readonly int _rank;
 
         /// <summary>
         /// Generates code for getting the length by rank index.
@@ -268,7 +268,7 @@ namespace MGen.Collections
         /// <summary>
         /// True if the structure has a set method.
         /// </summary>
-        public virtual bool HasSet { get; }
+        public virtual bool HasSet => false;
 
         /// <summary>
         /// Generates code of setting a value in this structure.

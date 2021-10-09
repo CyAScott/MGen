@@ -5,7 +5,7 @@ namespace MGen.Builder
 {
     partial class ClassBuilder
     {
-        protected IHandleBuildingPropertyGetters[] PropertyGetterBuilders { get; } = new IHandleBuildingPropertyGetters[]
+        protected IHandleBuildingPropertyGetters[] PropertyGetterBuilders { get; } =
         {
             WritePropertyDefaultGetterAndSetter.Instance
         };

@@ -43,7 +43,7 @@ namespace MGen.Tests.CloningSupport
 
             Assert.IsTrue(Attribute.IsDefined(parameters[0], typeof(NotNullAttribute)));
 
-            var instanceA = defaultCtor.Invoke(new object[0]) as IHaveASimpleProperty;
+            var instanceA = defaultCtor.Invoke(Array.Empty<object>()) as IHaveASimpleProperty;
             Assert.IsNotNull(instanceA);
 
             var dateTime = instanceA.DateTime = DateTime.UtcNow;

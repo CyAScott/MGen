@@ -17,7 +17,7 @@ namespace MGen.Builder.BuilderContext
         public ISymbol Member { get; }
 
         /// <summary>
-        /// If the member should be explictlly defined (i.e. void IDisposable.Dispose() { } ).
+        /// If the member should be explicitly defined (i.e. void IDisposable.Dispose() { } ).
         /// </summary>
         public bool Explicit { get; }
     }

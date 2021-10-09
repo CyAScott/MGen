@@ -6,7 +6,7 @@ namespace MGen.Builder.Writers
 {
     partial class WriteNestedClass : IHandleBuildingProperties
     {
-        public static WriteNestedClass Instance = new();
+        public static readonly WriteNestedClass Instance = new();
 
         public ITypeSymbol? GetNestedClass(PropertyBuilderContext context, ITypeSymbol type)
         {

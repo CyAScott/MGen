@@ -5,7 +5,7 @@ namespace MGen.Builder
 {
     partial class ClassBuilder
     {
-        protected IHandleBuildingEvents[] EventBuilders { get; } = new[]
+        protected IHandleBuildingEvents[] EventBuilders { get; } =
         {
             WriteDefaultEvent.Instance
         };

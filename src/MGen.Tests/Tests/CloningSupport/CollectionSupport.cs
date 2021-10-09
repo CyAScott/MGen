@@ -237,7 +237,7 @@ namespace MGen.Tests.CloningSupport
 
             Assert.IsTrue(Attribute.IsDefined(parameters[0], typeof(NotNullAttribute)));
 
-            var instanceA = defaultCtor.Invoke(new object[0]) as ICollectionClone;
+            var instanceA = defaultCtor.Invoke(Array.Empty<object>()) as ICollectionClone;
             Assert.IsNotNull(instanceA);
 
             Init(instanceA);

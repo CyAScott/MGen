@@ -71,7 +71,7 @@ namespace MGen.Tests.SerializationSupport.DotNet
                 null);
             Assert.IsNotNull(serializationCtor);
 
-            var instanceA = defaultCtor.Invoke(new object[0]) as IArraySerializable;
+            var instanceA = defaultCtor.Invoke(Array.Empty<object>()) as IArraySerializable;
             Assert.IsNotNull(instanceA);
 
             Init(instanceA);

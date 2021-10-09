@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MGen.Builder.Writers
 {
-    partial class WriteDefaultMethod : IHandleBuildingMethods
+    class WriteDefaultMethod : IHandleBuildingMethods
     {
         public static readonly WriteDefaultMethod Instance = new();
 
