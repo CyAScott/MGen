@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <LangVersion>preview</LangVersion>
-        <NoWarn>CS1591,CS0419</NoWarn>
+        <NoWarn>CS1591;CS0419</NoWarn>
         <Nullable>enable</Nullable>
         <RootNamespace>MGen</RootNamespace>
 		<TargetFramework>net5.0</TargetFramework>

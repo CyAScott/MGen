@@ -3,7 +3,7 @@
     <PropertyGroup>
         <IsPackable>false</IsPackable>
         <LangVersion>preview</LangVersion>
-        <NoWarn>CS8602,CS8604,CS8632</NoWarn>
+        <NoWarn>CS1591;CS8600;CS8601;CS8602;CS8604;CS8632;CS8714;1701;1702</NoWarn>
         <Nullable>enable</Nullable>
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
@@ -12,11 +12,9 @@
     
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <DocumentationFile>bin\Debug\MGen.Tests.xml</DocumentationFile>
-        <NoWarn>1701;1702;CS1591</NoWarn>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DocumentationFile>bin\Release\MGen.Tests.xml</DocumentationFile>
-        <NoWarn>1701;1702;CS1591</NoWarn>
     </PropertyGroup>
     
     <ItemGroup>

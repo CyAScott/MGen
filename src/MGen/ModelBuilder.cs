@@ -92,7 +92,9 @@ namespace MGen
                     return false;
             }
 
+#pragma warning disable CS8601 // Possible null reference assignment.
             type = assembly.GetType(@namespace + "." + name, false);
+#pragma warning restore CS8601 // Possible null reference assignment.
             if (type == null)
             {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -103,7 +105,11 @@ namespace MGen
 
             if (attribute.ConstructorArguments.Length == 0)
             {
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8601 // Possible null reference assignment.
                 instance = (MGenAttribute)Activator.CreateInstance(type);
+#pragma warning restore CS8601 // Possible null reference assignment.
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 return true;
             }
 

@@ -241,6 +241,6 @@ namespace MGen.Builder
         public static StringBuilder AppendType(this StringBuilder stringBuilder, ITypeSymbol? type) =>
             stringBuilder.Append(type.ToCsString());
 
-        public static string ToCsString(this ITypeSymbol? type) => type?.ToString().Replace("*", "") ?? "";
+        public static string ToCsString(this ITypeSymbol? type) => type?.ToString()?.Replace("*", "") ?? "";
     }
 }
