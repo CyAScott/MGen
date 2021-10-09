@@ -7,9 +7,10 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <Copyright>Copyright © 2021</Copyright>
         <Description>Abstractions used for generating class files from interfaces.</Description>
+        <DocumentationFile>bin\Release\MGen.Abstractions.xml</DocumentationFile>
         <IncludeSymbols>true</IncludeSymbols>
         <PackageIconUrl></PackageIconUrl>
         <PackageId>MGen.Abstractions</PackageId>
@@ -20,15 +21,10 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
         <Title>MGen Abstractions</Title>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
-    
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DocumentationFile>bin\Debug\MGen.Abstractions.xml</DocumentationFile>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>bin\Release\MGen.Abstractions.xml</DocumentationFile>
-    </PropertyGroup>
-    <ItemGroup>
+	
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <None Include="bin\Release\MGen.Abstractions.xml">
             <PackagePath>content\docs</PackagePath>
             <Pack>true</Pack>

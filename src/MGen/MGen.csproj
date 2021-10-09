@@ -8,9 +8,10 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 
-    <PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <Copyright>Copyright © 2021</Copyright>
         <Description>A nuget that generates class files from interfaces.</Description>
+		<DocumentationFile>bin\Release\MGen.xml</DocumentationFile>
         <IncludeSymbols>true</IncludeSymbols>
         <PackageIconUrl></PackageIconUrl>
         <PackageId>MGen</PackageId>
@@ -22,14 +23,8 @@
         <SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
         <Title>MGen</Title>
     </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DocumentationFile>bin\Debug\MGen.xml</DocumentationFile>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>bin\Release\MGen.xml</DocumentationFile>
-    </PropertyGroup>
-    <ItemGroup>
+	
+	<ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <None Include="bin\Release\MGen.xml">
             <PackagePath>content\docs</PackagePath>
             <Pack>true</Pack>
