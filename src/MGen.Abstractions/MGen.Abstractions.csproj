@@ -11,6 +11,7 @@
         <Copyright>Copyright © 2021</Copyright>
         <Description>Abstractions used for generating class files from interfaces.</Description>
         <DocumentationFile>bin\Release\MGen.Abstractions.xml</DocumentationFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IncludeSymbols>true</IncludeSymbols>
         <PackageIconUrl></PackageIconUrl>
         <PackageId>MGen.Abstractions</PackageId>
@@ -21,7 +22,6 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
         <Title>MGen Abstractions</Title>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 	
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

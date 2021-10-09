@@ -12,6 +12,7 @@
         <Copyright>Copyright © 2021</Copyright>
         <Description>A nuget that generates class files from interfaces.</Description>
 		<DocumentationFile>bin\Release\MGen.xml</DocumentationFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IncludeSymbols>true</IncludeSymbols>
         <PackageIconUrl></PackageIconUrl>
         <PackageId>MGen</PackageId>
