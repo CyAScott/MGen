@@ -41,8 +41,4 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup>
-         <ProjectReference Include="..\MGen.Abstractions\MGen.Abstractions.csproj" />
-    </ItemGroup>
-
 </Project>

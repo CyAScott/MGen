@@ -1,12 +1,6 @@
-﻿using System;
-
-namespace MGen
+﻿namespace MGen
 {
-    /// <summary>
-    /// Generates a class based on an interface.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Interface)]
-    public sealed class GenerateAttribute : MGenAttribute
+    public sealed class GenerateAttribute
     {
         /// <summary>
         /// If true then the interface types for the properties in this interface will also get classes generated.

@@ -127,7 +127,7 @@ namespace MGen
             string path,
             ITypeSymbol type,
             SyntaxTokenList modifiers,
-            List<MGenAttribute> attributes)
+            List<object> attributes)
         {
             Attributes = attributes;
             Type = type;
@@ -137,7 +137,7 @@ namespace MGen
             Add(type);
         }
 
-        public List<MGenAttribute> Attributes { get; }
+        public List<object> Attributes { get; }
         public ITypeSymbol Type { get; }
         public SyntaxTokenList Modifiers { get; }
 

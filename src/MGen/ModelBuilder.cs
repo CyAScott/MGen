@@ -18,7 +18,7 @@ namespace MGen
 
             foreach (var @interface in interfaces)
             {
-                var generateAttribute = @interface.Attributes.OfType<GenerateAttribute>().FirstOrDefault() ?? new GenerateAttribute();
+                var generateAttribute = @interface.Attributes.OfType<GenerateAttribute>().Single();
 
                 var context = builder.AppendClass(@interface, generateAttribute, generatorExecutionContext, collectionGenerators);
 
@@ -31,15 +31,40 @@ namespace MGen
             }
         }
 
-        public static List<MGenAttribute> GetMGenAttributes(this ITypeSymbol interfaceSymbol)
+        public static bool TryCreateGenerateAttribute(AttributeData attribute, out GenerateAttribute generateAttribute)
+        {
+            if (attribute.AttributeClass?.ContainingAssembly.Name != "MGen.Abstractions" ||
+                attribute.AttributeClass?.ContainingNamespace.ToString() != "MGen" ||
+                attribute.AttributeClass?.Name != "GenerateAttribute")
+            {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+                generateAttribute = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+                return false;
+            }
+
+            generateAttribute = new GenerateAttribute();
+
+            SetProperties(attribute, typeof(GenerateAttribute), generateAttribute);
+
+            return true;
+        }
+
+        public static List<object> GetMGenAttributes(this ITypeSymbol interfaceSymbol)
         {
             var attributes = interfaceSymbol.GetAttributes();
-            var list = new List<MGenAttribute>(attributes.Length);
+            var list = new List<object>(attributes.Length);
 
             foreach (var attribute in attributes)
             {
                 if (!IsAMGenAttribute(attribute))
                 {
+                    continue;
+                }
+
+                if (TryCreateGenerateAttribute(attribute, out var generateAttribute))
+                {
+                    list.Add(generateAttribute);
                     continue;
                 }
 
@@ -73,7 +98,7 @@ namespace MGen
             return baseType?.BaseType != null;
         }
 
-        public static bool TryCreateInstance(AttributeData attribute, out MGenAttribute instance, out Type type)
+        public static bool TryCreateInstance(AttributeData attribute, out object instance, out Type type)
         {
             var @namespace = attribute.AttributeClass?.ContainingNamespace.ToString() ?? "";
             var name = attribute.AttributeClass?.Name ?? "";
@@ -107,7 +132,7 @@ namespace MGen
             {
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8601 // Possible null reference assignment.
-                instance = (MGenAttribute)Activator.CreateInstance(type);
+                instance = Activator.CreateInstance(type);
 #pragma warning restore CS8601 // Possible null reference assignment.
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 return true;
@@ -145,7 +170,7 @@ namespace MGen
                     arguments[index] = attribute.ConstructorArguments[index].Value;
                 }
 
-                instance = (MGenAttribute)ctor.Invoke(arguments);
+                instance = ctor.Invoke(arguments);
 
                 return true;
             }
@@ -175,7 +200,7 @@ namespace MGen
             });
         }
 
-        public static void SetProperties(AttributeData attribute, Type type, MGenAttribute instance)
+        public static void SetProperties(AttributeData attribute, Type type, object instance)
         {
             var arguments = attribute.NamedArguments;
 
