@@ -14,7 +14,8 @@
         <Description>A nuget that generates class files from interfaces.</Description>
 		<DocumentationFile>bin\Release\MGen.xml</DocumentationFile>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <IncludeSymbols>true</IncludeSymbols>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<IncludeSymbols>true</IncludeSymbols>
 		<IsPackable>true</IsPackable>
 		<IsRoslynComponent>true</IsRoslynComponent>
         <PackageIconUrl></PackageIconUrl>
@@ -35,6 +36,7 @@
             <PackagePath>content\docs</PackagePath>
             <Pack>true</Pack>
         </None>
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     </ItemGroup>
 
     <ItemGroup>
