@@ -1,6 +1,6 @@
 ﻿namespace MGen
 {
-    public sealed class GenerateAttribute
+    public sealed class GenerateAttributeRuntime
     {
         /// <summary>
         /// If true then the interface types for the properties in this interface will also get classes generated.

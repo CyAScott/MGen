@@ -18,7 +18,7 @@ namespace MGen
 
             foreach (var @interface in interfaces)
             {
-                var generateAttribute = @interface.Attributes.OfType<GenerateAttribute>().Single();
+                var generateAttribute = @interface.Attributes.OfType<GenerateAttributeRuntime>().Single();
 
                 var context = builder.AppendClass(@interface, generateAttribute, generatorExecutionContext, collectionGenerators);
 
@@ -31,7 +31,7 @@ namespace MGen
             }
         }
 
-        public static bool TryCreateGenerateAttribute(AttributeData attribute, out GenerateAttribute generateAttribute)
+        public static bool TryCreateGenerateAttribute(AttributeData attribute, out GenerateAttributeRuntime generateAttribute)
         {
             if (attribute.AttributeClass?.ContainingAssembly.Name != "MGen.Abstractions" ||
                 attribute.AttributeClass?.ContainingNamespace.ToString() != "MGen" ||
@@ -43,9 +43,9 @@ namespace MGen
                 return false;
             }
 
-            generateAttribute = new GenerateAttribute();
+            generateAttribute = new GenerateAttributeRuntime();
 
-            SetProperties(attribute, typeof(GenerateAttribute), generateAttribute);
+            SetProperties(attribute, typeof(GenerateAttributeRuntime), generateAttribute);
 
             return true;
         }

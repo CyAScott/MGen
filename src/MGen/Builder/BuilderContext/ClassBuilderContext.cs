@@ -20,7 +20,7 @@ namespace MGen.Builder.BuilderContext
             Namespace = context.Namespace;
         }
 
-        internal ClassBuilderContext(GenerateAttribute generateAttribute,
+        internal ClassBuilderContext(GenerateAttributeRuntime generateAttribute,
             SyntaxTokenList modifiers,
             ITypeSymbol @interface,
             string @namespace,
@@ -52,7 +52,7 @@ namespace MGen.Builder.BuilderContext
         /// <summary>
         /// The generate attribute for creating this class.
         /// </summary>
-        public GenerateAttribute GenerateAttribute { get; }
+        public GenerateAttributeRuntime GenerateAttribute { get; }
 
         /// <summary>
         /// The builder for building the class that implements <see cref="Interface"/>.

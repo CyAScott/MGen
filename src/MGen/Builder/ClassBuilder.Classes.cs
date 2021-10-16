@@ -18,7 +18,7 @@ namespace MGen.Builder
             WriteDefaultConstructor.Instance
         };
 
-        public ClassBuilderContext AppendClass(InterfaceInfo @interface, GenerateAttribute generateAttribute,
+        public ClassBuilderContext AppendClass(InterfaceInfo @interface, GenerateAttributeRuntime generateAttribute,
             GeneratorExecutionContext generatorExecutionContext, Collections.CollectionGenerators collectionGenerators)
         {
             var context = new ClassBuilderContext(
