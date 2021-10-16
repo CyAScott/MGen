@@ -8,18 +8,22 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<Company />
         <Copyright>Copyright © 2021</Copyright>
         <Description>Abstractions used for generating class files from interfaces.</Description>
         <DocumentationFile>bin\Release\MGen.Abstractions.xml</DocumentationFile>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IncludeSymbols>true</IncludeSymbols>
-        <PackageIconUrl></PackageIconUrl>
+		<IsPackable>true</IsPackable>
+		<PackageIconUrl></PackageIconUrl>
         <PackageId>MGen.Abstractions</PackageId>
         <PackageProjectUrl>https://github.com/CyAScott/MGen</PackageProjectUrl>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-        <PackageTags>Models Classes Source Generators</PackageTags>
+		<PackageTags>code generator, roslyn</PackageTags>
         <PackageVersion>0.0.1-beta</PackageVersion>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/CyAScott/MGen</RepositoryUrl>
         <SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
         <Title>MGen Abstractions</Title>
     </PropertyGroup>
