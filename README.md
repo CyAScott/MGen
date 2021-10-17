@@ -1,4 +1,4 @@
-# MGen
+# [![MGen](https://github.com/CyAScott/MGen/blob/main/assets/mgen-64.png?raw=true "MGen")](https://www.nuget.org/packages/MGen/) MGen
 
 MGen is a code generator library that can generate C# classes from interfaces. Here is a simple example of how it works:
 
