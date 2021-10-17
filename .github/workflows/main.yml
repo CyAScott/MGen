@@ -11,8 +11,8 @@ jobs:
 
     steps:
     - name: Restore dependencies
-      run: dotnet restore src/MGen.sln
+      run: dotnet restore src\MGen.sln
     - name: Build
-      run: dotnet build src/MGen.sln --no-restore --configuration Release --output ./bin
+      run: dotnet build src\MGen.sln --no-restore --configuration Release --output ./bin
     - name: Test
-      run: dotnet test src/MGen.sln --no-build --configuration Release --verbosity normal
+      run: dotnet test src\MGen.sln --no-build --configuration Release --verbosity normal
