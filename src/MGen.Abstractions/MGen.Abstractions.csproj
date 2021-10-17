@@ -16,7 +16,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IncludeSymbols>true</IncludeSymbols>
 		<IsPackable>true</IsPackable>
-		<PackageIconUrl></PackageIconUrl>
+		<PackageIconUrl>https://github.com/CyAScott/MGen/blob/main/assets/mgen-512.png?raw=true</PackageIconUrl>
         <PackageId>MGen.Abstractions</PackageId>
         <PackageProjectUrl>https://github.com/CyAScott/MGen</PackageProjectUrl>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>

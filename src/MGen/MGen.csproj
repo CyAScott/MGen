@@ -19,7 +19,7 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<IsPackable>true</IsPackable>
 		<IsRoslynComponent>true</IsRoslynComponent>
-        <PackageIconUrl></PackageIconUrl>
+        <PackageIconUrl>https://github.com/CyAScott/MGen/blob/main/assets/mgen-512.png?raw=true</PackageIconUrl>
         <PackageId>MGen</PackageId>
         <PackageProjectUrl>https://github.com/CyAScott/MGen</PackageProjectUrl>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
