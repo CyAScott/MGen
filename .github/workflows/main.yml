@@ -16,8 +16,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore MGen.sln
+      run: dotnet restore src/MGen.sln
     - name: Build
-      run: dotnet build MGen.sln --no-restore --output ./bin
+      run: dotnet build src/MGen.sln --no-restore --output ./bin
     - name: Test
-      run: dotnet test MGen.sln --no-build --verbosity normal
+      run: dotnet test src/MGen.sln --no-build --verbosity normal
