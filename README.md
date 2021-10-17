@@ -1,6 +1,19 @@
 # [![MGen](https://github.com/CyAScott/MGen/blob/main/assets/mgen-64.png?raw=true "MGen")](https://www.nuget.org/packages/MGen/) MGen
 
-MGen is a code generator library that can generate C# classes from interfaces. Here is a simple example of how it works:
+[![NuGet Badge](https://buildstats.info/nuget/MGen?includePreReleases=true)](https://www.nuget.org/packages/MGen/)
+
+MGen is a code generator library that can generate C# classes from interfaces.
+
+### Simple Exmaple
+
+The first thing you will need to do is to install the MGen NuGet packages.
+
+```
+Install-Package MGen
+Install-Package MGen.Abstractions
+```
+
+Here is a simple example of how it works:
 
 ```
 [Generate]
