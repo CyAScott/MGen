@@ -49,3 +49,7 @@ public class HaveAnGuidIdModel : IHaveAnGuidId
 ```
 
 For a full list of supported features read [this](https://github.com/CyAScott/MGen/wiki/Supported-Features).
+
+#### Icon Created By
+
+Icons made by [Freepik](http://www.freepik.com) from [www.flaticon.com](http://www.flaticon.com) is licensed by [CC 3.0 B](http://creativecommons.org/licenses/by/3.0/)
