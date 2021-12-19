@@ -20,20 +20,31 @@ namespace MGen.Builder
 
     partial class ClassBuilder
     {
+        IHandleBuildingNestedClasses[] BuildNestedClassBuilders(params IAmAnExtension[] extensions)
+        {
+            var list = new List<IHandleBuildingNestedClasses>();
+            foreach (var extension in extensions)
+            {
+                if (extension is IHandleBuildingNestedClasses handler)
+                {
+                    list.Add(handler);
+                }
+            }
+            list.Add(WriteCloneSupport.Instance);
+            list.Add(WriteConversionSupport.Instance);
+            list.Add(WriteNetSerialization.Instance);
+            list.Add(WritePropertyBinders.Instance);
+            list.Add(WriteDefaultClass.Instance);
+            list.Add(WriteReadOnlyConstructor.Instance);
+            list.Add(WriteDefaultConstructor.Instance);
+            return list.ToArray();
+        }
+
         protected Dictionary<string, ITypeSymbol> NestedClasses { get; } = new();
 
         protected HashSet<string> WrittenClasses { get; } = new();
 
-        protected IHandleBuildingNestedClasses[] NestedClassBuilders { get; } = new IHandleBuildingNestedClasses[]
-        {
-            WriteCloneSupport.Instance,
-            WriteConversionSupport.Instance,
-            WriteNetSerialization.Instance,
-            WritePropertyBinders.Instance,
-            WriteDefaultClass.Instance,
-            WriteReadOnlyConstructor.Instance,
-            WriteDefaultConstructor.Instance
-        };
+        protected IHandleBuildingNestedClasses[] NestedClassBuilders { get; }
 
         protected void AppendNestedClasses(ClassBuilderContext context)
         {

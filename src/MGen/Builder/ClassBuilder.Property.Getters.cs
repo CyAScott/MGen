@@ -1,14 +1,26 @@
 ﻿using MGen.Builder.BuilderContext;
 using MGen.Builder.Writers;
+using System.Collections.Generic;
 
 namespace MGen.Builder
 {
     partial class ClassBuilder
     {
-        protected IHandleBuildingPropertyGetters[] PropertyGetterBuilders { get; } =
+        IHandleBuildingPropertyGetters[] BuildPropertyGetterBuilders(params IAmAnExtension[] extensions)
         {
-            WritePropertyDefaultGetterAndSetter.Instance
-        };
+            var list = new List<IHandleBuildingPropertyGetters>();
+            foreach (var extension in extensions)
+            {
+                if (extension is IHandleBuildingPropertyGetters handler)
+                {
+                    list.Add(handler);
+                }
+            }
+            list.Add(WritePropertyDefaultGetterAndSetter.Instance);
+            return list.ToArray();
+        }
+
+        protected IHandleBuildingPropertyGetters[] PropertyGetterBuilders { get; }
 
         protected void AppendPropertyGetter(PropertyGetterBuilderContext context)
         {

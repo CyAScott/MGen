@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using MGen.Builder.BuilderContext;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Immutable;
 using System.Text;
@@ -82,8 +83,18 @@ namespace MGen.Builder
         readonly GeneratorExecutionContext _generatorExecutionContext;
         bool _lineStarted;
 
-        public ClassBuilder(GeneratorExecutionContext generatorExecutionContext) =>
+        public ClassBuilder(GeneratorExecutionContext generatorExecutionContext, params IAmAnExtension[] extensions)
+        {
             _generatorExecutionContext = generatorExecutionContext;
+            ClassBuilders = BuildClassBuilders(extensions);
+            ConstructorBuilders = BuildConstructorBuilders(extensions);
+            EventBuilders = BuildEventBuilders(extensions);
+            MethodBuilders = BuildMethodBuilders(extensions);
+            NestedClassBuilders = BuildNestedClassBuilders(extensions);
+            PropertyBuilders = BuildPropertyBuilders(extensions);
+            PropertyGetterBuilders = BuildPropertyGetterBuilders(extensions);
+            PropertySetterBuilders = BuildPropertySetterBuilders(extensions);
+        }
 
         public IClassBuilder Append(Action<StringBuilder> builder)
         {

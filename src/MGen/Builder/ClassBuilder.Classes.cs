@@ -1,22 +1,34 @@
 ﻿using MGen.Builder.BuilderContext;
 using MGen.Builder.Writers;
 using Microsoft.CodeAnalysis;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MGen.Builder
 {
     partial class ClassBuilder
     {
-        protected IHandleBuildingClasses[] ClassBuilders { get; } = new IHandleBuildingClasses[]
+        IHandleBuildingClasses[] BuildClassBuilders(params IAmAnExtension[] extensions)
         {
-            WriteCloneSupport.Instance,
-            WriteConversionSupport.Instance,
-            WriteNetSerialization.Instance,
-            WritePropertyBinders.Instance,
-            WriteDefaultClass.Instance,
-            WriteReadOnlyConstructor.Instance,
-            WriteDefaultConstructor.Instance
-        };
+            var list = new List<IHandleBuildingClasses>();
+            foreach (var extension in extensions)
+            {
+                if (extension is IHandleBuildingClasses handler)
+                {
+                    list.Add(handler);
+                }
+            }
+            list.Add(WriteCloneSupport.Instance);
+            list.Add(WriteConversionSupport.Instance);
+            list.Add(WriteNetSerialization.Instance);
+            list.Add(WritePropertyBinders.Instance);
+            list.Add(WriteDefaultClass.Instance);
+            list.Add(WriteReadOnlyConstructor.Instance);
+            list.Add(WriteDefaultConstructor.Instance);
+            return list.ToArray();
+        }
+
+        protected IHandleBuildingClasses[] ClassBuilders { get; }
 
         public ClassBuilderContext AppendClass(InterfaceInfo @interface, GenerateAttributeRuntime generateAttribute,
             GeneratorExecutionContext generatorExecutionContext, Collections.CollectionGenerators collectionGenerators)

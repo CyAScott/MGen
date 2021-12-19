@@ -1,4 +1,5 @@
 ﻿using MGen.Builder;
+using MGen.Builder.BuilderContext;
 using MGen.Collections;
 using Microsoft.CodeAnalysis;
 using System;
@@ -13,7 +14,14 @@ namespace MGen
     {
         public static IEnumerable<(string FullName, string Code)> GenerateCode(this List<InterfaceInfo> interfaces, GeneratorExecutionContext generatorExecutionContext)
         {
-            var builder = new ClassBuilder(generatorExecutionContext);
+            if (interfaces.Count == 0)
+            {
+                yield break;
+            }
+
+            var extensions = generatorExecutionContext.GetExtensions().ToArray();
+
+            var builder = new ClassBuilder(generatorExecutionContext, extensions);
             var collectionGenerators = new CollectionGenerators(generatorExecutionContext);
 
             foreach (var @interface in interfaces)
@@ -28,6 +36,72 @@ namespace MGen
                 builder.Clear();
 
                 yield return (fullName, code);
+            }
+        }
+
+        public static IEnumerable<IAmAnExtension> GetExtensions(this GeneratorExecutionContext generatorExecutionContext)
+        {
+            foreach (var file in generatorExecutionContext.AdditionalFiles)
+            {
+                if (file == null)
+                {
+                    continue;
+                }
+
+                var options = generatorExecutionContext.AnalyzerConfigOptions.GetOptions(file);
+
+                if (options == null ||
+                    !options.TryGetValue("build_metadata.additionalfiles.mgenextension", out var mGenExtension) ||
+                    !bool.TryParse(mGenExtension ?? "false", out var idMGenExtension) |
+                    !idMGenExtension)
+                {
+                    continue;
+                }
+
+                Assembly assembly;
+                try
+                {
+                    assembly = Assembly.LoadFrom(file.Path);
+                }
+                catch (Exception error)
+                {
+                    generatorExecutionContext.ReportDiagnostic(Diagnostic.Create(
+                        new DiagnosticDescriptor(
+                            "MG0002",
+                            "Unable to load assembly",
+                            "Unable to load assembly: {0}",
+                            "CompileError",
+                            DiagnosticSeverity.Warning,
+                        true), null, error.ToString()));
+                    continue;
+                }
+
+                foreach (var type in assembly.ExportedTypes)
+                {
+                    if (type.IsClass && !type.IsAbstract &&
+                        typeof(IAmAnExtension).IsAssignableFrom(type))
+                    {
+                        IAmAnExtension instance;
+                        try
+                        {
+                            instance = (IAmAnExtension)Activator.CreateInstance(type);
+                        }
+                        catch (Exception error)
+                        {
+                            generatorExecutionContext.ReportDiagnostic(Diagnostic.Create(
+                                new DiagnosticDescriptor(
+                                    "MG0003",
+                                    "Unable to create extension instance",
+                                    "Unable to create extension instance: {0}",
+                                    "CompileError",
+                                    DiagnosticSeverity.Warning,
+                                true), null, error.ToString()));
+                            continue;
+                        }
+
+                        yield return instance;
+                    }
+                }
             }
         }
 
@@ -177,7 +251,7 @@ namespace MGen
                 foreach (var part in binding.Groups["parts"].Value.Split('|'))
                 {
                     var group = match.Groups[part.Trim()];
-                    if (group is {Success: true})
+                    if (group is { Success: true })
                     {
                         return group.Value;
                     }

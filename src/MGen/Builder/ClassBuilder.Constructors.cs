@@ -1,5 +1,6 @@
 ﻿using MGen.Builder.BuilderContext;
 using MGen.Builder.Writers;
+using System.Collections.Generic;
 
 namespace MGen.Builder
 {
@@ -13,11 +14,22 @@ namespace MGen.Builder
 
     partial class ClassBuilder
     {
-        protected IHandleBuildingConstructors[] ConstructorBuilders { get; } = new IHandleBuildingConstructors[]
+        IHandleBuildingConstructors[] BuildConstructorBuilders(params IAmAnExtension[] extensions)
         {
-            WriteReadOnlyConstructor.Instance,
-            WriteDefaultConstructor.Instance
-        };
+            var list = new List<IHandleBuildingConstructors>();
+            foreach (var extension in extensions)
+            {
+                if (extension is IHandleBuildingConstructors handler)
+                {
+                    list.Add(handler);
+                }
+            }
+            list.Add(WriteReadOnlyConstructor.Instance);
+            list.Add(WriteDefaultConstructor.Instance);
+            return list.ToArray();
+        }
+
+        protected IHandleBuildingConstructors[] ConstructorBuilders { get; }
 
         public IClassBuilder AppendConstructor(ClassBuilderContext context, ConstructorBuilder constructor) =>
             AppendConstructor(new ConstructorBuilderContext(context, constructor));
