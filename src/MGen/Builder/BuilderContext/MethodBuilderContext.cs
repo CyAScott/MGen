@@ -16,7 +16,7 @@ namespace MGen.Builder.BuilderContext
         public IMethodSymbol Method => (IMethodSymbol)Member;
     }
 
-    public interface IHandleBuildingMethods
+    public interface IHandleBuildingMethods : IAmAnExtension
     {
         public void Handle(MethodBuilderContext context, Action next);
     }

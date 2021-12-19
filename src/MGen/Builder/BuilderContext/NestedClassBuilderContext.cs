@@ -11,7 +11,7 @@ namespace MGen.Builder.BuilderContext
         }
     }
 
-    public interface IHandleBuildingNestedClasses
+    public interface IHandleBuildingNestedClasses : IAmAnExtension
     {
         public void Handle(NestedClassBuilderContext context, Action next);
     }

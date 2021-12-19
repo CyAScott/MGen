@@ -16,7 +16,7 @@ namespace MGen.Builder.BuilderContext
         public IEventSymbol Event => (IEventSymbol)Member;
     }
 
-    public interface IHandleBuildingEvents
+    public interface IHandleBuildingEvents : IAmAnExtension
     {
         public void Handle(EventBuilderContext context, Action next);
     }

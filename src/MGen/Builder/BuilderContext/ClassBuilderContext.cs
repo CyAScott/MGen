@@ -85,7 +85,7 @@ namespace MGen.Builder.BuilderContext
         public string Namespace { get; }
     }
 
-    public interface IHandleBuildingClasses
+    public interface IHandleBuildingClasses : IAmAnExtension
     {
         public void Handle(ClassBuilderContext context, Action next);
     }

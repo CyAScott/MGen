@@ -10,7 +10,7 @@ namespace MGen.Builder.BuilderContext
         }
     }
 
-    public interface IHandleBuildingPropertyGetters
+    public interface IHandleBuildingPropertyGetters : IAmAnExtension
     {
         public void Handle(PropertyGetterBuilderContext context, Action next);
     }

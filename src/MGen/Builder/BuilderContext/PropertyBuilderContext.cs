@@ -38,7 +38,7 @@ namespace MGen.Builder.BuilderContext
         public string? FieldName { get; }
     }
 
-    public interface IHandleBuildingProperties
+    public interface IHandleBuildingProperties : IAmAnExtension
     {
         public void Handle(PropertyBuilderContext context, Action next);
     }

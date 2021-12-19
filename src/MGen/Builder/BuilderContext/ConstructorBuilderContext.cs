@@ -13,7 +13,7 @@ namespace MGen.Builder.BuilderContext
         public ConstructorBuilder Constructor { get; }
     }
 
-    public interface IHandleBuildingConstructors
+    public interface IHandleBuildingConstructors : IAmAnExtension
     {
         public void Handle(ConstructorBuilderContext context, Action next);
     }
