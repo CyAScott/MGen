@@ -247,7 +247,7 @@ namespace MGen.Collections
         /// The number of lengths in the array.
         /// </summary>
         public virtual int Rank => HasLength ? _rank : 0;
-        private readonly int _rank;
+        readonly int _rank;
 
         /// <summary>
         /// Generates code for getting the length by rank index.

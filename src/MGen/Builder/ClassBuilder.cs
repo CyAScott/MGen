@@ -79,8 +79,8 @@ namespace MGen.Builder
     /// </summary>
     partial class ClassBuilder : IClassBuilder
     {
-        private readonly GeneratorExecutionContext _generatorExecutionContext;
-        private bool _lineStarted;
+        readonly GeneratorExecutionContext _generatorExecutionContext;
+        bool _lineStarted;
 
         public ClassBuilder(GeneratorExecutionContext generatorExecutionContext) =>
             _generatorExecutionContext = generatorExecutionContext;
