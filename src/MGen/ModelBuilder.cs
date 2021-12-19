@@ -37,9 +37,7 @@ namespace MGen
                 attribute.AttributeClass?.ContainingNamespace.ToString() != "MGen" ||
                 attribute.AttributeClass?.Name != "GenerateAttribute")
             {
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-                generateAttribute = null;
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+                generateAttribute = default!;
                 return false;
             }
 
@@ -110,31 +108,21 @@ namespace MGen
             }
             catch
             {
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-                    instance = null;
-                    type = null;
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
-                    return false;
+                instance = default!;
+                type = default!;
+                return false;
             }
 
-#pragma warning disable CS8601 // Possible null reference assignment.
             type = assembly.GetType(@namespace + "." + name, false);
-#pragma warning restore CS8601 // Possible null reference assignment.
             if (type == null)
             {
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-                instance = null;
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+                instance = default!;
                 return false;
             }
 
             if (attribute.ConstructorArguments.Length == 0)
             {
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-#pragma warning disable CS8601 // Possible null reference assignment.
                 instance = Activator.CreateInstance(type);
-#pragma warning restore CS8601 // Possible null reference assignment.
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 return true;
             }
 
@@ -175,9 +163,7 @@ namespace MGen
                 return true;
             }
 
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-            instance = null;
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+            instance = default!;
 
             return false;
         }

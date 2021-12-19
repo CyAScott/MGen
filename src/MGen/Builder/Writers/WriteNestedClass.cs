@@ -30,12 +30,11 @@ namespace MGen.Builder.Writers
 
         public bool IsGenericCollection(PropertyBuilderContext context, ITypeSymbol type, out ITypeSymbol elementType)
         {
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning disable CS8601 // Possible null reference assignment.
 
             if (!context.CollectionGenerators.TryToGet(context, type, "test", out var generator))
             {
-                elementType = null;
+                elementType = default!;
                 return false;
             }
 
@@ -43,7 +42,6 @@ namespace MGen.Builder.Writers
 
             return true;
 
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning restore CS8601 // Possible null reference assignment.
         }
 

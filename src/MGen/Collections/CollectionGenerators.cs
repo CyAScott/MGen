@@ -3,8 +3,6 @@ using MGen.Collections.Generators;
 using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-
 namespace MGen.Collections
 {
     public class CollectionGenerators
@@ -62,7 +60,7 @@ namespace MGen.Collections
 
             if (!Generators.TryGetValue(key, out var detector))
             {
-                generator = null;
+                generator = default!;
                 return false;
             }
 

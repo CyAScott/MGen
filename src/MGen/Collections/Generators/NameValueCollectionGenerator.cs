@@ -2,9 +2,6 @@
 using Microsoft.CodeAnalysis;
 using System;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-#pragma warning disable CS8601 // Possible null reference assignment.
-
 namespace MGen.Collections.Generators
 {
     class NameValueCollectionDetector : CollectionTypeDetector
@@ -30,7 +27,7 @@ namespace MGen.Collections.Generators
         {
             HasAdd = type.Name == "NameValueCollection";
             KeyType = GeneratorExecutionContext.Compilation.GetTypeByMetadataName("System.String") ?? throw new InvalidOperationException("Unable to resolve System.String");
-            ValueType = HasAdd ? KeyType : base.ValueType;
+            ValueType = HasAdd ? KeyType : base.ValueType!;
         }
 
         public override ITypeSymbol KeyType { get; }
