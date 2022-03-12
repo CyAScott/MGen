@@ -1,37 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    
-    <PropertyGroup>
-        <IsPackable>false</IsPackable>
-        <LangVersion>preview</LangVersion>
-        <NoWarn>CS1591;CS8600;CS8601;CS8602;CS8604;CS8632;CS8714;1701;1702</NoWarn>
-        <Nullable>enable</Nullable>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>MGen</RootNamespace>
-    </PropertyGroup>
-    
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DocumentationFile>bin\Debug\MGen.Tests.xml</DocumentationFile>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>bin\Release\MGen.Tests.xml</DocumentationFile>
-    </PropertyGroup>
-    
-    <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
-        <PackageReference Include="NUnit" Version="3.13.1" />
-        <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
-        <PackageReference Include="coverlet.collector" Version="3.0.2" />
-    </ItemGroup>
-	
-    <ItemGroup>
-        <ProjectReference Include="..\MGen.Abstractions\MGen.Abstractions.csproj" />
-    </ItemGroup>
 
-	<Import Project="..\MGen\MGen.props"/>
-	
-    <ItemGroup>
-		<AdditionalFiles Include="$(SolutionDir)MGen.Extension\bin\$(Configuration)\netstandard2.0\MGen.Extension.dll" MGenExtension="true" />
-        <ProjectReference Include="..\MGen\MGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    </ItemGroup>
+	<PropertyGroup>
+		<IsPackable>false</IsPackable>
+		<LangVersion>preview</LangVersion>
+		<NoWarn>CS1591;CS8600;CS8601;CS8602;CS8604;CS8632;CS8714;1701;1702</NoWarn>
+		<Nullable>enable</Nullable>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net5.0</TargetFramework>
+		<RootNamespace>MGen</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Moq" Version="4.17.1" />
+		<PackageReference Include="NUnit" Version="3.12.0" />
+		<PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\MGen.Abstractions\MGen.Abstractions.csproj" />
+		<ProjectReference Include="..\MGen\MGen.csproj" />
+	</ItemGroup>
+
 </Project>
