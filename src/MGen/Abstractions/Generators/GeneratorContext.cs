@@ -26,7 +26,7 @@ class ModelGenerator : ISourceGenerator
                 extensions.Add(extension);
             }
 
-            //todo: load extension and add assemblies to extensions
+            extensions.Add(context);
 
             var generatorContext = new GeneratorContext(context, receiver.Candidates, extensions.ToSortedList());
 

@@ -21,6 +21,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\MGen.Abstractions\MGen.Abstractions.csproj" />
+		<ProjectReference Include="..\MGen.Extension\MGen.Extension.csproj" />
 		<ProjectReference Include="..\MGen\MGen.csproj" />
 	</ItemGroup>
 

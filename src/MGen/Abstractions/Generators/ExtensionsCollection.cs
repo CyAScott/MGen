@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
+using Microsoft.CodeAnalysis;
 
 namespace MGen.Abstractions.Generators;
 
@@ -56,6 +58,32 @@ class ExtensionsCollection<TExtension> : Dictionary<string, MGenExtensionInfo<TE
                 (TExtension)Activator.CreateInstance(it))))
         {
             Add(extensionInfo.Attribute.Id, extensionInfo);
+        }
+    }
+
+    public void Add(GeneratorExecutionContext context)
+    {
+        foreach (var additionalText in context.AdditionalFiles)
+        {
+            if (context.AnalyzerConfigOptions
+                    .GetOptions(additionalText)
+                    .TryGetValue("build_metadata.additionalfiles.MGenExtension", out string? isExtensionValue) &&
+                bool.TryParse(isExtensionValue, out var isExtension) &&
+                isExtension)
+            {
+                Assembly assembly;
+
+                try
+                {
+                    assembly = File.Exists(additionalText.Path) ? Assembly.LoadFile(additionalText.Path) : Assembly.Load(additionalText.Path);
+                }
+                catch
+                {
+                    continue;
+                }
+
+                Add(assembly);
+            }
         }
     }
 
