@@ -21,7 +21,7 @@ public class InheritanceBuilder : IAmCode, IHaveState, IReadOnlyCollection<Code>
 
     readonly List<Code> _items = new();
 
-    internal InheritanceBuilder(IHaveInheritance parent, ISymbol? inheritedTypeSymbol = null)
+    internal InheritanceBuilder(IHaveInheritance parent, ITypeSymbol? inheritedTypeSymbol = null)
     {
         Parent = parent;
         if (inheritedTypeSymbol != null)
@@ -66,11 +66,11 @@ public class InheritanceBuilder : IAmCode, IHaveState, IReadOnlyCollection<Code>
 [DebuggerStepThrough]
 public class CodeWithInheritedTypeSymbol : Code
 {
-    public CodeWithInheritedTypeSymbol(ISymbol inheritedTypeSymbol)
+    public CodeWithInheritedTypeSymbol(ITypeSymbol inheritedTypeSymbol)
         : base(stringBuilder => AddInheritedTypeSymbol(stringBuilder, inheritedTypeSymbol, (inheritedTypeSymbol as INamedTypeSymbol)?.TypeArguments)) =>
         InheritedTypeSymbol = inheritedTypeSymbol;
 
-    public ISymbol InheritedTypeSymbol { get; }
+    public ITypeSymbol InheritedTypeSymbol { get; }
 
     static void AddInheritedTypeSymbol(StringBuilder stringBuilder, ISymbol inheritedTypeSymbol, ImmutableArray<ITypeSymbol>? genericParameters)
     {
