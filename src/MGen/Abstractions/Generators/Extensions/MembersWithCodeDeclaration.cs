@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using MGen.Abstractions.Builders;
 using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
@@ -96,5 +98,40 @@ public class MembersWithCodeDeclaration : IHandleOnTypeGenerated
         }
 
         return DeclareClass(candidate, symbol, modifiers, builder, name, index);
+    }
+}
+
+public static class MembersWithCodeDeclarationExtensions
+{
+    [DebuggerStepThrough]
+    public static bool TryToGetBuilder(this TypeGenerator generator, out IHaveMembersWithCode builder)
+    {
+        if (!generator.State.TryGetValue(MembersWithCodeDeclaration.MembersWithCodeDeclarationKey, out var value) ||
+            value is not IHaveMembersWithCode valueAsBuilder)
+        {
+            builder = default!;
+            return false;
+        }
+
+        builder = valueAsBuilder;
+        return true;
+    }
+
+    [DebuggerStepThrough]
+    public static bool TryToGetBuilderBaseOnInheritance(this TypeGenerator generator, Func<ITypeSymbol, bool> predict, out IHaveMembersWithCode builder)
+    {
+        if (generator.State.TryGetValue(MembersWithCodeDeclaration.MembersWithCodeDeclarationKey, out var value) &&
+            value is IHaveInheritance item and IHaveMembersWithCode valueAsBuilder &&
+            item.Inheritance
+                .OfType<CodeWithInheritedTypeSymbol>()
+                .Any(it => predict(it.InheritedTypeSymbol)))
+        {
+            builder = valueAsBuilder;
+
+            return true;
+        }
+
+        builder = default!;
+        return false;
     }
 }

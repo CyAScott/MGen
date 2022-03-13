@@ -8,7 +8,7 @@ namespace MGen.Abstractions.Generators.Extensions;
 /// <summary>
 /// Creates a constructor for initializing read only members.
 /// </summary>
-[MGenExtension(Id, after: new[] { MemberDeclaration.Id }), DebuggerStepThrough]
+[MGenExtension(Id, after: new [] { MemberDeclaration.Id }), DebuggerStepThrough]
 public class ReadOnlyConstructorSupport : IHandleOnInit, IHandleOnTypeGenerated
 {
     public const string Id = "MGen." + nameof(ReadOnlyConstructorSupport);
@@ -17,8 +17,7 @@ public class ReadOnlyConstructorSupport : IHandleOnInit, IHandleOnTypeGenerated
 
     public void TypeGenerated(TypeGeneratedArgs args)
     {
-        if (args.Generator.State.TryGetValue(MembersWithCodeDeclaration.MembersWithCodeDeclarationKey, out var value) &&
-            value is IHaveMembersWithCode builder)
+        if (args.Generator.TryToGetBuilder(out var builder))
         {
             ConstructorBuilder? ctor = null;
 

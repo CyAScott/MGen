@@ -6,7 +6,7 @@ namespace MGen.Abstractions.Generators.Extensions;
 /// <summary>
 /// Implements <see cref="System.ICloneable"/> for classes that require it.
 /// </summary>
-[DebuggerStepThrough, MGenExtension(Id, after: new[] { MemberDeclaration.Id })]
+[DebuggerStepThrough, MGenExtension(Id, after: new[] { MembersWithCodeDeclaration.Id }, before: new [] { MemberDeclaration.Id })]
 public class CloneSupport : IHandleOnInit, IHandleOnTypeGenerated
 {
     public const string Id = "MGen." + nameof(CloneSupport);
@@ -19,7 +19,7 @@ public class CloneSupport : IHandleOnInit, IHandleOnTypeGenerated
     }
 }
 
-[MGenExtension(Id, before: new[] { DefaultCodeGenerator.Id })]
+[MGenExtension(Id, before: new [] { DefaultCodeGenerator.Id })]
 public class CloneCodeGenerator : IHandleConstructorCodeGeneration, IHandleMethodCodeGeneration
 {
     public bool Enabled { get; set; } = true;

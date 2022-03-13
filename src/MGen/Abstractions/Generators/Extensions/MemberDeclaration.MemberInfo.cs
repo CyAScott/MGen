@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 
-namespace MGen.Abstractions.Generators.Extensions.Abstractions;
+namespace MGen.Abstractions.Generators.Extensions;
 
 partial class MemberDeclaration
 {

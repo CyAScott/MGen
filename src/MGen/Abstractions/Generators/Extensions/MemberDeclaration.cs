@@ -3,9 +3,10 @@ using System.Diagnostics;
 using System.Linq;
 using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Builders.Members;
+using MGen.Abstractions.Generators.Extensions.Abstractions;
 using Microsoft.CodeAnalysis;
 
-namespace MGen.Abstractions.Generators.Extensions.Abstractions;
+namespace MGen.Abstractions.Generators.Extensions;
 
 /// <summary>
 /// Adds required members to a class declaration based on the interfaces it needs to implement.
@@ -34,8 +35,8 @@ public partial class MemberDeclaration : IHandleOnInit, IHandleOnTypeGenerated
 
     public void TypeGenerated(TypeGeneratedArgs args)
     {
-        if (args.Generator.State.TryGetValue(MembersWithCodeDeclaration.MembersWithCodeDeclarationKey, out var value) &&
-            value is IHaveInheritance item and IHaveMembersWithCode builder)
+        if (args.Generator.TryToGetBuilder(out var builder) &&
+            builder is IHaveInheritance item)
         {
             var index = builder.Count;
             var members = GetMembers(item);

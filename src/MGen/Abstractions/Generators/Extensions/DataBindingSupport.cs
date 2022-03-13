@@ -1,60 +1,18 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using MGen.Abstractions.Builders.Blocks;
 using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
-using Microsoft.CodeAnalysis;
 
 namespace MGen.Abstractions.Generators.Extensions;
 
 /// <summary>
 /// Implements <see cref="INotifyPropertyChanged"/> and / or <see cref="INotifyPropertyChanging"/> for classes that require it.
 /// </summary>
-[MGenExtension(Id, after: new[] { MemberDeclaration.Id }), DebuggerStepThrough]
-public class DataBindingSupport : IHandleOnInit
+[MGenExtension(Id, after: new[] { MembersWithCodeDeclaration.Id }, before: new [] { MemberDeclaration.Id }), DebuggerStepThrough]
+public class DataBindingSupport : IHandleOnInit, IHandleOnTypeGenerated
 {
-    internal static bool HasType(TypeGenerator generator, string name)
-    {
-        if (generator.State.TryGetValue(name, out var hasType))
-        {
-            return (bool)hasType;
-        }
-
-        if (!generator.State.TryGetValue(MembersWithCodeDeclaration.MembersWithCodeDeclarationKey, out var value) ||
-            value is not IHaveInheritance item)
-        {
-            generator.State[name] = false;
-            return false;
-        }
-
-        generator.State[name] = false;
-
-        foreach (var code in item.Inheritance.OfType<CodeWithInheritedTypeSymbol>())
-        {
-            if (code.InheritedTypeSymbol is INamedTypeSymbol symbol)
-            {
-                foreach (var @interface in symbol.AllInterfaces)
-                {
-                    if (@interface.ContainingAssembly.Name == "System.ObjectModel" &&
-                        @interface.ContainingNamespace.Name == "ComponentModel")
-                    {
-                        switch (@interface.Name)
-                        {
-                            case nameof(INotifyPropertyChanged):
-                                generator.State[nameof(INotifyPropertyChanged)] = true;
-                                break;
-                            case nameof(INotifyPropertyChanging):
-                                generator.State[nameof(INotifyPropertyChanging)] = true;
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return (bool)generator.State[name];
-    }
-
     public const string Id = "MGen." + nameof(DataBindingSupport);
 
     public void Init(InitArgs args)
@@ -62,9 +20,35 @@ public class DataBindingSupport : IHandleOnInit
         args.Context.Add(new PropertyChangedCodeGenerator());
         args.Context.Add(new PropertyChangingCodeGenerator());
     }
+
+    public void TypeGenerated(TypeGeneratedArgs args)
+    {
+        if (args.Generator.TryToGetBuilder(out var builder) && builder is IHaveInheritance item)
+        {
+            foreach (var code in item.Inheritance.OfType<CodeWithInheritedTypeSymbol>())
+            {
+                foreach (var @interface in code.InheritedTypeSymbol.AllInterfaces)
+                {
+                    if (@interface.ContainingAssembly.Name == "System.ObjectModel" &&
+                        @interface.ContainingNamespace.Name == "ComponentModel")
+                    {
+                        switch (@interface.Name)
+                        {
+                            case nameof(INotifyPropertyChanged):
+                                args.Generator.State[nameof(INotifyPropertyChanged)] = true;
+                                break;
+                            case nameof(INotifyPropertyChanging):
+                                args.Generator.State[nameof(INotifyPropertyChanging)] = true;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
-[MGenExtension(Id, after: new[] { DefaultCodeGenerator.Id }), DebuggerStepThrough]
+[MGenExtension(Id, after: new [] { DefaultCodeGenerator.Id }), DebuggerStepThrough]
 public class PropertyChangedCodeGenerator : IHandlePropertySetCodeGeneration
 {
     public bool Enabled { get; set; } = true;
@@ -73,16 +57,15 @@ public class PropertyChangedCodeGenerator : IHandlePropertySetCodeGeneration
 
     public void Handle(PropertySetCodeGenerationArgs args)
     {
-        if (DataBindingSupport.HasType(args.Generator, nameof(INotifyPropertyChanged)))
+        if (args.Generator.State.ContainsKey(nameof(INotifyPropertyChanged)))
         {
-            args.Builder.Set.Add(new Code(stringBuilder => stringBuilder
-                .AppendIndent(args.Builder.IndentLevel + 2)
-                .Append("PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(\"").Append(args.Builder.Name).AppendLine("\"));")));
+            args.Builder.Set.AddLine(new Code(stringBuilder => stringBuilder
+                .Append("PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(\"").Append(args.Builder.Name).Append("\"))")));
         }
     }
 }
 
-[MGenExtension(Id, before: new[] { DefaultCodeGenerator.Id }), DebuggerStepThrough]
+[MGenExtension(Id, before: new [] { DefaultCodeGenerator.Id }), DebuggerStepThrough]
 public class PropertyChangingCodeGenerator : IHandlePropertySetCodeGeneration
 {
     public bool Enabled { get; set; } = true;
@@ -91,11 +74,10 @@ public class PropertyChangingCodeGenerator : IHandlePropertySetCodeGeneration
 
     public void Handle(PropertySetCodeGenerationArgs args)
     {
-        if (DataBindingSupport.HasType(args.Generator, nameof(INotifyPropertyChanging)))
+        if (args.Generator.State.ContainsKey(nameof(INotifyPropertyChanging)))
         {
-            args.Builder.Set.Add(new Code(stringBuilder => stringBuilder
-                .AppendIndent(args.Builder.IndentLevel + 2)
-                .Append("PropertyChanging?.Invoke(this, new System.ComponentModel.PropertyChangingEventArgs(\"").Append(args.Builder.Name).AppendLine("\"));")));
+            args.Builder.Set.AddLine(new Code(stringBuilder => stringBuilder
+                .Append("PropertyChanging?.Invoke(this, new System.ComponentModel.PropertyChangingEventArgs(\"").Append(args.Builder.Name).Append("\"))")));
             args.Builder.Set.Add(Code.Empty);
         }
     }

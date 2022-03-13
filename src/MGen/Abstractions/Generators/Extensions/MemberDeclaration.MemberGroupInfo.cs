@@ -4,7 +4,7 @@ using System.Diagnostics;
 using MGen.Abstractions.Builders.Members;
 using Microsoft.CodeAnalysis;
 
-namespace MGen.Abstractions.Generators.Extensions.Abstractions;
+namespace MGen.Abstractions.Generators.Extensions;
 
 partial class MemberDeclaration
 {
