@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Shouldly;
 
 namespace MGen.Abstractions.Generators.Properties;
 
@@ -22,7 +23,7 @@ class PropertyDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -60,7 +61,7 @@ class PropertyDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -98,7 +99,7 @@ class PropertyDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -150,7 +151,7 @@ class PropertyDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -202,7 +203,7 @@ class PropertyDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -241,7 +242,7 @@ class PropertyDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -283,7 +284,7 @@ class PropertyDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -337,7 +338,7 @@ class PropertyDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -389,7 +390,7 @@ class PropertyDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",

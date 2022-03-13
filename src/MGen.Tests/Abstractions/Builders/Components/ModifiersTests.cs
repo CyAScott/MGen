@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using Shouldly;
 
 namespace MGen.Abstractions.Builders.Components;
 
@@ -30,45 +31,45 @@ class ModifiersTests
     {
         var modifiers = isAllowed ? new Modifiers(modifier) : new Modifiers();
 
-        Assert.AreEqual(isAllowed, modifiers.IsAllowed(modifier));
+        isAllowed.ShouldBe(modifiers.IsAllowed(modifier));
 
         var isAllowedProperty = typeof(Modifiers).GetProperty("Is" + modifier + "Allowed");
-        Assert.IsNotNull(isAllowedProperty);
-        Assert.IsTrue(isAllowedProperty.CanRead);
-        Assert.IsFalse(isAllowedProperty.CanWrite);
-        Assert.AreEqual(isAllowed, isAllowedProperty.GetValue(modifiers));
+        isAllowedProperty.ShouldNotBeNull();
+        isAllowedProperty.CanRead.ShouldBeTrue();
+        isAllowedProperty.CanWrite.ShouldBeFalse();
+        isAllowed.ShouldBe(isAllowedProperty.GetValue(modifiers));
 
-        Assert.IsFalse(modifiers.Contains(modifier));
+        modifiers.ShouldNotContain(modifier);
 
         var isProperty = typeof(Modifiers).GetProperty("Is" + modifier);
-        Assert.IsNotNull(isProperty);
-        Assert.IsTrue(isProperty.CanRead);
-        Assert.IsTrue(isProperty.CanWrite);
-        Assert.IsFalse((bool)isProperty.GetValue(modifiers)!);
+        isProperty.ShouldNotBeNull();
+        isProperty.CanRead.ShouldBeTrue();
+        isProperty.CanWrite.ShouldBeTrue();
+        isProperty.GetValue(modifiers).ShouldBe(false);
 
         if (isAllowed)
         {
-            Assert.IsTrue(modifiers.Add(modifier));
-            Assert.IsFalse(modifiers.Add(modifier));
-            Assert.IsTrue(modifiers.Contains(modifier));
-            Assert.IsTrue((bool)isProperty.GetValue(modifiers)!);
-            Assert.IsTrue(modifiers.Remove(modifier));
-            Assert.IsFalse(modifiers.Remove(modifier));
-            Assert.IsFalse(modifiers.Contains(modifier));
-            Assert.IsFalse((bool)isProperty.GetValue(modifiers)!);
+            modifiers.Add(modifier).ShouldBeTrue();
+            modifiers.Add(modifier).ShouldBeFalse();
+            modifiers.ShouldContain(modifier);
+            isProperty.GetValue(modifiers).ShouldBe(true);
+            modifiers.Remove(modifier).ShouldBeTrue();
+            modifiers.Remove(modifier).ShouldBeFalse();
+            modifiers.ShouldNotContain(modifier);
+            isProperty.GetValue(modifiers).ShouldBe(false);
 
-            Assert.IsTrue(modifiers.Add(modifier));
+            modifiers.Add(modifier).ShouldBeTrue();
             isProperty.SetValue(modifiers, true);
-            Assert.IsTrue(modifiers.Contains(modifier));
+            modifiers.ShouldContain(modifier);
 
             isProperty.SetValue(modifiers, false);
-            Assert.IsFalse(modifiers.Contains(modifier));
+            modifiers.ShouldNotContain(modifier);
         }
         else
         {
-            Assert.Throws<ArgumentException>(() => modifiers.Add(modifier));
-            Assert.IsFalse(modifiers.Contains(modifier));
-            Assert.IsFalse((bool)isProperty.GetValue(modifiers)!);
+            Should.Throw<ArgumentException>(() => modifiers.Add(modifier));
+            modifiers.ShouldNotContain(modifier);
+            isProperty.GetValue(modifiers).ShouldBe(false);
 
         }
     }
@@ -80,9 +81,9 @@ class ModifiersTests
 
         foreach (var modifer in Enum.GetValues<Modifier>())
         {
-            Assert.IsFalse(modifiers.Contains(modifer));
-            Assert.IsTrue(modifiers.Add(modifer));
-            Assert.IsTrue(modifiers.Contains(modifer));
+            modifiers.ShouldNotContain(modifer);
+            modifiers.Add(modifer).ShouldBeTrue();
+            modifiers.ShouldContain(modifer);
         }
 
         var stringBuilder = new StringBuilder();
@@ -91,7 +92,7 @@ class ModifiersTests
 
         var code = stringBuilder.ToString();
 
-        Assert.IsTrue(code.All(c => char.IsLetter(c) && char.IsLower(c) || c == ' '));
+        code.All(c => char.IsLetter(c) && char.IsLower(c) || c == ' ').ShouldBeTrue();
 
         var results = code
             .Split(' ', StringSplitOptions.RemoveEmptyEntries)
@@ -100,22 +101,24 @@ class ModifiersTests
         
         for (var index = 1; index < results.Count; index++)
         {
-            Assert.Less((int)results[index - 1], (int)results[index]);
+            var a = (int)results[index - 1];
+            a.ShouldBeLessThan((int)results[index]);
         }
 
         if (appendAccessors)
         {
-            Assert.That(results, Has.Member(Modifier.Public));
-            Assert.That(results, Has.Member(Modifier.Private));
-            Assert.That(results, Has.Member(Modifier.Protected));
-            Assert.That(results, Has.Member(Modifier.Internal));
+            results.ShouldContain(Modifier.Public);
+            results.ShouldContain(Modifier.Public);
+            results.ShouldContain(Modifier.Private);
+            results.ShouldContain(Modifier.Protected);
+            results.ShouldContain(Modifier.Internal);
         }
         else
         {
-            Assert.That(results, Has.No.Member(Modifier.Public));
-            Assert.That(results, Has.No.Member(Modifier.Private));
-            Assert.That(results, Has.No.Member(Modifier.Protected));
-            Assert.That(results, Has.No.Member(Modifier.Internal));
+            results.ShouldNotContain(Modifier.Public);
+            results.ShouldNotContain(Modifier.Private);
+            results.ShouldNotContain(Modifier.Protected);
+            results.ShouldNotContain(Modifier.Internal);
         }
     }
 }

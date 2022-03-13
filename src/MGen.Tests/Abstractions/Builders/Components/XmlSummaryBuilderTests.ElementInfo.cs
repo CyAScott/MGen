@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using NUnit.Framework;
+using Shouldly;
 using ElementClosure = MGen.Abstractions.Builders.Components.XmlCommentsBuilder.ElementClosure;
 using ElementInfo = MGen.Abstractions.Builders.Components.XmlCommentsBuilder.ElementInfo;
 
@@ -24,11 +25,11 @@ partial class XmlSummaryBuilderTests
 
         element.CopyContentsTo(actualLines, out _);
 
-        Assert.AreEqual(expectedLines.Length, actualLines.Count);
+        expectedLines.Length.ShouldBe(actualLines.Count);
 
         for (var index = 0; index < actualLines.Count; index++)
         {
-            Assert.AreEqual(expectedLines[index], actualLines[index]);
+            expectedLines[index].ShouldBe(actualLines[index]);
         }
     }
 
@@ -37,15 +38,15 @@ partial class XmlSummaryBuilderTests
     {
         var element = Create("<element>", "Line 1\r\nLine 2");
 
-        Assert.AreEqual("element", element.Name.ToString());
-        Assert.AreEqual(ElementClosure.StartOfElement, element.Closure);
+        element.Name.ToString().ShouldBe("element");
+        ElementClosure.StartOfElement.ShouldBe(element.Closure);
 
         var lines = new List<string>();
         element.CopyContentsTo(lines, out _);
 
-        Assert.AreEqual(2, lines.Count);
-        Assert.AreEqual("Line 1", lines[0]);
-        Assert.AreEqual("Line 2", lines[1]);
+        lines.Count.ShouldBe(2);
+        lines[0].ShouldBe("Line 1");
+        lines[1].ShouldBe("Line 2");
     }
 
     [Test,
@@ -63,10 +64,10 @@ partial class XmlSummaryBuilderTests
     {
         var element = Create(@case);
 
-        Assert.AreEqual("element", element.Name.ToString());
+        element.Name.ToString().ShouldBe("element");
 
         var value = element.GetAttribute("attribute");
-        Assert.IsNull(value);
+        value.ShouldBeNull();
     }
 
     [Test,
@@ -79,10 +80,10 @@ partial class XmlSummaryBuilderTests
     {
         var element = Create(@case);
 
-        Assert.AreEqual("element", element.Name.ToString());
+        element.Name.ToString().ShouldBe("element");
 
         var value = element.GetAttribute("attribute");
-        Assert.IsEmpty(value);
+        value.ShouldBeEmpty();
     }
 
     [Test,
@@ -96,10 +97,10 @@ partial class XmlSummaryBuilderTests
     {
         var element = Create(@case);
 
-        Assert.AreEqual("element", element.Name.ToString());
+        element.Name.ToString().ShouldBe("element");
 
         var value = element.GetAttribute("attribute");
-        Assert.AreEqual(result, value);
+        value.ShouldBe(result);
     }
 
     [Test,
@@ -109,11 +110,11 @@ partial class XmlSummaryBuilderTests
     {
         var element = Create(@case);
 
-        Assert.AreEqual("element", element.Name.ToString());
+        element.Name.ToString().ShouldBe("element");
 
         var lines = new List<string>();
         element.CopyContentsTo(lines, out _);
-        Assert.IsEmpty(lines);
+        lines.ShouldBeEmpty();
     }
 
     [Test,
@@ -125,8 +126,8 @@ partial class XmlSummaryBuilderTests
      TestCase("element>")]
     public void TestInvalidElement(string @case)
     {
-        var exception = Assert.Throws<InvalidEnumArgumentException>(() => Create(@case));
-        Assert.IsTrue(exception.Message.Contains(@case));
+        var exception = Should.Throw<InvalidEnumArgumentException>(() => Create(@case));
+        exception.Message.ShouldContain(@case);
     }
 
     [Test,
@@ -135,6 +136,6 @@ partial class XmlSummaryBuilderTests
      TestCase("<element ")]
     public void TestNoElements(string @case)
     {
-        Assert.IsFalse(ElementInfo.Next(@case.AsSpan(), out _));
+        ElementInfo.Next(@case.AsSpan(), out _).ShouldBeFalse();
     }
 }

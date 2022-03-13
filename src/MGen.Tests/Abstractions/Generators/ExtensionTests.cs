@@ -1,5 +1,6 @@
 ﻿using MGen.Abstractions.Generators.Extensions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace MGen.Abstractions.Generators;
 
@@ -23,7 +24,7 @@ class ExtensionTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(new [] { typeof(Demo).Assembly }, out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",

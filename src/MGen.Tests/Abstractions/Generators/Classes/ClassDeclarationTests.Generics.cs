@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Shouldly;
 
 namespace MGen.Abstractions.Generators.Classes;
 
@@ -19,7 +20,7 @@ partial class ClassDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -51,7 +52,7 @@ partial class ClassDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -91,7 +92,7 @@ partial class ClassDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -121,7 +122,7 @@ partial class ClassDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",
@@ -150,7 +151,7 @@ partial class ClassDeclarationTests
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",

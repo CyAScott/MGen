@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
+using Shouldly;
 
 namespace MGen.Abstractions.Generators;
 
@@ -50,18 +51,18 @@ class ExtensionOrderOfOperationsTests
         };
 
         testModelGenerator.Compile(out var diagnostics);
-        Assert.IsEmpty(diagnostics);
+        diagnostics.ShouldBeEmpty();
 
-        Assert.AreEqual(5, order.Count);
-        Assert.AreEqual(nameof(testModelGenerator.Init), order[0]);
-        Assert.AreEqual(nameof(testModelGenerator.TypeGenerated), order[1]);
-        Assert.AreEqual(nameof(testModelGenerator.TypesGenerated), order[2]);
-        Assert.AreEqual(nameof(testModelGenerator.FileGenerated), order[3]);
-        Assert.AreEqual(nameof(testModelGenerator.FilesGenerated), order[4]);
+        order.Count.ShouldBe(5);
+        order[0].ShouldBe(nameof(testModelGenerator.Init));
+        order[1].ShouldBe(nameof(testModelGenerator.TypeGenerated));
+        order[2].ShouldBe(nameof(testModelGenerator.TypesGenerated));
+        order[3].ShouldBe(nameof(testModelGenerator.FileGenerated));
+        order[4].ShouldBe(nameof(testModelGenerator.FilesGenerated));
 
         foreach (var pair in argValues)
         {
-            Assert.IsNotNull(pair.Value, $"Arg for {pair.Key} is null.");
+            pair.Value.ShouldNotBeNull($"Arg for {pair.Key} is null.");
         }
     }
 }

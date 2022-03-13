@@ -2,6 +2,7 @@
 using System.Text;
 using Microsoft.CodeAnalysis;
 using NUnit.Framework;
+using Shouldly;
 
 namespace MGen.Abstractions.Builders.Components;
 
@@ -129,7 +130,7 @@ partial class ArgumentParametersTests
             { "object", "arg" }
         };
 
-        Assert.Throws<ArgumentException>(() => parameters.Add("object", "arg"));
+        Should.Throw<ArgumentException>(() => parameters.Add("object", "arg"));
     }
 
     [Test]
