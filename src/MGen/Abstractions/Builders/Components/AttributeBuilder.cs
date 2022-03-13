@@ -97,7 +97,7 @@ public class AttributeBuilder : IAmCode, IHaveEnabled, IHaveState
 {
     internal AttributeBuilder(AttributeData attribute)
     {
-        Type = new(attribute.AttributeClass);
+        Type = new CodeType(attribute.AttributeClass!);
 
         Add(attribute.ConstructorArguments);
 

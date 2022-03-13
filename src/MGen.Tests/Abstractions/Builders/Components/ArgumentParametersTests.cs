@@ -58,7 +58,7 @@ partial class ArgumentParametersTests
     {
         var parameters = new ArgumentParameters(new TestArgumentParametersParent());
 
-        parameters.Add("object?", "arg").DefaultValue = "null";
+        parameters.Add("object?", "arg").DefaultValue = Code.Null;
 
         var (arguments, descriptions) = parameters.ToCode();
 

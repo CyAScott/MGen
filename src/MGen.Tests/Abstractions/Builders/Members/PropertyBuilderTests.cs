@@ -47,7 +47,7 @@ partial class PropertyBuilderTests
         var @class = @namespace.AddClass("Example");
 
         var property = @class.AddIndexProperty("object?", "int", "index");
-        property.Get.Return("null");
+        property.Get.Return(Code.Null);
         property.Set.AddLine("throw System.IndexOutOfRangeException()");
         
         @namespace.ToCode().ShouldBe(

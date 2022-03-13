@@ -31,17 +31,17 @@ public class Code : IAmCode
     readonly Action<StringBuilder> _generator;
 
     public Code(Action<StringBuilder> generator) => _generator = generator;
-    public Code(ITypeSymbol? type) => _generator = sb => sb.AppendType(type);
 
     public static readonly Code Empty = string.Empty;
     public static readonly Code NewLine = Environment.NewLine;
+    public static readonly Code Null = "null";
 
     public void Generate(StringBuilder stringBuilder) => _generator(stringBuilder);
 
     public static implicit operator Code(Action<StringBuilder> generator) => new(generator);
     public static implicit operator Code(Func<string> generator) => new(sb => sb.Append(generator));
     public static implicit operator Code(TypedConstant constant) => new(sb => sb.AppendConstant(constant));
-    public static implicit operator Code(bool value) => new(sb => sb.Append(value));
+    public static implicit operator Code(bool value) => new(sb => sb.Append(value ? "true" : "false"));
     public static implicit operator Code(byte value) => new(sb => sb.Append(value));
     public static implicit operator Code(char value) => new(sb => sb.Append(value));
     public static implicit operator Code(decimal value) => new(sb => sb.Append(value));
@@ -55,6 +55,15 @@ public class Code : IAmCode
     public static implicit operator Code(uint value) => new(sb => sb.Append(value));
     public static implicit operator Code(ulong value) => new(sb => sb.Append(value));
     public static implicit operator Code(ushort value) => new(sb => sb.Append(value));
+}
+
+public class CodeType : Code
+{
+    public CodeType(ITypeSymbol type)
+        : base(sb => sb.AppendType(type)) =>
+        Type = type;
+
+    public ITypeSymbol Type { get; }
 }
 
 public static partial class StringBuilderExtensions

@@ -43,7 +43,7 @@ public class EventBuilder :
         };
         Name = @event.Name;
         Parent = parent;
-        ReturnType = new(@event.Type);
+        ReturnType = new CodeType(@event.Type);
     }
 
     internal EventBuilder(IHaveEvents parent, string type, string name)

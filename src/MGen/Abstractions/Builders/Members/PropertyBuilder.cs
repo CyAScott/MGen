@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ public interface IHaveProperties : IHaveAName, IHaveMembers, IHaveModifiers
 
 public static partial class MembersExtensions
 {
+    [DebuggerStepThrough]
     public static PropertyBuilder AddProperty(this IHaveProperties members, IPropertySymbol first, IPropertySymbol? second = null)
     {
         var property = second == null ? members.Add(new PropertyBuilder(members, first)) : members.Add(new PropertyBuilder(members, first, second));
@@ -27,6 +29,7 @@ public static partial class MembersExtensions
         return property;
     }
 
+    [DebuggerStepThrough]
     public static PropertyBuilder AddIndexProperty(this IHaveProperties members, string propertyType, string indexType, string indexName)
     {
         var property = members.Add(new PropertyBuilder(members, propertyType, "this", false));
@@ -41,6 +44,7 @@ public static partial class MembersExtensions
         return property;
     }
 
+    [DebuggerStepThrough]
     public static PropertyBuilder AddProperty(this IHaveProperties members, string type, string name, bool generateField = true)
     {
         var property = members.Add(new PropertyBuilder(members, type, name, generateField));
@@ -54,6 +58,7 @@ public static partial class MembersExtensions
     }
 }
 
+[DebuggerStepThrough]
 public sealed class PropertyBuilder : BlockOfMembers,
     ICanHaveAnExplicitDeclaration,
     IHaveAReturnType,
@@ -78,7 +83,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
         Name = property.Name;
         Parent = parent;
         PropertySymbols = properties;
-        ReturnType = new(property.Type);
+        ReturnType = new CodeType(property.Type);
         XmlComments = new(this, property);
 
         var getMethod = properties.Select(it => it.GetMethod).FirstOrDefault(it => it != null);
@@ -264,6 +269,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
     string IHaveAName.Name => ArgumentParameters.Count == 0 ? Name : "this";
 }
 
+[DebuggerStepThrough]
 public class PropertyGetterSetter : BlockOfCode<PropertyBuilder>, IHaveAttributes, IHaveState
 {
     internal PropertyGetterSetter(PropertyBuilder parent, bool isGetter, IMethodSymbol? method = null)

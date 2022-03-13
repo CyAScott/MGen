@@ -176,7 +176,7 @@ public class ArgumentParameterBuilder : IAmCode,
 
         Attributes = new(parent, false, parameter);
         IsParams = parameter.IsParams;
-        Type = new(parameter.Type);
+        Type = new CodeType(parameter.Type);
         Name = parameter.Name;
         Parent = _parent = parent;
         RefKind = parameter.RefKind;
@@ -185,7 +185,7 @@ public class ArgumentParameterBuilder : IAmCode,
         {
             if (parameter.ExplicitDefaultValue == null)
             {
-                DefaultValue = "null";
+                DefaultValue = Code.Null;
             }
             else if (parameter.ExplicitDefaultValue is string @string)
             {
@@ -193,7 +193,7 @@ public class ArgumentParameterBuilder : IAmCode,
             }
             else if (parameter.ExplicitDefaultValue is bool boolean)
             {
-                DefaultValue = boolean ? "true" : "false";
+                DefaultValue = boolean;
             }
             else
             {
