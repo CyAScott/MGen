@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 
 namespace MGen.Abstractions.Attributes;
 
+[DebuggerStepThrough]
 public sealed class GenerateAttributeRuntime
 {
     /// <summary>

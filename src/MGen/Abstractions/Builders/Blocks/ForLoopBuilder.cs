@@ -1,9 +1,11 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 
 namespace MGen.Abstractions.Builders.Blocks;
 
 public static partial class CodeBlockExtensions
 {
+    [DebuggerStepThrough]
     public static ForLoopBuilder AddForLoop(this BlockOfCodeBase parent, Code? initializer = null, Code? condition = null, Code? iterator = null) => parent
         .Add(new ForLoopBuilder(parent)
         {
@@ -18,6 +20,7 @@ public static partial class CodeBlockExtensions
 /// For Loop Block
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public class ForLoopBuilder : BlockOfCode
 {
     internal ForLoopBuilder(BlockOfCodeBase parent)

@@ -1,6 +1,7 @@
 ﻿using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Builders.Members;
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MGen.Abstractions.Builders;
@@ -11,6 +12,7 @@ public interface IHaveStructs : IHaveAName, IHaveMembers
 
 public static partial class MembersExtensions
 {
+    [DebuggerStepThrough]
     public static StructBuilder AddStruct(this IHaveStructs members, string name) => members
         .Add(new StructBuilder(members, name));
 }
@@ -20,6 +22,7 @@ public static partial class MembersExtensions
 /// A struct
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public sealed class StructBuilder : BlockOfMembers,
     IHaveADeclarationKeyword,
     IHaveAStaticConstructor,

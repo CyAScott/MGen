@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 
 namespace MGen.Abstractions.Builders.Blocks;
 
 public static partial class CodeBlockExtensions
 {
+    [DebuggerStepThrough]
     public static DoLoopBuilder AddDoLoop(this BlockOfCodeBase parent, Code condition) => parent
         .Add(new DoLoopBuilder(parent, condition));
 }
@@ -14,6 +16,7 @@ public static partial class CodeBlockExtensions
 /// Do Loop Block
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public class DoLoopBuilder : BlockOfCode
 {
     internal DoLoopBuilder(BlockOfCodeBase parent, Code condition)

@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 
 namespace MGen.Abstractions.Builders.Blocks;
 
 public static partial class CodeBlockExtensions
 {
+    [DebuggerStepThrough]
     public static ForeachLoopBuilder AddForeachLoop(this BlockOfCodeBase parent, string elementType, string elementVariableName, Code enumerable) => parent
         .Add(new ForeachLoopBuilder(parent, elementType, elementVariableName, enumerable));
 
+    [DebuggerStepThrough]
     public static ForeachLoopBuilder AddForeachLoop(this BlockOfCodeBase parent, string elementVariableName, Code enumerable) => parent
         .Add(new ForeachLoopBuilder(parent, "var", elementVariableName, enumerable));
 }
@@ -17,6 +20,7 @@ public static partial class CodeBlockExtensions
 /// Foreach Loop Block
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public class ForeachLoopBuilder : BlockOfCode
 {
     internal ForeachLoopBuilder(BlockOfCodeBase parent, string elementType, string elementVariableName, Code enumerable)

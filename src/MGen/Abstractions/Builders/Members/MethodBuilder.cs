@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using MGen.Abstractions.Builders.Components;
 using Microsoft.CodeAnalysis;
@@ -12,13 +13,16 @@ public interface IHaveMethods : IHaveAName, IHaveMembers, IHaveModifiers
 
 public static partial class MembersExtensions
 {
+    [DebuggerStepThrough]
     public static MethodBuilder AddMethod(this IHaveMethods members, IMethodSymbol method) =>
         members.Add(new MethodBuilder(members, method));
 
+    [DebuggerStepThrough]
     public static MethodBuilder AddMethod(this IHaveMethods members, string type, string name) => members
         .Add(new MethodBuilder(members, type, name));
 }
 
+[DebuggerStepThrough]
 public class MethodBuilder : BlockOfCode<IHaveMethods>,
     ICanHaveAnExplicitDeclaration,
     IHaveAReturnType,

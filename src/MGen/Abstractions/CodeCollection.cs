@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MGen.Abstractions;
 
+[DebuggerStepThrough]
 public abstract class CodeCollection : IAmIndentedCode, IHaveEnabled, IReadOnlyList<IAmCode>
 {
     [ExcludeFromCodeCoverage]

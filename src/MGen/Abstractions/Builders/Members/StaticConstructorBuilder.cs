@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using MGen.Abstractions.Builders.Components;
 using System.Text;
@@ -10,6 +11,7 @@ public interface IHaveAStaticConstructor : IHaveAName, IHaveMembers
     StaticConstructorBuilder StaticConstructor { get; }
 }
 
+[DebuggerStepThrough]
 public sealed class StaticConstructorBuilder : BlockOfCode<IHaveAStaticConstructor>, IHaveADeclarationKeyword, IHaveAName, IHaveAttributes, IHaveState
 {
     internal StaticConstructorBuilder(IHaveAStaticConstructor parent)

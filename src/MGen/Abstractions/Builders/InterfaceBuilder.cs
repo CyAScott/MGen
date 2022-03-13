@@ -1,6 +1,7 @@
 ﻿using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Builders.Members;
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MGen.Abstractions.Builders;
@@ -11,6 +12,7 @@ public interface IHaveInterfaces : IHaveAName, IHaveMembers
 
 public static partial class MembersExtensions
 {
+    [DebuggerStepThrough]
     public static InterfaceBuilder AddInterface(this IHaveInterfaces members, string name) => members
         .Add(new InterfaceBuilder(members, name));
 }
@@ -20,6 +22,7 @@ public static partial class MembersExtensions
 /// An interface
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public sealed class InterfaceBuilder : BlockOfMembers,
     IHaveADeclarationKeyword,
     IHaveAStaticConstructor,

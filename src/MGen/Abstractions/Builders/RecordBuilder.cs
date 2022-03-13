@@ -1,6 +1,7 @@
 ﻿using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Builders.Members;
 using System;
+using System.Diagnostics;
 
 namespace MGen.Abstractions.Builders;
 
@@ -10,6 +11,7 @@ public interface IHaveRecords : IHaveAName, IHaveMembers
 
 public static partial class MembersExtensions
 {
+    [DebuggerStepThrough]
     public static RecordBuilder AddRecord(this IHaveRecords members, string name) => members
         .Add(new RecordBuilder(members, name));
 }
@@ -19,6 +21,7 @@ public static partial class MembersExtensions
 /// A record
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public sealed class RecordBuilder : BlockOfMembers,
     IHaveADeclarationKeyword,
     IHaveAStaticConstructor,

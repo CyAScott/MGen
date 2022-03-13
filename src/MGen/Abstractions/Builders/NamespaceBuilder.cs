@@ -1,5 +1,6 @@
 ﻿using MGen.Abstractions.Builders.Members;
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MGen.Abstractions.Builders;
@@ -9,6 +10,7 @@ namespace MGen.Abstractions.Builders;
 /// A namespace
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public class NamespaceBuilder : BlockOfMembers,
     IHaveADeclarationKeyword,
     IHaveClasses,

@@ -1,17 +1,21 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MGen.Abstractions.Builders.Blocks;
 
 public static partial class CodeBlockExtensions
 {
+    [DebuggerStepThrough]
     public static LocalVariableBuilder AddVariable(this BlockOfCodeBase parent, string name, Code initialValue) => parent
         .Add(new LocalVariableBuilder(parent, "var", name, initialValue));
 
+    [DebuggerStepThrough]
     public static LocalVariableBuilder AddVariable(this BlockOfCodeBase parent, string type, string name, Code? initialValue = null) => parent
         .Add(new LocalVariableBuilder(parent, type, name, initialValue));
 }
 
+[DebuggerStepThrough]
 public class LocalVariableBuilder : IAmIndentedCode, IHaveAName
 {
     internal LocalVariableBuilder(IAmIndentedCode? parent, string type, string name, Code? initialValue = null)

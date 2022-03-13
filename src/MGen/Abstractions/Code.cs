@@ -57,6 +57,7 @@ public class Code : IAmCode
     public static implicit operator Code(ushort value) => new(sb => sb.Append(value));
 }
 
+[DebuggerStepThrough]
 public class CodeType : Code
 {
     public CodeType(ITypeSymbol type)

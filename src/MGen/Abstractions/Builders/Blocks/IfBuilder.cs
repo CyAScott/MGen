@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -8,6 +9,7 @@ namespace MGen.Abstractions.Builders.Blocks;
 
 public static partial class CodeBlockExtensions
 {
+    [DebuggerStepThrough]
     public static IfBuilder AddIf(this BlockOfCodeBase parent, Code @if) => parent
         .Add(new IfBuilder(parent, @if));
 }
@@ -17,6 +19,7 @@ public static partial class CodeBlockExtensions
 /// If, Else If, Else Block
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public class IfBuilder : BlockOfCode
 {
     internal IfBuilder(BlockOfCodeBase parent, Code @if)
@@ -53,6 +56,7 @@ public class IfBuilder : BlockOfCode
     public ElseBuilder Else { get; }
 }
 
+[DebuggerStepThrough]
 public class ElseIfCollection : IReadOnlyCollection<ElseIfBuilder>
 {
     [ExcludeFromCodeCoverage]
@@ -92,6 +96,7 @@ public class ElseIfCollection : IReadOnlyCollection<ElseIfBuilder>
 /// <summary>
 /// An else if case for <see cref="IfBuilder"/>.
 /// </summary>
+[DebuggerStepThrough]
 public class ElseIfBuilder : BlockOfCode
 {
     internal ElseIfBuilder(BlockOfCodeBase parent, Code @if)
@@ -111,6 +116,7 @@ public class ElseIfBuilder : BlockOfCode
 /// <summary>
 /// An else case for <see cref="IfBuilder"/>.
 /// </summary>
+[DebuggerStepThrough]
 public sealed class ElseBuilder : BlockOfCode
 {
     internal ElseBuilder(BlockOfCodeBase parent)

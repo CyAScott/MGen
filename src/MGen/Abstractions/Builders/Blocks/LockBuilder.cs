@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 
 namespace MGen.Abstractions.Builders.Blocks;
 
 public static partial class CodeBlockExtensions
 {
+    [DebuggerStepThrough]
     public static LockBuilder AddLock(this BlockOfCodeBase parent, Code expression) => parent
         .Add(new LockBuilder(parent, expression));
 }
@@ -14,6 +16,7 @@ public static partial class CodeBlockExtensions
 /// Lock Block
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public class LockBuilder : BlockOfCode
 {
     internal LockBuilder(BlockOfCodeBase parent, Code expression)

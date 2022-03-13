@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using MGen.Abstractions.Builders.Components;
 using System.Text;
 
@@ -10,10 +11,12 @@ public interface IHaveDelegates : IHaveAName, IHaveMembers
 
 public static partial class MembersExtensions
 {
+    [DebuggerStepThrough]
     public static DelegateBuilder AddDelegate(this IHaveDelegates members, string returnType, string name) => members
         .Add(new DelegateBuilder(members, returnType, name));
 }
 
+[DebuggerStepThrough]
 public class DelegateBuilder :
     IHaveADeclarationKeyword,
     IHaveAName,

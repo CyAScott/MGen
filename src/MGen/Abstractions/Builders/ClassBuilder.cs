@@ -1,6 +1,7 @@
 ﻿using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Builders.Members;
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 
@@ -12,6 +13,7 @@ public interface IHaveClasses : IHaveAName, IHaveMembers
 
 public static partial class MembersExtensions
 {
+    [DebuggerStepThrough]
     public static ClassBuilder AddClass(this IHaveClasses members, string name, ITypeSymbol? inheritedTypeSymbol = null, SyntaxTokenList? modifiers = null) => members
         .Add(new ClassBuilder(members, name, inheritedTypeSymbol, modifiers));
 }
@@ -21,6 +23,7 @@ public static partial class MembersExtensions
 /// A class
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public sealed class ClassBuilder : BlockOfMembers,
     IHaveADeclarationKeyword,
     IHaveAStaticConstructor,

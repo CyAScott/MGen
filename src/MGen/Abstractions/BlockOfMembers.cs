@@ -1,6 +1,7 @@
 ﻿using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Builders.Members;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace MGen.Abstractions;
@@ -20,6 +21,7 @@ public interface IHaveMembersWithCode :
 {
 }
 
+[DebuggerStepThrough]
 public abstract class BlockOfMembers : CodeCollection, IHaveMembers
 {
     protected BlockOfMembers(int indentLevel)

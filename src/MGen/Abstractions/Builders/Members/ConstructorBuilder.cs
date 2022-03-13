@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using MGen.Abstractions.Builders.Components;
 using System.Text;
@@ -11,10 +12,12 @@ public interface IHaveConstructors : IHaveAName, IHaveMembers
 
 public static partial class MembersExtensions
 {
+    [DebuggerStepThrough]
     public static ConstructorBuilder AddConstructor(this IHaveConstructors members) => members
         .Add(new ConstructorBuilder(members));
 }
 
+[DebuggerStepThrough]
 public class ConstructorBuilder : BlockOfCode<IHaveConstructors>,
     IHaveAName,
     IHaveArgumentParameters,

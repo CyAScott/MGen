@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -8,6 +9,7 @@ namespace MGen.Abstractions.Builders.Blocks;
 
 public static partial class CodeBlockExtensions
 {
+    [DebuggerStepThrough]
     public static TryCatchBuilder AddTryCatch(this BlockOfCodeBase parent, string exceptionType, string variableName, Code? when = null) => parent
         .Add(new TryCatchBuilder(parent, exceptionType, variableName, when));
 }
@@ -17,6 +19,7 @@ public static partial class CodeBlockExtensions
 /// Try Catch Finally Block
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public class TryCatchBuilder : BlockOfCode
 {
     internal TryCatchBuilder(BlockOfCodeBase parent, string exceptionType, string variableName, Code? when = null)
@@ -48,6 +51,7 @@ public class TryCatchBuilder : BlockOfCode
     public FinallyBuilder Finally { get; }
 }
 
+[DebuggerStepThrough]
 public class CatchCollection : IReadOnlyCollection<CatchBuilder>
 {
     internal CatchCollection(BlockOfCodeBase parent) => _parent = parent;
@@ -87,6 +91,7 @@ public class CatchCollection : IReadOnlyCollection<CatchBuilder>
     public void Remove(int index) => _catches.RemoveAt(index);
 }
 
+[DebuggerStepThrough]
 public class CatchBuilder : BlockOfCode
 {
     internal CatchBuilder(BlockOfCodeBase parent, string type, string name)
@@ -120,6 +125,7 @@ public class CatchBuilder : BlockOfCode
     public string Type { get; }
 }
 
+[DebuggerStepThrough]
 public sealed class FinallyBuilder : BlockOfCode
 {
     internal FinallyBuilder(BlockOfCodeBase parent)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -8,6 +9,7 @@ namespace MGen.Abstractions.Builders.Blocks;
 
 public static partial class CodeBlockExtensions
 {
+    [DebuggerStepThrough]
     public static SwitchCaseBuilder AddSwitchCase(this BlockOfCodeBase parent, Code expression) => parent
         .Add(new SwitchCaseBuilder(parent, expression));
 }
@@ -17,6 +19,7 @@ public static partial class CodeBlockExtensions
 /// Switch Case Block
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public class SwitchCaseBuilder : IAmIndentedCode, IHaveEnabled
 {
     internal SwitchCaseBuilder(BlockOfCodeBase parent, Code expression)
@@ -52,6 +55,7 @@ public class SwitchCaseBuilder : IAmIndentedCode, IHaveEnabled
     }
 }
 
+[DebuggerStepThrough]
 public class CaseCollection : IReadOnlyCollection<CaseBuilder>
 {
     internal CaseCollection(SwitchCaseBuilder parent) => _parent = parent;
@@ -103,6 +107,7 @@ public class CaseCollection : IReadOnlyCollection<CaseBuilder>
 /// <summary>
 /// A case for a <see cref="SwitchCaseBuilder"/>.
 /// </summary>
+[DebuggerStepThrough]
 public class CaseBuilder : BlockOfCode<SwitchCaseBuilder>
 {
     internal CaseBuilder(SwitchCaseBuilder parent)

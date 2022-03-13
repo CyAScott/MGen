@@ -1,5 +1,8 @@
-﻿namespace MGen.Abstractions;
+﻿using System.Diagnostics;
 
+namespace MGen.Abstractions;
+
+[DebuggerStepThrough]
 public abstract class BlockOfCodeBase : CodeCollection
 {
     protected BlockOfCodeBase(int indentLevel)
@@ -8,6 +11,7 @@ public abstract class BlockOfCodeBase : CodeCollection
     }
 }
 
+[DebuggerStepThrough]
 public abstract class BlockOfCode<TParent> : BlockOfCodeBase
     where TParent : IAmIndentedCode
 {
@@ -18,6 +22,7 @@ public abstract class BlockOfCode<TParent> : BlockOfCodeBase
     public TParent Parent { get; }
 }
 
+[DebuggerStepThrough]
 public abstract class BlockOfCode : BlockOfCode<BlockOfCodeBase>
 {
     protected BlockOfCode(BlockOfCodeBase parent, int? indentLevel = null)

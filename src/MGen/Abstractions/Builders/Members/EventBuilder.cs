@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using MGen.Abstractions.Builders.Components;
 using Microsoft.CodeAnalysis;
@@ -12,13 +13,16 @@ public interface IHaveEvents : IHaveAName, IHaveMembers
 
 public static partial class MembersExtensions
 {
+    [DebuggerStepThrough]
     public static EventBuilder AddEvent(this IHaveEvents members, IEventSymbol @event) =>
         members.Add(new EventBuilder(members, @event));
 
+    [DebuggerStepThrough]
     public static EventBuilder AddEvent(this IHaveEvents members, string type, string name) => members
         .Add(new EventBuilder(members, type, name));
 }
 
+[DebuggerStepThrough]
 public class EventBuilder :
     ICanHaveAnExplicitDeclaration,
     IHaveADeclarationKeyword,

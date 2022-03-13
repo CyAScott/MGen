@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 
 namespace MGen.Abstractions.Builders.Blocks;
 
 public static partial class CodeBlockExtensions
 {
+    [DebuggerStepThrough]
     public static WhileLoopBuilder AddWhileLoop(this BlockOfCodeBase parent, Code condition) => parent
         .Add(new WhileLoopBuilder(parent, condition));
 }
@@ -14,6 +16,7 @@ public static partial class CodeBlockExtensions
 /// While Loop Block
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public class WhileLoopBuilder : BlockOfCode
 {
     internal WhileLoopBuilder(BlockOfCodeBase parent, Code condition)

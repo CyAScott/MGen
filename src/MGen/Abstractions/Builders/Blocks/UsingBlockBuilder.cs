@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 
 namespace MGen.Abstractions.Builders.Blocks;
 
 public static partial class CodeBlockExtensions
 {
+    [DebuggerStepThrough]
     public static UsingBlockBuilder AddUsingBlock(this BlockOfCodeBase parent, Code expression) => parent
         .Add(new UsingBlockBuilder(parent, expression));
 }
@@ -14,6 +16,7 @@ public static partial class CodeBlockExtensions
 /// Using Block
 /// </see>
 /// </summary>
+[DebuggerStepThrough]
 public class UsingBlockBuilder : BlockOfCode
 {
     internal UsingBlockBuilder(BlockOfCodeBase parent, Code expression)

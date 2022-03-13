@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using MGen.Abstractions.Builders.Components;
 using System.Text;
@@ -11,10 +12,12 @@ public interface IHaveFields : IHaveAName, IHaveMembers
 
 public static partial class MembersExtensions
 {
+    [DebuggerStepThrough]
     public static FieldBuilder AddField(this IHaveFields members, string type, string name) => members
         .Add(new FieldBuilder(members, type, name));
 }
 
+[DebuggerStepThrough]
 public class FieldBuilder :
     IHaveAReturnType,
     IHaveAttributes,
