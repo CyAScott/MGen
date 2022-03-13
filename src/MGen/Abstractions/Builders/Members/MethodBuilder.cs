@@ -48,7 +48,7 @@ public class MethodBuilder : BlockOfCode<IHaveMethods>,
                 IsPublic = true
             };
         Name = method.Name;
-        ReturnType = new(stringBuilder => stringBuilder.AppendType(method.ReturnType));
+        ReturnType = new(method.ReturnType);
         XmlComments = new(this, method);
     }
 

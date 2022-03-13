@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using MGen.Abstractions.Builders.Blocks;
 using MGen.Abstractions.Builders.Members;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
 
@@ -55,16 +56,11 @@ public class ReadOnlyConstructorGenerator : IHandleConstructorCodeGeneration
     {
         if (args.Builder.State.ContainsKey(nameof(ReadOnlyConstructorSupport)))
         {
-            var indentLevel = args.Builder.IndentLevel + 1;
-
             foreach (var pair in args.Builder.ArgumentParameters)
             {
-                args.Builder.Add(new Code(stringBuilder => stringBuilder
-                    .AppendIndent(indentLevel)
-                    .Append(((FieldBuilder)pair.Value.State[nameof(ReadOnlyConstructorSupport)]).Name)
-                    .Append(" = ")
-                    .Append(pair.Key)
-                    .AppendLine(";")));
+                args.Builder.Set(
+                    ((FieldBuilder)pair.Value.State[nameof(ReadOnlyConstructorSupport)]).Name,
+                    pair.Key);
             }
         }
     }

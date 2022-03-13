@@ -97,7 +97,7 @@ public class AttributeBuilder : IAmCode, IHaveEnabled, IHaveState
 {
     internal AttributeBuilder(AttributeData attribute)
     {
-        Type = new(stringBuilder => stringBuilder.AppendType(attribute.AttributeClass));
+        Type = new(attribute.AttributeClass);
 
         Add(attribute.ConstructorArguments);
 
@@ -144,7 +144,7 @@ public class AttributeBuilder : IAmCode, IHaveEnabled, IHaveState
     {
         foreach (var argument in namedArguments)
         {
-            NamedParameters[argument.Key] = new(stringBuilder => stringBuilder.AppendConstant(argument.Value));
+            NamedParameters[argument.Key] = argument.Value;
         }
     }
 
@@ -152,7 +152,7 @@ public class AttributeBuilder : IAmCode, IHaveEnabled, IHaveState
     {
         foreach (var constant in constructorArguments)
         {
-            Arguments.Add(new(stringBuilder => stringBuilder.AppendConstant(constant)));
+            Arguments.Add(constant);
         }
     }
 

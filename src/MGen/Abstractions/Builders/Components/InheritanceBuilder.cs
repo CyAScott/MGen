@@ -67,7 +67,7 @@ public class InheritanceBuilder : IAmCode, IHaveState, IReadOnlyCollection<Code>
 public class CodeWithInheritedTypeSymbol : Code
 {
     public CodeWithInheritedTypeSymbol(ITypeSymbol inheritedTypeSymbol)
-        : base(stringBuilder => AddInheritedTypeSymbol(stringBuilder, inheritedTypeSymbol, (inheritedTypeSymbol as INamedTypeSymbol)?.TypeArguments)) =>
+        : base(sb => AddInheritedTypeSymbol(sb, inheritedTypeSymbol, (inheritedTypeSymbol as INamedTypeSymbol)?.TypeArguments)) =>
         InheritedTypeSymbol = inheritedTypeSymbol;
 
     public ITypeSymbol InheritedTypeSymbol { get; }

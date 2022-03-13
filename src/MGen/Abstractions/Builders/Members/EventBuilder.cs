@@ -43,7 +43,7 @@ public class EventBuilder :
         };
         Name = @event.Name;
         Parent = parent;
-        ReturnType = new(stringBuilder => stringBuilder.AppendType(@event.Type));
+        ReturnType = new(@event.Type);
     }
 
     internal EventBuilder(IHaveEvents parent, string type, string name)

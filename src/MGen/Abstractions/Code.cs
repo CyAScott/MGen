@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using Microsoft.CodeAnalysis;
 
 namespace MGen.Abstractions;
 
@@ -30,13 +31,16 @@ public class Code : IAmCode
     readonly Action<StringBuilder> _generator;
 
     public Code(Action<StringBuilder> generator) => _generator = generator;
+    public Code(ITypeSymbol? type) => _generator = sb => sb.AppendType(type);
 
     public static readonly Code Empty = string.Empty;
+    public static readonly Code NewLine = Environment.NewLine;
 
     public void Generate(StringBuilder stringBuilder) => _generator(stringBuilder);
 
     public static implicit operator Code(Action<StringBuilder> generator) => new(generator);
     public static implicit operator Code(Func<string> generator) => new(sb => sb.Append(generator));
+    public static implicit operator Code(TypedConstant constant) => new(sb => sb.AppendConstant(constant));
     public static implicit operator Code(bool value) => new(sb => sb.Append(value));
     public static implicit operator Code(byte value) => new(sb => sb.Append(value));
     public static implicit operator Code(char value) => new(sb => sb.Append(value));

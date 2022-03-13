@@ -269,7 +269,7 @@ public class GenericParameterBuilder :
                 parameter.ReferenceTypeConstraintNullableAnnotation == NullableAnnotation.Annotated
             ))
         {
-            Constraint = new(stringBuilder => AppendGenericConstraint(stringBuilder, parameter));
+            Constraint = new(sb => AppendGenericConstraint(sb, parameter));
         }
 
         Attributes = new(parent, false, type);

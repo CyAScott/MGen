@@ -78,7 +78,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
         Name = property.Name;
         Parent = parent;
         PropertySymbols = properties;
-        ReturnType = new(stringBuilder => stringBuilder.AppendType(property.Type));
+        ReturnType = new(property.Type);
         XmlComments = new(this, property);
 
         var getMethod = properties.Select(it => it.GetMethod).FirstOrDefault(it => it != null);

@@ -176,7 +176,7 @@ public class ArgumentParameterBuilder : IAmCode,
 
         Attributes = new(parent, false, parameter);
         IsParams = parameter.IsParams;
-        Type = new(stringBuilder => stringBuilder.AppendType(parameter.Type));
+        Type = new(parameter.Type);
         Name = parameter.Name;
         Parent = _parent = parent;
         RefKind = parameter.RefKind;
@@ -189,7 +189,7 @@ public class ArgumentParameterBuilder : IAmCode,
             }
             else if (parameter.ExplicitDefaultValue is string @string)
             {
-                DefaultValue = new(stringBuilder => stringBuilder.AppendConstant(@string));
+                DefaultValue = new(sb => sb.AppendConstant(@string));
             }
             else if (parameter.ExplicitDefaultValue is bool boolean)
             {
@@ -197,7 +197,7 @@ public class ArgumentParameterBuilder : IAmCode,
             }
             else
             {
-                DefaultValue = new(stringBuilder => stringBuilder.Append(parameter.ExplicitDefaultValue));
+                DefaultValue = new(sb => sb.Append(parameter.ExplicitDefaultValue));
             }
         }
     }

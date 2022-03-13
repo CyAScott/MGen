@@ -59,8 +59,9 @@ public class PropertyChangedCodeGenerator : IHandlePropertySetCodeGeneration
     {
         if (args.Generator.State.ContainsKey(nameof(INotifyPropertyChanged)))
         {
-            args.Builder.Set.AddLine(new Code(stringBuilder => stringBuilder
-                .Append("PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(\"").Append(args.Builder.Name).Append("\"))")));
+            args.Builder.Set
+                .AddLine(new(sb => sb
+                    .Append("PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(\"").Append(args.Builder.Name).Append("\"))")));
         }
     }
 }
@@ -76,9 +77,9 @@ public class PropertyChangingCodeGenerator : IHandlePropertySetCodeGeneration
     {
         if (args.Generator.State.ContainsKey(nameof(INotifyPropertyChanging)))
         {
-            args.Builder.Set.AddLine(new Code(stringBuilder => stringBuilder
-                .Append("PropertyChanging?.Invoke(this, new System.ComponentModel.PropertyChangingEventArgs(\"").Append(args.Builder.Name).Append("\"))")));
-            args.Builder.Set.Add(Code.Empty);
+            args.Builder.Set
+                .AddLine(new(sb => sb
+                    .Append("PropertyChanging?.Invoke(this, new System.ComponentModel.PropertyChangingEventArgs(\"").Append(args.Builder.Name).Append("\"))")));
         }
     }
 }

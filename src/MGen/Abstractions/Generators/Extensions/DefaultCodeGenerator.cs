@@ -1,4 +1,5 @@
-﻿using MGen.Abstractions.Generators.Extensions.Abstractions;
+﻿using MGen.Abstractions.Builders.Blocks;
+using MGen.Abstractions.Generators.Extensions.Abstractions;
 
 namespace MGen.Abstractions.Generators.Extensions;
 
@@ -13,9 +14,7 @@ public class DefaultCodeGenerator : IHandleMethodCodeGeneration, IHandleProperty
     {
         if (args.Builder.IsBodyEnabled)
         {
-            args.Builder.Add(new Code(stringBuilder => stringBuilder
-                .AppendIndent(args.Builder.IndentLevel + 1)
-                .AppendLine("throw new System.NotImplementedException();")));
+            args.Builder.AddLine("throw new System.NotImplementedException()");
         }
     }
 
@@ -23,17 +22,11 @@ public class DefaultCodeGenerator : IHandleMethodCodeGeneration, IHandleProperty
     {
         if (args.Builder.ArgumentsEnabled)
         {
-            args.Builder.Get.Add(new Code(stringBuilder => stringBuilder
-                .AppendIndent(args.Builder.IndentLevel + 2)
-                .AppendLine("throw new System.NotImplementedException();")));
+            args.Builder.Get.AddLine("throw new System.NotImplementedException()");
         }
         else if (args.Builder.Field != null)
         {
-            args.Builder.Get.Add(new Code(stringBuilder => stringBuilder
-                .AppendIndent(args.Builder.IndentLevel + 2)
-                .Append("return ")
-                .Append(args.Builder.Field.Name)
-                .AppendLine(";")));
+            args.Builder.Get.Return(args.Builder.Field.Name);
         }
     }
 
@@ -41,16 +34,11 @@ public class DefaultCodeGenerator : IHandleMethodCodeGeneration, IHandleProperty
     {
         if (args.Builder.ArgumentsEnabled)
         {
-            args.Builder.Set.Add(new Code(stringBuilder => stringBuilder
-                .AppendIndent(args.Builder.IndentLevel + 2)
-                .AppendLine("throw new System.NotImplementedException();")));
+            args.Builder.Set.AddLine("throw new System.NotImplementedException()");
         }
         else if (args.Builder.Field != null)
         {
-            args.Builder.Set.Add(new Code(stringBuilder => stringBuilder
-                .AppendIndent(args.Builder.IndentLevel + 2)
-                .Append(args.Builder.Field.Name)
-                .AppendLine(" = value;")));
+            args.Builder.Set.Set(args.Builder.Field.Name, "value");
         }
     }
 }
