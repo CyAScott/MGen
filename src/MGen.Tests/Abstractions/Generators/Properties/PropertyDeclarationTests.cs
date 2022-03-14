@@ -28,7 +28,6 @@ class PropertyDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public object this[int index]",
@@ -66,7 +65,6 @@ class PropertyDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public object this[int index]",
@@ -104,7 +102,6 @@ class PropertyDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public int Id",
@@ -156,7 +153,6 @@ class PropertyDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        [Example.DescriptionAttribute(\"Sample text\")]",
@@ -208,7 +204,6 @@ class PropertyDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public object this[[Example.DescriptionAttribute(\"Sample text\")]int index]",
@@ -247,7 +242,6 @@ class PropertyDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        /// <param name=\"index\">Sample text</param>",
@@ -289,7 +283,6 @@ class PropertyDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        /// <summary>",
@@ -343,7 +336,6 @@ class PropertyDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public int Id",
@@ -395,7 +387,6 @@ class PropertyDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public int Id",

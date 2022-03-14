@@ -28,7 +28,6 @@ class ReadOnlyConstructorSupportTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public int Id",

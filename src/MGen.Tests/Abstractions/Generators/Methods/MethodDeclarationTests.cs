@@ -28,7 +28,6 @@ class MethodDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public object Get()",
@@ -71,7 +70,6 @@ class MethodDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        [Example.DescriptionAttribute(\"Sample text\")]",
@@ -114,7 +112,6 @@ class MethodDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public object Get([Example.DescriptionAttribute(\"Sample text\")]object arg)",
@@ -156,7 +153,6 @@ class MethodDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public object Get<[Example.DescriptionAttribute(\"Sample text\")]T>()",
@@ -192,7 +188,6 @@ class MethodDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        /// <param name=\"arg\">Sample text</param>",
@@ -231,7 +226,6 @@ class MethodDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        /// <summary>",
@@ -269,7 +263,6 @@ class MethodDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    partial class ExampleModel : IExample",
             "    {",
             "        public partial object Get();",
@@ -302,7 +295,6 @@ class MethodDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        /// <typeparam name=\"T\">Sample text</typeparam>",

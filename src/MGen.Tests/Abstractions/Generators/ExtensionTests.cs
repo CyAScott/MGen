@@ -29,7 +29,6 @@ class ExtensionTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        int Get()",

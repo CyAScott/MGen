@@ -38,7 +38,6 @@ class DuplicateMethodTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public int Set(int value)",
@@ -88,7 +87,6 @@ class DuplicateMethodTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public void Set(int value)",
@@ -138,7 +136,6 @@ class DuplicateMethodTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public int Get()",
@@ -188,7 +185,6 @@ class DuplicateMethodTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public long Get()",
@@ -238,7 +234,6 @@ class DuplicateMethodTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public int Get()",

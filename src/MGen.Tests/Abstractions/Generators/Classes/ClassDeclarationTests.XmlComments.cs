@@ -33,7 +33,6 @@ partial class ClassDeclarationTests
             "    /// Line 1",
             "    /// Line 2",
             "    /// </summary>",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "    }",

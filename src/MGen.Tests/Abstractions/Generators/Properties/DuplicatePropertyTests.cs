@@ -38,7 +38,6 @@ class DuplicatePropertyTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public int Property",
@@ -106,7 +105,6 @@ class DuplicatePropertyTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public long Property",
@@ -174,7 +172,6 @@ class DuplicatePropertyTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public int Property",
@@ -228,7 +225,6 @@ class DuplicatePropertyTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public int Property",

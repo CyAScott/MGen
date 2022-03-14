@@ -29,7 +29,6 @@ partial class ArgumentParametersTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public object Get(bool disabled = false)",
@@ -64,7 +63,6 @@ partial class ArgumentParametersTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public object Get(string? keyword = null)",
@@ -99,7 +97,6 @@ partial class ArgumentParametersTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public object Get(int count = 10)",
@@ -134,7 +131,6 @@ partial class ArgumentParametersTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public object Get(string keyword = \"\")",

@@ -25,7 +25,6 @@ partial class ClassDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel<T> : IExample<T>",
             "    {",
             "    }",
@@ -57,7 +56,6 @@ partial class ClassDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel<TKey, TValue> : IExample<TKey, TValue>",
             "        where TKey : struct",
             "        where TValue : class",
@@ -97,7 +95,6 @@ partial class ClassDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel<T> : IExample<T>",
             $"        where T : {constraint}",
             "    {",
@@ -128,7 +125,6 @@ partial class ClassDeclarationTests
             "namespace Example",
             "{",
             "    /// <typeparam name=\"T\">Example documentation</typeparam>",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel<T> : IExample<T>",
             "    {",
             "    }",
@@ -156,7 +152,6 @@ partial class ClassDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel<TKey, TValue> : IExample<TKey, TValue>",
             "    {",
             "    }",

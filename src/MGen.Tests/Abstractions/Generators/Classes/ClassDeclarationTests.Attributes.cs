@@ -73,7 +73,6 @@ partial class ClassDeclarationTests
             "namespace Example",
             "{",
             $"    [{(string.IsNullOrEmpty(attributeParameters) ? "Example.TestAttribute" : $"Example.TestAttribute({ attributeParameters})")}]",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "    }",

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 
 namespace MGen.Abstractions.Builders.Components;
@@ -20,6 +21,17 @@ public class Attributes : IAmCode, IHaveState, IReadOnlyCollection<AttributeBuil
     [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator() => _attributes.GetEnumerator();
 
+    private static readonly Dictionary<string, Dictionary<string, string[]>> forbiddenAttributes = new()
+    {
+        {
+            "MGen.Abstractions", new()
+            {
+                { "MGen", new[] { "GenerateAttribute" } },
+                { "System.Runtime.CompilerServices", new[] { "NullableAttribute", "NullableContextAttribute" } }
+            }
+        }
+    };
+
     internal Attributes(IAmIndentedCode parent, bool appendNewLineBetweenEachAttribute, ISymbol? symbol = null)
     {
         AppendNewLineBetweenEachAttribute = appendNewLineBetweenEachAttribute;
@@ -29,7 +41,13 @@ public class Attributes : IAmCode, IHaveState, IReadOnlyCollection<AttributeBuil
         {
             foreach (var attributeData in symbol.GetAttributes())
             {
-                if (attributeData != null)
+                if (attributeData != null && (!forbiddenAttributes.TryGetValue(
+                                                  attributeData.AttributeClass?.ContainingAssembly?.Name ?? string.Empty,
+                                                  out var forbiddenNamespaces) ||
+                                              !forbiddenNamespaces.TryGetValue(
+                                                  attributeData.AttributeClass?.ContainingNamespace.ToDisplayString() ?? string.Empty,
+                                                  out var forbiddenTypes) ||
+                                              !forbiddenTypes.Contains(attributeData.AttributeClass?.Name)))
                 {
                     Add(attributeData);
                 }

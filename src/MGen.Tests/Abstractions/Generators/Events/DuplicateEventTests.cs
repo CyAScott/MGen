@@ -38,7 +38,6 @@ class DuplicateEventTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public event System.Action<int>? Event;",
@@ -86,7 +85,6 @@ class DuplicateEventTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public event System.Action<long>? Event;",
@@ -134,7 +132,6 @@ class DuplicateEventTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public event System.Action<int>? Event;",

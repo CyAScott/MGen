@@ -29,7 +29,6 @@ class EventDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        public event System.Action Event;",
@@ -69,7 +68,6 @@ class EventDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        [Example.DescriptionAttribute(\"Sample text\")]",
@@ -106,7 +104,6 @@ class EventDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             "    class ExampleModel : IExample",
             "    {",
             "        /// <summary>",

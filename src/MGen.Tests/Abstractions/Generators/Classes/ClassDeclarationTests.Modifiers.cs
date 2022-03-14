@@ -30,7 +30,6 @@ partial class ClassDeclarationTests
         contents.ShouldBe(
             "namespace Example",
             "{",
-            "    [MGen.GenerateAttribute]",
             $"    {modifiers} class ExampleModel : IExample",
             "    {",
             "    }",
