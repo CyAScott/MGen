@@ -138,11 +138,17 @@ public class CaseBuilder : BlockOfCode<SwitchCaseBuilder>
         {
             base.AppendBody(stringBuilder);
         }
-        stringBuilder.AppendIndent(IndentLevel).AppendLine("break;");
+
+        if (BreakAtEnd)
+        {
+            stringBuilder.AppendIndent(IndentLevel).AppendLine("break;");
+        }
     }
 
     /// <summary>
     /// The condition expressions for this case.
     /// </summary>
     public List<Code> Conditions { get; } = new();
+
+    public bool BreakAtEnd { get; set; } = true;
 }
