@@ -252,6 +252,11 @@ class MethodDeclarationTests
             "partial interface IExample",
             "{",
             "    object Get();",
+            "}",
+            "",
+            "partial class ExampleModel",
+            "{",
+            "    public partial object Get() => null!;",
             "}");
 
         string? contents = null;

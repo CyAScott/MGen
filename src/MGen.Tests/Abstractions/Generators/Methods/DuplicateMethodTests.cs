@@ -221,7 +221,7 @@ class DuplicateMethodTests
             "}",
             "",
             "[Generate]",
-            "interface IExample : IHaveIntMethod, IHaveLongMethod",
+            "interface IExample : IHaveIntMethod, IHaveIntMethodToo",
             "{",
             "}");
 
