@@ -29,6 +29,12 @@ public class Attributes : IAmCode, IHaveState, IReadOnlyCollection<AttributeBuil
                 { "MGen", new[] { "GenerateAttribute" } },
                 { "System.Runtime.CompilerServices", new[] { "NullableAttribute", "NullableContextAttribute" } }
             }
+        },
+        {
+            "System.Private.CoreLib", new()
+            {
+                { "System.Runtime.CompilerServices", new[] { "NullableAttribute", "NullableContextAttribute" } }
+            }
         }
     };
 
