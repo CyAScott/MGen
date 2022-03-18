@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.Classes;
 
@@ -11,23 +11,15 @@ partial class ClassDeclarationTests
      TestCase("internal"),
      TestCase("internal partial"),
      TestCase("partial")]
-    public void TestClassDeclarationWithModifiers(string modifiers)
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationWithModifiers(string modifiers) =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
             "",
             "[Generate]",
-            $"{modifiers} interface IExample {{ }}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            $"{modifiers} interface IExample {{ }}")
+        .ShouldBe(
             "namespace Example",
             "{",
             $"    {modifiers} class ExampleModel : IExample",
@@ -35,5 +27,4 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 }

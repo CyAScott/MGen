@@ -1,14 +1,13 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.Properties;
 
 class PropertyDeclarationTests
 {
     [Test]
-    public void TestIndexGetProperty()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestIndexGetProperty() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -17,15 +16,8 @@ class PropertyDeclarationTests
             "interface IExample",
             "{",
             "    object this[int index] { get; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -40,12 +32,10 @@ class PropertyDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestIndexSetProperty()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestIndexSetProperty() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -54,15 +44,8 @@ class PropertyDeclarationTests
             "interface IExample",
             "{",
             "    object this[int index] { set; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -77,12 +60,10 @@ class PropertyDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestProperty()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestProperty() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -91,15 +72,8 @@ class PropertyDeclarationTests
             "interface IExample",
             "{",
             "    int Id { get; set; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -120,12 +94,10 @@ class PropertyDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestPropertyAttributes()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestPropertyAttributes() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -142,15 +114,8 @@ class PropertyDeclarationTests
             "{",
             "    [Description(\"Sample text\")]",
             "    int Id { get; set; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -172,12 +137,10 @@ class PropertyDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestPropertyAttributesForIndexArguments()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestPropertyAttributesForIndexArguments() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -193,15 +156,8 @@ class PropertyDeclarationTests
             "interface IExample",
             "{",
             "    object this[[Description(\"Sample text\")] int index] { get; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -216,12 +172,10 @@ class PropertyDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestPropertyArgumentDescription()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestPropertyArgumentDescription() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -231,15 +185,8 @@ class PropertyDeclarationTests
             "{",
             "    /// <param name=\"index\">Sample text</param>",
             "    object this[int index] { get; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -255,12 +202,10 @@ class PropertyDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestPropertyDescription()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestPropertyDescription() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -272,15 +217,8 @@ class PropertyDeclarationTests
             "    /// Sample text",
             "    /// </summary>",
             "    int Id { get; set; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -304,12 +242,10 @@ class PropertyDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestPropertyGetAttributes()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestPropertyGetAttributes() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -325,15 +261,8 @@ class PropertyDeclarationTests
             "interface IExample",
             "{",
             "    int Id { [Description(\"Sample text\")] get; set; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -355,12 +284,10 @@ class PropertyDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestPropertySetAttributes()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestPropertySetAttributes() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -376,15 +303,8 @@ class PropertyDeclarationTests
             "interface IExample",
             "{",
             "    int Id { get; [Description(\"Sample text\")] set; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -406,5 +326,4 @@ class PropertyDeclarationTests
             "    }",
             "}",
             "");
-    }
 }

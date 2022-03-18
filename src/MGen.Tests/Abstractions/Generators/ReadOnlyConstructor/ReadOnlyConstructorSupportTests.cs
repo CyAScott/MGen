@@ -1,14 +1,13 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.ReadOnlyConstructor;
 
 class ReadOnlyConstructorSupportTests
 {
     [Test]
-    public void TestReadOnlyConstructorDeclaration()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestReadOnlyConstructorDeclaration() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -17,15 +16,8 @@ class ReadOnlyConstructorSupportTests
             "interface IExample",
             "{",
             "    int Id { get; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -47,5 +39,4 @@ class ReadOnlyConstructorSupportTests
             "    }",
             "}",
             "");
-    }
 }

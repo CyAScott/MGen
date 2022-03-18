@@ -1,14 +1,13 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.Methods;
 
 class DuplicateMethodTests
 {
     [Test]
-    public void TestDifferentSignatureAndDifferentReturnType()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestDifferentSignatureAndDifferentReturnType() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -27,15 +26,8 @@ class DuplicateMethodTests
             "[Generate]",
             "interface IExample : IHaveIntMethod, IHaveLongMethod",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -52,12 +44,10 @@ class DuplicateMethodTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestDifferentSignatureAndSameReturnType()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestDifferentSignatureAndSameReturnType() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -76,15 +66,8 @@ class DuplicateMethodTests
             "[Generate]",
             "interface IExample : IHaveIntMethod, IHaveLongMethod",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -101,12 +84,10 @@ class DuplicateMethodTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestSameSignatureAndDifferentReturnType()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestSameSignatureAndDifferentReturnType() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -125,15 +106,8 @@ class DuplicateMethodTests
             "[Generate]",
             "interface IExample : IHaveIntMethod, IHaveLongMethod",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -150,12 +124,10 @@ class DuplicateMethodTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestSameSignatureAndDifferentReturnTypeAndOrderOfInterfaces()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestSameSignatureAndDifferentReturnTypeAndOrderOfInterfaces() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -174,15 +146,8 @@ class DuplicateMethodTests
             "[Generate]",
             "interface IExample : IHaveLongMethod, IHaveIntMethod",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -199,12 +164,10 @@ class DuplicateMethodTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestSameSignatureAndSameReturnType()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestSameSignatureAndSameReturnType() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -223,15 +186,8 @@ class DuplicateMethodTests
             "[Generate]",
             "interface IExample : IHaveIntMethod, IHaveIntMethodToo",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -243,5 +199,4 @@ class DuplicateMethodTests
             "    }",
             "}",
             "");
-    }
 }

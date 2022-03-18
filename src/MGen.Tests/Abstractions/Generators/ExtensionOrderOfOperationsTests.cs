@@ -50,8 +50,7 @@ class ExtensionOrderOfOperationsTests
             argValues.Add(nameof(testModelGenerator.TypesGenerated), args);
         };
 
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
+        testModelGenerator.Compile().EmitResult.Diagnostics.ShouldBeEmpty();
 
         order.Count.ShouldBe(5);
         order[0].ShouldBe(nameof(testModelGenerator.Init));

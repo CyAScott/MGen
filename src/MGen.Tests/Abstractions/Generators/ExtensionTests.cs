@@ -1,4 +1,6 @@
-﻿using MGen.Abstractions.Generators.Extensions;
+﻿using System.Linq;
+using MGen.Abstractions.Generators.Extensions;
+using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 using Shouldly;
 
@@ -23,8 +25,11 @@ class ExtensionTests
         string? contents = null;
         testModelGenerator.FileGenerated += args => contents = args.Contents;
 
-        testModelGenerator.Compile(new [] { typeof(Demo).Assembly }, out var diagnostics);
-        diagnostics.ShouldBeEmpty();
+        testModelGenerator.Compile(typeof(Demo).Assembly)
+            .EmitResult
+            .Diagnostics
+            .Where(it => it.Severity == DiagnosticSeverity.Error)
+            .ShouldBeEmpty();
 
         contents.ShouldBe(
             "namespace Example",

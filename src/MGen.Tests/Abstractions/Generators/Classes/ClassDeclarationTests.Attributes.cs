@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.Classes;
 
@@ -22,9 +22,8 @@ partial class ClassDeclarationTests
      TestCase("\"Test String\", I = 1"),
      TestCase("(Example.TestEnum)2, S = \"Test String\""),
      TestCase("\"Test String\", E = (Example.TestEnum)2")]
-    public void TestClassDeclarationWithAttributes(string attributeParameters)
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationWithAttributes(string attributeParameters) =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -61,15 +60,8 @@ partial class ClassDeclarationTests
             "}",
             "",
             $"[{(string.IsNullOrEmpty(attributeParameters) ? "Test" : $"Test({attributeParameters})")}, Generate]",
-            "interface IExample { }");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "interface IExample { }")
+        .ShouldBe(
             "namespace Example",
             "{",
             $"    [{(string.IsNullOrEmpty(attributeParameters) ? "Example.TestAttribute" : $"Example.TestAttribute({ attributeParameters})")}]",
@@ -78,5 +70,4 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 }

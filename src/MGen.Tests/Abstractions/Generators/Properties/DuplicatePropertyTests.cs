@@ -1,14 +1,13 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.Properties;
 
 class DuplicatePropertyTests
 {
     [Test]
-    public void TestDifferentType()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestDifferentType() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -27,15 +26,8 @@ class DuplicatePropertyTests
             "[Generate]",
             "interface IExample : IHaveIntProperty, IHaveLongProperty",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -70,12 +62,10 @@ class DuplicatePropertyTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestDifferentTypeAndOrderOfInterfaces()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestDifferentTypeAndOrderOfInterfaces() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -94,15 +84,8 @@ class DuplicatePropertyTests
             "[Generate]",
             "interface IExample : IHaveLongProperty, IHaveIntProperty",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -137,12 +120,10 @@ class DuplicatePropertyTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestSameType()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestSameType() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -161,15 +142,8 @@ class DuplicatePropertyTests
             "[Generate]",
             "interface IExample : IHaveIntProperty, IHaveIntPropertyToo",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -190,12 +164,10 @@ class DuplicatePropertyTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestSameTypeAndMixedGetAndSet()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestSameTypeAndMixedGetAndSet() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -214,15 +186,8 @@ class DuplicatePropertyTests
             "[Generate]",
             "interface IExample : IHaveIntProperty, IHaveIntPropertyToo",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -243,5 +208,4 @@ class DuplicatePropertyTests
             "    }",
             "}",
             "");
-    }
 }

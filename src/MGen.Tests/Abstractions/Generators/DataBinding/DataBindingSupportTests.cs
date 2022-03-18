@@ -1,14 +1,13 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.DataBinding;
 
 class DataBindingSupportTests
 {
     [Test]
-    public void TestNotifyPropertyChanged()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestNotifyPropertyChanged() =>
+        Compile(
             "using MGen;",
             "using System.ComponentModel;",
             "",
@@ -18,15 +17,8 @@ class DataBindingSupportTests
             "interface IExample : INotifyPropertyChanged",
             "{",
             "    int Id { get; set; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -50,12 +42,10 @@ class DataBindingSupportTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestNotifyPropertyChangedAndChanging()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestNotifyPropertyChangedAndChanging() =>
+        Compile(
             "using MGen;",
             "using System.ComponentModel;",
             "",
@@ -65,15 +55,8 @@ class DataBindingSupportTests
             "interface IExample : INotifyPropertyChanged, INotifyPropertyChanging",
             "{",
             "    int Id { get; set; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -100,12 +83,10 @@ class DataBindingSupportTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestNotifyPropertyChanging()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestNotifyPropertyChanging() =>
+        Compile(
             "using MGen;",
             "using System.ComponentModel;",
             "",
@@ -115,15 +96,8 @@ class DataBindingSupportTests
             "interface IExample : INotifyPropertyChanging",
             "{",
             "    int Id { get; set; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -147,12 +121,10 @@ class DataBindingSupportTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestNotifyPropertyChangingAndChanged()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestNotifyPropertyChangingAndChanged() =>
+        Compile(
             "using MGen;",
             "using System.ComponentModel;",
             "",
@@ -162,15 +134,8 @@ class DataBindingSupportTests
             "interface IExample : INotifyPropertyChanging, INotifyPropertyChanged",
             "{",
             "    int Id { get; set; }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -197,5 +162,4 @@ class DataBindingSupportTests
             "    }",
             "}",
             "");
-    }
 }

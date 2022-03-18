@@ -1,15 +1,13 @@
-﻿using MGen.Abstractions.Generators;
-using NUnit.Framework;
-using Shouldly;
+﻿using NUnit.Framework;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Builders.Components;
 
 partial class ArgumentParametersTests
 {
     [Test]
-    public void TestDefaultBooleanValue()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestDefaultBooleanValue() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -18,15 +16,8 @@ partial class ArgumentParametersTests
             "interface IExample",
             "{",
             "    object Get(bool disabled = false);",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -38,12 +29,10 @@ partial class ArgumentParametersTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestDefaultNullValue()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestDefaultNullValue() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -52,15 +41,8 @@ partial class ArgumentParametersTests
             "interface IExample",
             "{",
             "    object Get(string? keyword = null);",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -72,12 +54,10 @@ partial class ArgumentParametersTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestDefaultPrimitiveValue()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestDefaultPrimitiveValue() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -86,15 +66,8 @@ partial class ArgumentParametersTests
             "interface IExample",
             "{",
             "    object Get(int count = 10);",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -106,12 +79,10 @@ partial class ArgumentParametersTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestDefaultStringValue()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestDefaultStringValue() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -120,15 +91,8 @@ partial class ArgumentParametersTests
             "interface IExample",
             "{",
             "    object Get(string keyword = \"\");",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -140,5 +104,4 @@ partial class ArgumentParametersTests
             "    }",
             "}",
             "");
-    }
 }

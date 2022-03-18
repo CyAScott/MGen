@@ -1,14 +1,13 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.Classes;
 
 partial class ClassDeclarationTests
 {
     [Test]
-    public void TestClassDeclarationWithXmlComments()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationWithXmlComments() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -18,15 +17,8 @@ partial class ClassDeclarationTests
             "/// Line 2",
             "/// </summary>",
             "[Generate]",
-            "interface IExample { }");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "interface IExample { }")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    /// <summary>",
@@ -38,5 +30,4 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 }

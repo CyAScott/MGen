@@ -1,14 +1,13 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.Events;
 
 class EventDeclarationTests
 {
     [Test]
-    public void TestEvent()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestEvent() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -18,15 +17,8 @@ class EventDeclarationTests
             "interface IExample",
             "{",
             "    event Action Event;",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -35,12 +27,10 @@ class EventDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestEventAttributes()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestEventAttributes() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -57,15 +47,8 @@ class EventDeclarationTests
             "{",
             "    [Description(\"Sample text\")]",
             "    event Action Event;",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -75,12 +58,10 @@ class EventDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestEventDescription()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestEventDescription() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -93,15 +74,8 @@ class EventDeclarationTests
             "    /// Sample text",
             "    /// </summary>",
             "    event Action Event;",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -113,5 +87,4 @@ class EventDeclarationTests
             "    }",
             "}",
             "");
-    }
 }

@@ -1,28 +1,20 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.Classes;
 
 partial class ClassDeclarationTests
 {
     [Test]
-    public void TestClassDeclarationWithGenerics()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationWithGenerics() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
             "",
             "[Generate]",
-            "interface IExample<T> { }");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "interface IExample<T> { }")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel<T> : IExample<T>",
@@ -30,12 +22,10 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestClassDeclarationWithGenericsAndConstraints()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationWithGenericsAndConstraints() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -45,15 +35,8 @@ partial class ClassDeclarationTests
             "    where TKey : struct",
             "    where TValue : class",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel<TKey, TValue> : IExample<TKey, TValue>",
@@ -63,7 +46,6 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test,
      TestCase("class"),
@@ -73,9 +55,8 @@ partial class ClassDeclarationTests
      TestCase("System.IDisposable"),
      TestCase("System.IDisposable, System.Collections.IEnumerable"),
      TestCase("new()")]
-    public void TestClassDeclarationWithGenericsAndConstraints(string constraint)
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationWithGenericsAndConstraints(string constraint) =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -84,15 +65,8 @@ partial class ClassDeclarationTests
             "interface IExample<T>",
             $"    where T : {constraint}",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel<T> : IExample<T>",
@@ -101,27 +75,18 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestClassDeclarationWithGenericsAndDescriptions()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationWithGenericsAndDescriptions() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
             "",
             "/// <typeparam name=\"T\">Example documentation</typeparam>",
             "[Generate]",
-            "interface IExample<T> { }");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "interface IExample<T> { }")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    /// <typeparam name=\"T\">Example documentation</typeparam>",
@@ -130,26 +95,17 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestClassDeclarationWithMultipleGenerics()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationWithMultipleGenerics() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
             "",
             "[Generate]",
-            "interface IExample<TKey, TValue> { }");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "interface IExample<TKey, TValue> { }")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel<TKey, TValue> : IExample<TKey, TValue>",
@@ -157,5 +113,4 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 }

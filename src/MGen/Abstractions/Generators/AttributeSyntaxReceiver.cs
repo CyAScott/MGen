@@ -52,8 +52,8 @@ public class Candidate
     readonly List<TypeDeclarationSyntax> _types = new();
 
     [ExcludeFromCodeCoverage]
-    public IReadOnlyList<NamespaceDeclarationSyntax> Namespaces => _namespaces;
-    readonly List<NamespaceDeclarationSyntax> _namespaces = new();
+    public IReadOnlyList<BaseNamespaceDeclarationSyntax> Namespaces => _namespaces;
+    readonly List<BaseNamespaceDeclarationSyntax> _namespaces = new();
 
     public MemberDeclarationSyntax Member { get; }
 
@@ -114,7 +114,7 @@ public class Candidate
 
         switch (node)
         {
-            case NamespaceDeclarationSyntax namespaceDeclarationSyntax:
+            case BaseNamespaceDeclarationSyntax namespaceDeclarationSyntax:
                 _namespaces.Add(namespaceDeclarationSyntax);
                 break;
             case TypeDeclarationSyntax typeDeclarationSyntax:

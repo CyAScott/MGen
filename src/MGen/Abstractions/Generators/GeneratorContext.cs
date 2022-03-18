@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace MGen.Abstractions.Generators;
 
-[Generator]
+[Generator, DebuggerStepThrough]
 class ModelGenerator : ISourceGenerator
 {
     public void Execute(GeneratorExecutionContext context)
@@ -34,7 +34,6 @@ class ModelGenerator : ISourceGenerator
         }
     }
 
-    [DebuggerStepThrough]
     public void Initialize(GeneratorInitializationContext context) => context.RegisterForSyntaxNotifications(() => new AttributeSyntaxReceiver(SyntaxKind.InterfaceDeclaration));
 }
 

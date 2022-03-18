@@ -1,14 +1,13 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.Methods;
 
 class MethodDeclarationTests
 {
     [Test]
-    public void TestMethod()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestMethod() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -17,15 +16,8 @@ class MethodDeclarationTests
             "interface IExample",
             "{",
             "    object Get();",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -37,12 +29,10 @@ class MethodDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestMethodAttributes()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestMethodAttributes() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -59,15 +49,8 @@ class MethodDeclarationTests
             "{",
             "    [Description(\"Sample text\")]",
             "    object Get();",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -80,12 +63,10 @@ class MethodDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestMethodAttributesForArguments()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestMethodAttributesForArguments() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -101,15 +82,8 @@ class MethodDeclarationTests
             "interface IExample",
             "{",
             "    object Get([Description(\"Sample text\")] object arg);",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -121,12 +95,10 @@ class MethodDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestMethodAttributesForGenericArguments()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestMethodAttributesForGenericArguments() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -142,15 +114,8 @@ class MethodDeclarationTests
             "interface IExample",
             "{",
             "    object Get<[Description(\"Sample text\")] T>();",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -162,12 +127,10 @@ class MethodDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestMethodArgumentDescription()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestMethodArgumentDescription() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -177,15 +140,8 @@ class MethodDeclarationTests
             "{",
             "    /// <param name=\"arg\">Sample text</param>",
             "    object Get(object arg);",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -198,12 +154,10 @@ class MethodDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestMethodDescription()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestMethodDescription() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -215,15 +169,8 @@ class MethodDeclarationTests
             "    /// Sample text",
             "    /// </summary>",
             "    object Get();",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -238,12 +185,10 @@ class MethodDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestMethodForPartialClass()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestMethodForPartialClass() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -257,15 +202,8 @@ class MethodDeclarationTests
             "partial class ExampleModel",
             "{",
             "    public partial object Get() => null!;",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    partial class ExampleModel : IExample",
@@ -274,12 +212,10 @@ class MethodDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestMethodGenericArgumentDescription()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestMethodGenericArgumentDescription() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -289,15 +225,8 @@ class MethodDeclarationTests
             "{",
             "    /// <typeparam name=\"T\">Sample text</typeparam>",
             "    object Get<T>();",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -310,5 +239,4 @@ class MethodDeclarationTests
             "    }",
             "}",
             "");
-    }
 }

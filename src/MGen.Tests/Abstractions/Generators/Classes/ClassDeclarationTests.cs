@@ -1,28 +1,20 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.Classes;
 
 partial class ClassDeclarationTests
 {
     [Test]
-    public void TestClassDeclaration()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclaration() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
             "",
             "[Generate]",
-            "interface IExample { }");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "interface IExample { }")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -30,12 +22,10 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestClassDeclarationInNestedClass()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationInNestedClass() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -44,15 +34,8 @@ partial class ClassDeclarationTests
             "{",
             "    [Generate]",
             "    interface IExample { }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    partial class Core",
@@ -63,12 +46,10 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestClassDeclarationInNestedClassInNestedClass()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationInNestedClassInNestedClass() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -80,15 +61,8 @@ partial class ClassDeclarationTests
             "        [Generate]",
             "        interface IExample { }",
             "    }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    partial class Core",
@@ -102,12 +76,10 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestClassDeclarationInNestedClassWithGenerics()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationInNestedClassWithGenerics() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -116,15 +88,8 @@ partial class ClassDeclarationTests
             "{",
             "    [Generate]",
             "    interface IExample { }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    partial class Core<T>",
@@ -135,12 +100,10 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestClassDeclarationInNestedInterface()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationInNestedInterface() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -149,15 +112,8 @@ partial class ClassDeclarationTests
             "{",
             "    [Generate]",
             "    interface IExample { }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    partial interface ICore",
@@ -168,12 +124,10 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestClassDeclarationInNestedInterfaceInNestedInterface()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationInNestedInterfaceInNestedInterface() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -185,15 +139,8 @@ partial class ClassDeclarationTests
             "        [Generate]",
             "        interface IExample { }",
             "    }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    partial interface ICore",
@@ -207,12 +154,10 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestClassDeclarationInNestedInterfaceWithGenerics()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationInNestedInterfaceWithGenerics() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example;",
@@ -221,15 +166,8 @@ partial class ClassDeclarationTests
             "{",
             "    [Generate]",
             "    interface IExample { }",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    partial interface ICore<T>",
@@ -240,26 +178,17 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestClassDeclarationInNestedNamespace()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestClassDeclarationInNestedNamespace() =>
+        Compile(
             "using MGen;",
             "",
             "namespace Example.Core;",
             "",
             "[Generate]",
-            "interface IExample { }");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "interface IExample { }")
+        .ShouldBe(
             "namespace Example.Core",
             "{",
             "    class ExampleModel : IExample",
@@ -267,5 +196,4 @@ partial class ClassDeclarationTests
             "    }",
             "}",
             "");
-    }
 }

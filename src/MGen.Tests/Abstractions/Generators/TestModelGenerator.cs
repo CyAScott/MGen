@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,7 +12,10 @@ using MGen.Abstractions.Generators.Extensions.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Text;
+using NUnit.Framework;
+using Shouldly;
 
 namespace MGen.Abstractions.Generators;
 
@@ -34,14 +36,17 @@ class TestModelGenerator : ModelGenerator,
     }
 
     static readonly string dotNetAssemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
-    public Compilation Compile(out ImmutableArray<Diagnostic> diagnostics) => Compile(Array.Empty<Assembly>(), out diagnostics);
-    public Compilation Compile(Assembly[] extensionAssemblies, out ImmutableArray<Diagnostic> diagnostics)
+    public (EmitResult EmitResult, Dictionary<string, GeneratedSourceResult> Sources, Assembly? Assembly) Compile(params Assembly[] extensionAssemblies)
     {
         var options = new CSharpParseOptions(
             LanguageVersion.Preview,
             DocumentationMode.Diagnose);
 
         var code = Source.ToString();
+
+        TestContext.Out.WriteLine("Input:");
+        TestContext.Out.WriteLine();
+        TestContext.Out.WriteLine(code);
 
         var compilation = CSharpCompilation.Create(
             assemblyName: "Test",
@@ -51,27 +56,58 @@ class TestModelGenerator : ModelGenerator,
             },
             references: new[]
             {
-                MetadataReference.CreateFromFile(Path.Combine(dotNetAssemblyPath, "mscorlib.dll")),
+                MetadataReference.CreateFromFile(Path.Combine(dotNetAssemblyPath, "netstandard.dll")),
                 MetadataReference.CreateFromFile(Path.Combine(dotNetAssemblyPath, "System.dll")),
+                MetadataReference.CreateFromFile(Path.Combine(dotNetAssemblyPath, "System.ComponentModel.TypeConverter.dll")),
                 MetadataReference.CreateFromFile(Path.Combine(dotNetAssemblyPath, "System.Core.dll")),
+                MetadataReference.CreateFromFile(Path.Combine(dotNetAssemblyPath, "System.ObjectModel.dll")),
                 MetadataReference.CreateFromFile(Path.Combine(dotNetAssemblyPath, "System.Private.CoreLib.dll")),
                 MetadataReference.CreateFromFile(Path.Combine(dotNetAssemblyPath, "System.Runtime.dll")),
-                MetadataReference.CreateFromFile(typeof(GenerateAttribute).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(INotifyCollectionChanged).GetTypeInfo().Assembly.Location)
+                MetadataReference.CreateFromFile(typeof(GenerateAttribute).GetTypeInfo().Assembly.Location)
             },
             options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
-                .WithOptimizationLevel(OptimizationLevel.Release));
-        
-        CSharpGeneratorDriver.Create(
+                .WithOptimizationLevel(OptimizationLevel.Release)
+                .WithNullableContextOptions(NullableContextOptions.Enable));
+
+        var driver = CSharpGeneratorDriver.Create(
                 generators: ImmutableArray.Create(this),
                 additionalTexts: extensionAssemblies.Select(assembly => new AssemblyExtension(assembly)).ToArray(),
                 parseOptions: options,
                 optionsProvider: new TestAnalyzerConfigOptionsProvider())
-            .RunGeneratorsAndUpdateCompilation(compilation, out var updatedCompilation, out diagnostics);
+            .RunGeneratorsAndUpdateCompilation(compilation, out var updatedCompilation, out _);
 
-        return updatedCompilation;
+        var runResults = driver.GetRunResult();
+
+        var sources = runResults.Results
+            .SelectMany(it => it.GeneratedSources)
+            .ToDictionary(it => it.HintName);
+
+        using var pdbStream = new MemoryStream();
+        using var peStream = new MemoryStream();
+
+        var emitResult = updatedCompilation.Emit(peStream, pdbStream);
+
+        var assembly = emitResult.Success ? Assembly.Load(peStream.ToArray(), pdbStream.ToArray()) : null;
+
+        return (emitResult, sources, assembly);
     }
 
+    public static string Compile(params string[] lines)
+    {
+        var testModelGenerator = new TestModelGenerator(lines);
+
+        string? contents = null;
+        testModelGenerator.FileGenerated += args => contents = args.Contents;
+
+        testModelGenerator.Compile()
+            .EmitResult
+            .Diagnostics
+            .Where(it => it.Severity == DiagnosticSeverity.Error)
+            .ShouldBeEmpty();
+
+        contents.ShouldNotBeNull();
+        return contents;
+    }
 
     public StringBuilder Source { get; } = new();
 

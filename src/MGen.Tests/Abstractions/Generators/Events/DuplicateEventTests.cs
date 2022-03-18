@@ -1,14 +1,13 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using static MGen.Abstractions.Generators.TestModelGenerator;
 
 namespace MGen.Abstractions.Generators.Events;
 
 class DuplicateEventTests
 {
     [Test]
-    public void TestDifferentType()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestDifferentType() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -27,15 +26,8 @@ class DuplicateEventTests
             "[Generate]",
             "interface IExample : IHaveIntEvent, IHaveLongEvent",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -50,12 +42,10 @@ class DuplicateEventTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestDifferentTypeAndOrderOfInterfaces()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestDifferentTypeAndOrderOfInterfaces() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -74,15 +64,8 @@ class DuplicateEventTests
             "[Generate]",
             "interface IExample : IHaveLongEvent, IHaveIntEvent",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -97,12 +80,10 @@ class DuplicateEventTests
             "    }",
             "}",
             "");
-    }
 
     [Test]
-    public void TestSameType()
-    {
-        var testModelGenerator = new TestModelGenerator(
+    public void TestSameType() =>
+        Compile(
             "using MGen;",
             "using System;",
             "",
@@ -121,15 +102,8 @@ class DuplicateEventTests
             "[Generate]",
             "interface IExample : IHaveIntEvent, IHaveIntEventToo",
             "{",
-            "}");
-
-        string? contents = null;
-        testModelGenerator.FileGenerated += args => contents = args.Contents;
-
-        testModelGenerator.Compile(out var diagnostics);
-        diagnostics.ShouldBeEmpty();
-
-        contents.ShouldBe(
+            "}")
+        .ShouldBe(
             "namespace Example",
             "{",
             "    class ExampleModel : IExample",
@@ -138,5 +112,4 @@ class DuplicateEventTests
             "    }",
             "}",
             "");
-    }
 }
