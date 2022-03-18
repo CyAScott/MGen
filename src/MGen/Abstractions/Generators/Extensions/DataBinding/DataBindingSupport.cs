@@ -5,7 +5,7 @@ using MGen.Abstractions.Builders.Blocks;
 using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
 
-namespace MGen.Abstractions.Generators.Extensions;
+namespace MGen.Abstractions.Generators.Extensions.DataBinding;
 
 /// <summary>
 /// Implements <see cref="INotifyPropertyChanged"/> and / or <see cref="INotifyPropertyChanging"/> for classes that require it.

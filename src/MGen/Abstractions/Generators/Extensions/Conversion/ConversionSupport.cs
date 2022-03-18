@@ -6,7 +6,7 @@ using MGen.Abstractions.Builders.Members;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
 using Microsoft.CodeAnalysis;
 
-namespace MGen.Abstractions.Generators.Extensions;
+namespace MGen.Abstractions.Generators.Extensions.Conversion;
 
 /// <summary>
 /// Implements MGen.ISupportConversion for classes that require it.

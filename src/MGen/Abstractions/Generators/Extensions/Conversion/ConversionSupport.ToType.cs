@@ -1,7 +1,7 @@
 ﻿using MGen.Abstractions.Builders.Blocks;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
 
-namespace MGen.Abstractions.Generators.Extensions;
+namespace MGen.Abstractions.Generators.Extensions.Conversion;
 
 partial class ConversionCodeGenerator
 {

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
 
-namespace MGen.Abstractions.Generators.Extensions;
+namespace MGen.Abstractions.Generators.Extensions.DotNetSerialization;
 
 /// <summary>
 /// Implements <see cref="System.Runtime.Serialization.ISerializable"/> for classes that require it.

@@ -4,7 +4,7 @@ using MGen.Abstractions.Builders.Members;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
 using Microsoft.CodeAnalysis;
 
-namespace MGen.Abstractions.Generators.Extensions;
+namespace MGen.Abstractions.Generators.Extensions.Conversion;
 
 partial class ConversionCodeGenerator : IHandleConstructorCodeGeneration
 {

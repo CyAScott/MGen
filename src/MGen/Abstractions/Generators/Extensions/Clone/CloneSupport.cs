@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
 
-namespace MGen.Abstractions.Generators.Extensions;
+namespace MGen.Abstractions.Generators.Extensions.Clone;
 
 /// <summary>
 /// Implements <see cref="System.ICloneable"/> for classes that require it.
