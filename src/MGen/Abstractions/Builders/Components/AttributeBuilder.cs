@@ -73,6 +73,13 @@ public class Attributes : IAmCode, IHaveState, IReadOnlyCollection<AttributeBuil
         return item;
     }
 
+    public AttributeBuilder Add(INamedTypeSymbol attribute)
+    {
+        var item = new AttributeBuilder(attribute);
+        _attributes.Add(item);
+        return item;
+    }
+
     public AttributeBuilder Add(string type)
     {
         var item = new AttributeBuilder(type);
@@ -126,6 +133,11 @@ public class AttributeBuilder : IAmCode, IHaveEnabled, IHaveState
         Add(attribute.ConstructorArguments);
 
         Add(attribute.NamedArguments);
+    }
+
+    internal AttributeBuilder(INamedTypeSymbol attribute)
+    {
+        Type = new CodeType(attribute);
     }
 
     internal AttributeBuilder(string type) => Type = type ?? throw new ArgumentNullException(nameof(type));
