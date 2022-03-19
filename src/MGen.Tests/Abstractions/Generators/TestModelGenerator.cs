@@ -22,10 +22,11 @@ namespace MGen.Abstractions.Generators;
 [MGenExtension(nameof(TestModelGenerator), after: new[] { DotNetSerializationSupport.Id }), DebuggerStepThrough]
 class TestModelGenerator : ModelGenerator,
     IHandleOnInit,
-    IHandleOnTypeGenerated,
-    IHandleOnTypesGenerated,
+    IHandleOnFileCreated,
+    IHandleOnFilesCreated,
     IHandleOnFileGenerated,
-    IHandleOnFilesGenerated
+    IHandleOnFilesGenerated,
+    IHandleOnTypeCreated
 {
     public TestModelGenerator(params string[] lines)
     {
@@ -120,11 +121,14 @@ class TestModelGenerator : ModelGenerator,
     public event Action<FilesGeneratedArgs>? FilesGenerated;
     void IHandleOnFilesGenerated.FilesGenerated(FilesGeneratedArgs args) => FilesGenerated?.Invoke(args);
 
-    public event Action<TypeGeneratedArgs>? TypeGenerated;
-    void IHandleOnTypeGenerated.TypeGenerated(TypeGeneratedArgs args) => TypeGenerated?.Invoke(args);
+    public event Action<FileCreatedArgs>? FileCreated;
+    void IHandleOnFileCreated.FileCreated(FileCreatedArgs args) => FileCreated?.Invoke(args);
 
-    public event Action<TypesGeneratedArgs>? TypesGenerated;
-    void IHandleOnTypesGenerated.TypesGenerated(TypesGeneratedArgs args) => TypesGenerated?.Invoke(args);
+    public event Action<FilesCreatedArgs>? FilesCreated;
+    void IHandleOnFilesCreated.FilesCreated(FilesCreatedArgs args) => FilesCreated?.Invoke(args);
+
+    public event Action<TypeCreatedArgs>? TypeGenerated;
+    void IHandleOnTypeCreated.TypeCreated(TypeCreatedArgs args) => TypeGenerated?.Invoke(args);
 }
 
 [DebuggerStepThrough]

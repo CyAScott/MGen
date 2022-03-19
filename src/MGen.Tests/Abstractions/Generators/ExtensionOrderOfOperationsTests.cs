@@ -38,26 +38,33 @@ class ExtensionOrderOfOperationsTests
             argValues.Add(nameof(testModelGenerator.FilesGenerated), args);
         };
 
+        testModelGenerator.FileCreated += args =>
+        {
+            order.Add(nameof(testModelGenerator.FileCreated));
+            argValues.Add(nameof(testModelGenerator.FileCreated), args);
+        };
+
+        testModelGenerator.FilesCreated += args =>
+        {
+            order.Add(nameof(testModelGenerator.FilesCreated));
+            argValues.Add(nameof(testModelGenerator.FilesCreated), args);
+        };
+
         testModelGenerator.TypeGenerated += args =>
         {
             order.Add(nameof(testModelGenerator.TypeGenerated));
             argValues.Add(nameof(testModelGenerator.TypeGenerated), args);
         };
 
-        testModelGenerator.TypesGenerated += args =>
-        {
-            order.Add(nameof(testModelGenerator.TypesGenerated));
-            argValues.Add(nameof(testModelGenerator.TypesGenerated), args);
-        };
-
         testModelGenerator.Compile().EmitResult.Diagnostics.ShouldBeEmpty();
 
-        order.Count.ShouldBe(5);
+        order.Count.ShouldBe(6);
         order[0].ShouldBe(nameof(testModelGenerator.Init));
         order[1].ShouldBe(nameof(testModelGenerator.TypeGenerated));
-        order[2].ShouldBe(nameof(testModelGenerator.TypesGenerated));
-        order[3].ShouldBe(nameof(testModelGenerator.FileGenerated));
-        order[4].ShouldBe(nameof(testModelGenerator.FilesGenerated));
+        order[2].ShouldBe(nameof(testModelGenerator.FileCreated));
+        order[3].ShouldBe(nameof(testModelGenerator.FilesCreated));
+        order[4].ShouldBe(nameof(testModelGenerator.FileGenerated));
+        order[5].ShouldBe(nameof(testModelGenerator.FilesGenerated));
 
         foreach (var pair in argValues)
         {

@@ -12,7 +12,7 @@ public interface IHandlePropertySetCodeGeneration : IHandleCodeGeneration
 [DebuggerStepThrough]
 public class PropertySetCodeGenerationArgs
 {
-    public PropertySetCodeGenerationArgs(GeneratorContext context, TypeGenerator generator, PropertyBuilder builder)
+    public PropertySetCodeGenerationArgs(GeneratorContext context, FileGenerator generator, PropertyBuilder builder)
     {
         Builder = builder;
         Context = context;
@@ -23,7 +23,7 @@ public class PropertySetCodeGenerationArgs
 
     public PropertyBuilder Builder { get; }
 
-    public TypeGenerator Generator { get; }
+    public FileGenerator Generator { get; }
 
     /// <summary>
     /// If true then additional invocations of <see cref="IHandlePropertySetCodeGeneration"/> will be blocked.
@@ -31,7 +31,7 @@ public class PropertySetCodeGenerationArgs
     public bool Handled { get; set; }
 }
 
-partial class TypeGeneratedArgs
+partial class TypeCreatedArgs
 {
     public IReadOnlyList<IHandlePropertySetCodeGeneration> PropertySetCodeGenerators { get; }
 

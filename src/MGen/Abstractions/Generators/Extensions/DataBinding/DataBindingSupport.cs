@@ -10,8 +10,8 @@ namespace MGen.Abstractions.Generators.Extensions.DataBinding;
 /// <summary>
 /// Implements <see cref="INotifyPropertyChanged"/> and / or <see cref="INotifyPropertyChanging"/> for classes that require it.
 /// </summary>
-[MGenExtension(Id, after: new[] { MembersWithCodeDeclaration.Id }, before: new [] { MemberDeclaration.Id }), DebuggerStepThrough]
-public class DataBindingSupport : IHandleOnInit, IHandleOnTypeGenerated
+[MGenExtension(Id, before: new [] { MemberDeclaration.Id }), DebuggerStepThrough]
+public class DataBindingSupport : IHandleOnInit, IHandleOnTypeCreated
 {
     public const string Id = "MGen." + nameof(DataBindingSupport);
 
@@ -21,9 +21,9 @@ public class DataBindingSupport : IHandleOnInit, IHandleOnTypeGenerated
         args.Context.Add(new PropertyChangingCodeGenerator());
     }
 
-    public void TypeGenerated(TypeGeneratedArgs args)
+    public void TypeCreated(TypeCreatedArgs args)
     {
-        if (args.Generator.TryToGetBuilder(out var builder) && builder is IHaveInheritance item)
+        if (args.Builder is IHaveMembersWithCode and IHaveInheritance item)
         {
             foreach (var code in item.Inheritance.OfType<CodeWithInheritedTypeSymbol>())
             {

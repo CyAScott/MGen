@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Linq;
 using MGen.Abstractions.Builders.Blocks;
+using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Builders.Members;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
-using Microsoft.CodeAnalysis;
 
 namespace MGen.Abstractions.Generators.Extensions.Conversion;
 
@@ -12,34 +12,41 @@ namespace MGen.Abstractions.Generators.Extensions.Conversion;
 /// Implements MGen.ISupportConversion for classes that require it.
 /// </summary>
 [MGenExtension(Id, after: new[] { MemberDeclaration.Id }), DebuggerStepThrough]
-public class ConversionSupport : IHandleOnInit, IHandleOnTypeGenerated
+public class ConversionSupport : IHandleOnInit, IHandleOnTypeCreated
 {
-    bool SupportsConversion(ITypeSymbol typeSymbol) =>
-        typeSymbol.ContainingAssembly.Name == "MGen.Abstractions" &&
-        typeSymbol.ContainingNamespace.Name == "MGen" &&
-        typeSymbol.Name == InterfaceName ||
-        typeSymbol.AllInterfaces.Any(SupportsConversion);
-
     public const string Id = "MGen." + nameof(ConversionSupport);
 
     public const string InterfaceName = "ISupportConversion";
 
     public void Init(InitArgs args) => args.Context.Add(new ConversionCodeGenerator());
 
-    public void TypeGenerated(TypeGeneratedArgs args)
+    public void TypeCreated(TypeCreatedArgs args)
     {
-        if (args.Generator.TryToGetBuilderBaseOnInheritance(SupportsConversion, out var builder))
+        if (args.Builder is IHaveConstructors builder and IHaveMembersWithCode and IHaveInheritance item)
         {
-            args.Generator.State[InterfaceName] = true;
+            foreach (var code in item.Inheritance.OfType<CodeWithInheritedTypeSymbol>())
+            {
+                foreach (var @interface in code.InheritedTypeSymbol.AllInterfaces)
+                {
+                    if (@interface.ContainingAssembly.Name == "MGen.Abstractions" &&
+                        @interface.ContainingNamespace.Name == "MGen" &&
+                        @interface.Name == InterfaceName)
+                    {
+                        args.Generator.State[InterfaceName] = true;
 
-            var ctor = builder.AddConstructor();
+                        var ctor = builder.AddConstructor();
 
-            ctor.ArgumentParameters.Add("MGen.ISupportConversion", "obj")
-                .Attributes.Add("System.Diagnostics.CodeAnalysis.NotNullAttribute");
-            ctor.Modifiers.IsProtected = true;
-            ctor.State[InterfaceName] = true;
+                        ctor.ArgumentParameters.Add("MGen.ISupportConversion", "obj")
+                            .Attributes.Add("System.Diagnostics.CodeAnalysis.NotNullAttribute");
+                        ctor.Modifiers.IsProtected = true;
+                        ctor.State[InterfaceName] = true;
 
-            args.GenerateCode(ctor);
+                        args.GenerateCode(ctor);
+
+                        return;
+                    }
+                }
+            }
         }
     }
 }

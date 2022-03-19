@@ -10,15 +10,15 @@ namespace MGen.Abstractions.Generators.Extensions.ReadOnlyConstructor;
 /// Creates a constructor for initializing read only members.
 /// </summary>
 [MGenExtension(Id, after: new [] { MemberDeclaration.Id }), DebuggerStepThrough]
-public class ReadOnlyConstructorSupport : IHandleOnInit, IHandleOnTypeGenerated
+public class ReadOnlyConstructorSupport : IHandleOnInit, IHandleOnTypeCreated
 {
     public const string Id = "MGen." + nameof(ReadOnlyConstructorSupport);
 
     public void Init(InitArgs args) => args.Context.Add(new ReadOnlyConstructorGenerator());
 
-    public void TypeGenerated(TypeGeneratedArgs args)
+    public void TypeCreated(TypeCreatedArgs args)
     {
-        if (args.Generator.TryToGetBuilder(out var builder))
+        if (args.Builder is IHaveMembersWithCode builder)
         {
             ConstructorBuilder? ctor = null;
 

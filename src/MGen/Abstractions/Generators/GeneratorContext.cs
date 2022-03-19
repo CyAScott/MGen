@@ -61,33 +61,36 @@ public class GeneratorContext
             out var propertyGetCodeGenerators,
             out var propertySetCodeGenerators);
 
+        var typeCreatedHandlers = Extensions.OfType<IHandleOnTypeCreated>().ToList();
+
         foreach (var candidate in Candidates)
         {
-            if (TypeGenerator.TryToCreate(this, candidate, out var generator))
+            if (FileGenerator.TryToCreate(this, candidate, out var generator))
             {
-                _typeGenerators.Add(generator);
+                _files.Add(generator);
 
-                var typeGeneratedArgs = new TypeGeneratedArgs(this, generator,
+                var fileCreatedArgs = new FileCreatedArgs(this, generator,
                     constructorCodeGenerators,
                     methodCodeGenerators,
+                    typeCreatedHandlers,
                     propertyGetCodeGenerators,
                     propertySetCodeGenerators);
-                foreach (var extension in Extensions.OfType<IHandleOnTypeGenerated>())
+                foreach (var extension in Extensions.OfType<IHandleOnFileCreated>())
                 {
-                    extension.TypeGenerated(typeGeneratedArgs);
+                    extension.FileCreated(fileCreatedArgs);
                 }
             }
         }
 
-        var typesGeneratedArgs = new TypesGeneratedArgs(this);
-        foreach (var extension in Extensions.OfType<IHandleOnTypesGenerated>())
+        var filesCreatedArgs = new FilesCreatedArgs(this);
+        foreach (var extension in Extensions.OfType<IHandleOnFilesCreated>())
         {
-            extension.TypesGenerated(typesGeneratedArgs);
+            extension.FilesCreated(filesCreatedArgs);
         }
 
         var builder = new StringBuilder();
 
-        foreach (var generator in _typeGenerators)
+        foreach (var generator in _files)
         {
             if (generator.Builder.Enabled)
             {
@@ -120,8 +123,8 @@ public class GeneratorContext
 
     public IReadOnlyList<Candidate> Candidates { get; }
 
-    public IReadOnlyList<TypeGenerator> TypeGenerators => _typeGenerators;
-    readonly List<TypeGenerator> _typeGenerators = new();
+    public IReadOnlyList<FileGenerator> Files => _files;
+    readonly List<FileGenerator> _files = new();
 
     public IReadOnlyList<IHandleCodeGeneration> CodeGenerators => _codeGenerators;
     public void Add(IHandleCodeGeneration codeGenerator) => _codeGenerators.Add(codeGenerator ?? throw new ArgumentNullException(nameof(codeGenerator)));

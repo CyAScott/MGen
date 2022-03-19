@@ -4,20 +4,22 @@ using MGen.Abstractions.Builders.Members;
 
 namespace MGen.Abstractions.Generators.Extensions.Abstractions;
 
-public interface IHandleOnTypeGenerated : IAmAMGenExtension
+public interface IHandleOnTypeCreated : IAmAMGenExtension
 {
-    void TypeGenerated(TypeGeneratedArgs args);
+    void TypeCreated(TypeCreatedArgs args);
 }
 
 [DebuggerStepThrough]
-public partial class TypeGeneratedArgs
+public partial class TypeCreatedArgs
 {
-    public TypeGeneratedArgs(GeneratorContext context, TypeGenerator generator,
+    public TypeCreatedArgs(GeneratorContext context, FileGenerator generator,
+        IHaveMembers builder,
         IReadOnlyList<IHandleConstructorCodeGeneration> constructorCodeGenerators,
         IReadOnlyList<IHandleMethodCodeGeneration> methodCodeGenerators,
         IReadOnlyList<IHandlePropertyGetCodeGeneration> propertyGetCodeGenerators,
         IReadOnlyList<IHandlePropertySetCodeGeneration> propertySetCodeGenerators)
     {
+        Builder = builder;
         ConstructorCodeGenerators = constructorCodeGenerators;
         Context = context;
         Generator = generator;
@@ -28,7 +30,9 @@ public partial class TypeGeneratedArgs
 
     public GeneratorContext Context { get; }
 
-    public TypeGenerator Generator { get; }
+    public FileGenerator Generator { get; }
+
+    public IHaveMembers Builder { get; }
 
     public void GenerateCode(PropertyBuilder builder)
     {

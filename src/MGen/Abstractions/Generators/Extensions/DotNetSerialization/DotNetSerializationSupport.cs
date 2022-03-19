@@ -6,14 +6,14 @@ namespace MGen.Abstractions.Generators.Extensions.DotNetSerialization;
 /// <summary>
 /// Implements <see cref="System.Runtime.Serialization.ISerializable"/> for classes that require it.
 /// </summary>
-[DebuggerStepThrough, MGenExtension(Id, after: new[] { MembersWithCodeDeclaration.Id }, before: new [] { MemberDeclaration.Id })]
-public class DotNetSerializationSupport : IHandleOnInit, IHandleOnTypeGenerated
+[DebuggerStepThrough, MGenExtension(Id, before: new [] { MemberDeclaration.Id })]
+public class DotNetSerializationSupport : IHandleOnInit, IHandleOnTypeCreated
 {
     public const string Id = "MGen." + nameof(DotNetSerializationSupport);
 
     public void Init(InitArgs args) => args.Context.Add(new DotNetSerializationCodeGenerator());
 
-    public void TypeGenerated(TypeGeneratedArgs args)
+    public void TypeCreated(TypeCreatedArgs args)
     {
         //todo: inject constructor
     }

@@ -10,7 +10,7 @@ public interface IHandleOnFileGenerated : IAmAMGenExtension
 [DebuggerStepThrough]
 public class FileGeneratedArgs
 {
-    public FileGeneratedArgs(GeneratorContext context, TypeGenerator generator, string contents)
+    public FileGeneratedArgs(GeneratorContext context, FileGenerator generator, string contents)
     {
         Context = context;
         Generator = generator;
@@ -18,6 +18,6 @@ public class FileGeneratedArgs
     }
 
     public GeneratorContext Context { get; }
-    public TypeGenerator Generator { get; }
+    public FileGenerator Generator { get; }
     public string Contents { get; }
 }

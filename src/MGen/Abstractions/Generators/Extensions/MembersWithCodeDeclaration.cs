@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using MGen.Abstractions.Builders;
 using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
@@ -13,22 +11,21 @@ namespace MGen.Abstractions.Generators.Extensions;
 /// Handles generating code for class declaration.
 /// </summary>
 [MGenExtension(Id)]
-public class MembersWithCodeDeclaration : IHandleOnTypeGenerated
+public class MembersWithCodeDeclaration : IHandleOnFileCreated
 {
-    public const string MembersWithCodeDeclarationKey = "MGen." + nameof(MembersWithCodeDeclaration);
     public const string Id = "MGen." + nameof(MembersWithCodeDeclaration);
 
-    public void TypeGenerated(TypeGeneratedArgs args)
+    public void FileCreated(FileCreatedArgs args)
     {
         var builder = args.Generator.Builder;
         var candidate = args.Generator.Candidate;
         var generator = args.Generator;
 
-        var declaredType = generator.Candidate.Types[generator.Candidate.Types.Count - 1];
+        var declaredType = candidate.Types[candidate.Types.Count - 1];
         var name = generator.GenerateAttribute.GetDestinationName(generator.Type);
 
-        var @class = DeclareClass(candidate, generator.Type, declaredType.Modifiers, builder, name);
-        if (@class == null)
+        var type = DeclareType(candidate, generator.Type, declaredType.Modifiers, builder, name);
+        if (type == null)
         {
             args.Context.GeneratorExecutionContext.ReportDiagnostic(Diagnostic.Create(
                 new DiagnosticDescriptor(
@@ -41,19 +38,19 @@ public class MembersWithCodeDeclaration : IHandleOnTypeGenerated
         }
         else
         {
-            generator.State[MembersWithCodeDeclarationKey] = @class;
+            args.CreateType(type);
         }
-
-        //todo: struct
-
-        //todo: record
     }
 
-    ClassBuilder? DeclareClass<T>(Candidate candidate, ITypeSymbol symbol, SyntaxTokenList modifiers, T builder, string name, int index = 0)
+    IHaveMembers? DeclareType<T>(Candidate candidate, ITypeSymbol symbol, SyntaxTokenList modifiers, T builder, string name, int index = 0)
         where T : IHaveClasses, IHaveInterfaces, IHaveRecords, IHaveStructs
     {
         if (index == candidate.Types.Count - 1)
         {
+            //todo: struct
+
+            //todo: record
+
             return builder.AddClass(name, symbol, modifiers);
         }
 
@@ -63,28 +60,28 @@ public class MembersWithCodeDeclaration : IHandleOnTypeGenerated
 
         if (type is ClassDeclarationSyntax)
         {
-            return DeclareClass(candidate, symbol, modifiers, type, builder.AddClass(parentName), name, index + 1);
+            return DeclareType(candidate, symbol, modifiers, type, builder.AddClass(parentName), name, index + 1);
         }
 
         if (type is InterfaceDeclarationSyntax)
         {
-            return DeclareClass(candidate, symbol, modifiers, type, builder.AddInterface(parentName), name, index + 1);
+            return DeclareType(candidate, symbol, modifiers, type, builder.AddInterface(parentName), name, index + 1);
         }
 
         if (type is RecordDeclarationSyntax)
         {
-            return DeclareClass(candidate, symbol, modifiers, type, builder.AddRecord(parentName), name, index + 1);
+            return DeclareType(candidate, symbol, modifiers, type, builder.AddRecord(parentName), name, index + 1);
         }
 
         if (type is StructDeclarationSyntax)
         {
-            return DeclareClass(candidate, symbol, modifiers, type, builder.AddStruct(parentName), name, index + 1);
+            return DeclareType(candidate, symbol, modifiers, type, builder.AddStruct(parentName), name, index + 1);
         }
 
         return null;
     }
 
-    ClassBuilder? DeclareClass<T>(Candidate candidate, ITypeSymbol symbol, SyntaxTokenList modifiers, TypeDeclarationSyntax type, T builder, string name, int index = 0)
+    IHaveMembers? DeclareType<T>(Candidate candidate, ITypeSymbol symbol, SyntaxTokenList modifiers, TypeDeclarationSyntax type, T builder, string name, int index = 0)
         where T : IHaveClasses, IHaveGenericParameters, IHaveInterfaces, IHaveModifiers, IHaveRecords, IHaveStructs
     {
         builder.Modifiers.IsPartial = true;
@@ -97,41 +94,6 @@ public class MembersWithCodeDeclaration : IHandleOnTypeGenerated
             }
         }
 
-        return DeclareClass(candidate, symbol, modifiers, builder, name, index);
-    }
-}
-
-public static class MembersWithCodeDeclarationExtensions
-{
-    [DebuggerStepThrough]
-    public static bool TryToGetBuilder(this TypeGenerator generator, out IHaveMembersWithCode builder)
-    {
-        if (!generator.State.TryGetValue(MembersWithCodeDeclaration.MembersWithCodeDeclarationKey, out var value) ||
-            value is not IHaveMembersWithCode valueAsBuilder)
-        {
-            builder = default!;
-            return false;
-        }
-
-        builder = valueAsBuilder;
-        return true;
-    }
-
-    [DebuggerStepThrough]
-    public static bool TryToGetBuilderBaseOnInheritance(this TypeGenerator generator, Func<ITypeSymbol, bool> predict, out IHaveMembersWithCode builder)
-    {
-        if (generator.State.TryGetValue(MembersWithCodeDeclaration.MembersWithCodeDeclarationKey, out var value) &&
-            value is IHaveInheritance item and IHaveMembersWithCode valueAsBuilder &&
-            item.Inheritance
-                .OfType<CodeWithInheritedTypeSymbol>()
-                .Any(it => predict(it.InheritedTypeSymbol)))
-        {
-            builder = valueAsBuilder;
-
-            return true;
-        }
-
-        builder = default!;
-        return false;
+        return DeclareType(candidate, symbol, modifiers, builder, name, index);
     }
 }

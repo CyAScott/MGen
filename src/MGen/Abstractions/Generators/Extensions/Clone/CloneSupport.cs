@@ -6,14 +6,14 @@ namespace MGen.Abstractions.Generators.Extensions.Clone;
 /// <summary>
 /// Implements <see cref="System.ICloneable"/> for classes that require it.
 /// </summary>
-[DebuggerStepThrough, MGenExtension(Id, after: new[] { MembersWithCodeDeclaration.Id }, before: new [] { MemberDeclaration.Id })]
-public class CloneSupport : IHandleOnInit, IHandleOnTypeGenerated
+[DebuggerStepThrough, MGenExtension(Id, before: new [] { MemberDeclaration.Id })]
+public class CloneSupport : IHandleOnInit, IHandleOnTypeCreated
 {
     public const string Id = "MGen." + nameof(CloneSupport);
 
     public void Init(InitArgs args) => args.Context.Add(new CloneCodeGenerator());
 
-    public void TypeGenerated(TypeGeneratedArgs args)
+    public void TypeCreated(TypeCreatedArgs args)
     {
         //todo: inject constructor
     }

@@ -9,9 +9,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MGen.Abstractions.Generators;
 
-public class TypeGenerator : IHaveState
+public class FileGenerator : IHaveState
 {
-    internal static bool TryToCreate(GeneratorContext context, Candidate candidate, out TypeGenerator generator)
+    internal static bool TryToCreate(GeneratorContext context, Candidate candidate, out FileGenerator generator)
     {
         if (candidate.Member is not TypeDeclarationSyntax typeDeclarationSyntax)
         {
@@ -82,7 +82,7 @@ public class TypeGenerator : IHaveState
     }
 
     [DebuggerStepThrough]
-    TypeGenerator(
+    FileGenerator(
         Candidate candidate,
         GenerateAttributeRuntime generateAttribute,
         GeneratorContext generatorContext,

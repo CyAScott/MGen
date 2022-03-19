@@ -12,7 +12,7 @@ public interface IHandleMethodCodeGeneration : IHandleCodeGeneration
 [DebuggerStepThrough]
 public class MethodCodeGenerationArgs
 {
-    public MethodCodeGenerationArgs(GeneratorContext context, TypeGenerator generator, MethodBuilder builder)
+    public MethodCodeGenerationArgs(GeneratorContext context, FileGenerator generator, MethodBuilder builder)
     {
         Builder = builder;
         Context = context;
@@ -23,7 +23,7 @@ public class MethodCodeGenerationArgs
 
     public MethodBuilder Builder { get; }
 
-    public TypeGenerator Generator { get; }
+    public FileGenerator Generator { get; }
 
     /// <summary>
     /// If true then additional invocations of <see cref="IHandleMethodCodeGeneration"/> will be blocked.
@@ -31,7 +31,7 @@ public class MethodCodeGenerationArgs
     public bool Handled { get; set; }
 }
 
-partial class TypeGeneratedArgs
+partial class TypeCreatedArgs
 {
     public IReadOnlyList<IHandleMethodCodeGeneration> MethodCodeGenerators { get; }
 

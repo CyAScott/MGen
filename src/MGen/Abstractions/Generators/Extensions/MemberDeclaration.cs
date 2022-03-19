@@ -11,8 +11,8 @@ namespace MGen.Abstractions.Generators.Extensions;
 /// <summary>
 /// Adds required members to a class declaration based on the interfaces it needs to implement.
 /// </summary>
-[MGenExtension(Id, after: new [] { MembersWithCodeDeclaration.Id }), DebuggerStepThrough]
-public partial class MemberDeclaration : IHandleOnInit, IHandleOnTypeGenerated
+[MGenExtension(Id), DebuggerStepThrough]
+public partial class MemberDeclaration : IHandleOnInit, IHandleOnTypeCreated
 {
     Dictionary<string, MemberGroupInfo> GetMembers(IHaveInheritance item)
     {
@@ -33,10 +33,9 @@ public partial class MemberDeclaration : IHandleOnInit, IHandleOnTypeGenerated
 
     public void Init(InitArgs args) => args.Context.Add(new DefaultCodeGenerator());
 
-    public void TypeGenerated(TypeGeneratedArgs args)
+    public void TypeCreated(TypeCreatedArgs args)
     {
-        if (args.Generator.TryToGetBuilder(out var builder) &&
-            builder is IHaveInheritance item)
+        if (args.Builder is IHaveMembersWithCode builder and IHaveInheritance item)
         {
             var index = builder.Count;
             var members = GetMembers(item);
