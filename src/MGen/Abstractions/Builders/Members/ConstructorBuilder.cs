@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MGen.Abstractions.Builders.Members;
 
-public interface IHaveConstructors : IHaveAName, IHaveMembers
+public interface IHaveConstructors : IHaveTypes
 {
 }
 
@@ -66,6 +66,8 @@ public class ConstructorBuilder : BlockOfCode<IHaveConstructors>,
     public bool ArgumentsEnabled => true;
 
     public string Name => _parent.Name;
+
+    public void GenerateCode() => _parent.Handlers.GenerateCode(this);
 
     readonly IHaveConstructors _parent;
 }

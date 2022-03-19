@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MGen.Abstractions.Attributes;
 using MGen.Abstractions.Builders;
+using MGen.Abstractions.Generators.Extensions.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -11,7 +12,7 @@ namespace MGen.Abstractions.Generators;
 
 public class FileGenerator : IHaveState
 {
-    internal static bool TryToCreate(GeneratorContext context, Candidate candidate, out FileGenerator generator)
+    internal static bool TryToCreate(GeneratorContext context, Candidate candidate, HandlerCollection handlers, out FileGenerator generator)
     {
         if (candidate.Member is not TypeDeclarationSyntax typeDeclarationSyntax)
         {
@@ -75,7 +76,7 @@ public class FileGenerator : IHaveState
             context,
             attributes,
             symbol,
-            new(@namespace),
+            new(@namespace, handlers),
             filePath);
 
         return true;

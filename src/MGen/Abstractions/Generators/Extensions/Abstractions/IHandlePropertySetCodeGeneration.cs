@@ -12,18 +12,15 @@ public interface IHandlePropertySetCodeGeneration : IHandleCodeGeneration
 [DebuggerStepThrough]
 public class PropertySetCodeGenerationArgs
 {
-    public PropertySetCodeGenerationArgs(GeneratorContext context, FileGenerator generator, PropertyBuilder builder)
+    public PropertySetCodeGenerationArgs(GeneratorContext context, PropertyBuilder builder)
     {
         Builder = builder;
         Context = context;
-        Generator = generator;
     }
 
     public GeneratorContext Context { get; }
 
     public PropertyBuilder Builder { get; }
-
-    public FileGenerator Generator { get; }
 
     /// <summary>
     /// If true then additional invocations of <see cref="IHandlePropertySetCodeGeneration"/> will be blocked.
@@ -31,17 +28,17 @@ public class PropertySetCodeGenerationArgs
     public bool Handled { get; set; }
 }
 
-partial class TypeCreatedArgs
+partial class HandlerCollection
 {
-    public IReadOnlyList<IHandlePropertySetCodeGeneration> PropertySetCodeGenerators { get; }
+    readonly IReadOnlyList<IHandlePropertySetCodeGeneration>? _propertySetCodeGenerators;
 
     void GeneratePropertySetCode(PropertyBuilder builder)
     {
-        if (builder.Set.Enabled)
+        if (_context != null && _propertySetCodeGenerators != null && builder.Set.Enabled)
         {
-            var args = new PropertySetCodeGenerationArgs(Context, Generator, builder);
+            var args = new PropertySetCodeGenerationArgs(_context, builder);
 
-            foreach (var generator in PropertySetCodeGenerators)
+            foreach (var generator in _propertySetCodeGenerators)
             {
                 if (generator.Enabled)
                 {

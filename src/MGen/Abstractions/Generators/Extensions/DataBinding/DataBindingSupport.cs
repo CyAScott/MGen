@@ -23,7 +23,7 @@ public class DataBindingSupport : IHandleOnInit, IHandleOnTypeCreated
 
     public void TypeCreated(TypeCreatedArgs args)
     {
-        if (args.Builder is IHaveMembersWithCode and IHaveInheritance item)
+        if (args.Builder is IHaveState type and IHaveInheritance item)
         {
             foreach (var code in item.Inheritance.OfType<CodeWithInheritedTypeSymbol>())
             {
@@ -35,10 +35,10 @@ public class DataBindingSupport : IHandleOnInit, IHandleOnTypeCreated
                         switch (@interface.Name)
                         {
                             case nameof(INotifyPropertyChanged):
-                                args.Generator.State[nameof(INotifyPropertyChanged)] = true;
+                                type.State[nameof(INotifyPropertyChanged)] = true;
                                 break;
                             case nameof(INotifyPropertyChanging):
-                                args.Generator.State[nameof(INotifyPropertyChanging)] = true;
+                                type.State[nameof(INotifyPropertyChanging)] = true;
                                 break;
                         }
                     }
@@ -57,7 +57,8 @@ public class PropertyChangedCodeGenerator : IHandlePropertySetCodeGeneration
 
     public void Handle(PropertySetCodeGenerationArgs args)
     {
-        if (args.Generator.State.ContainsKey(nameof(INotifyPropertyChanged)))
+        
+        if (args.Builder.Parent is IHaveState type && type.State.ContainsKey(nameof(INotifyPropertyChanged)))
         {
             args.Builder.Set
                 .AddLine(new(sb => sb
@@ -75,7 +76,7 @@ public class PropertyChangingCodeGenerator : IHandlePropertySetCodeGeneration
 
     public void Handle(PropertySetCodeGenerationArgs args)
     {
-        if (args.Generator.State.ContainsKey(nameof(INotifyPropertyChanging)))
+        if (args.Builder.Parent is IHaveState type && type.State.ContainsKey(nameof(INotifyPropertyChanging)))
         {
             args.Builder.Set
                 .AddLine(new(sb => sb

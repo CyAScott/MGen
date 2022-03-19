@@ -38,7 +38,7 @@ public class ReadOnlyConstructorSupport : IHandleOnInit, IHandleOnTypeCreated
             {
                 ctor.Modifiers.IsPublic = true;
                 ctor.State[nameof(ReadOnlyConstructorSupport)] = this;
-                args.GenerateCode(ctor);
+                ctor.GenerateCode();
             }
         }
     }

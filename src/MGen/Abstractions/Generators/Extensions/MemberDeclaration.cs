@@ -50,10 +50,10 @@ public partial class MemberDeclaration : IHandleOnInit, IHandleOnTypeCreated
                 switch (builder[index])
                 {
                     case MethodBuilder method:
-                        args.GenerateCode(method);
+                        method.GenerateCode();
                         break;
                     case PropertyBuilder property:
-                        args.GenerateCode(property);
+                        property.GenerateCode();
                         break;
                 }
             }

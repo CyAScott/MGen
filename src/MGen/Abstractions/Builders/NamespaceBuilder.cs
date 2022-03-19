@@ -1,7 +1,9 @@
 ﻿using MGen.Abstractions.Builders.Members;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using MGen.Abstractions.Generators.Extensions.Abstractions;
 
 namespace MGen.Abstractions.Builders;
 
@@ -13,27 +15,31 @@ namespace MGen.Abstractions.Builders;
 [DebuggerStepThrough]
 public class NamespaceBuilder : BlockOfMembers,
     IHaveADeclarationKeyword,
-    IHaveClasses,
     IHaveDelegates,
-    IHaveInterfaces,
-    IHaveRecords,
-    IHaveStructs,
+    IHaveTypes,
     IHaveUsings
 {
     internal NamespaceBuilder(NamespaceBuilder parent, string name)
         : base(parent.IndentLevel + 1)
     {
+        Handlers = parent.Handlers;
         Name = name ?? throw new ArgumentNullException(nameof(name));
         Parent = parent;
         Usings = new(this);
     }
 
-    internal NamespaceBuilder(string name)
+    internal NamespaceBuilder(string name, HandlerCollection? handlers = null)
         : base(0)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
+        Handlers = handlers ?? new();
         Usings = new(this);
     }
+
+    [ExcludeFromCodeCoverage]
+    public Dictionary<string, object> State { get; } = new();
+
+    public HandlerCollection Handlers { get; }
 
     public NamespaceBuilder AddNamespace(string name) => Add(new NamespaceBuilder(this, name));
 

@@ -32,8 +32,6 @@ public class ConversionSupport : IHandleOnInit, IHandleOnTypeCreated
                         @interface.ContainingNamespace.Name == "MGen" &&
                         @interface.Name == InterfaceName)
                     {
-                        args.Generator.State[InterfaceName] = true;
-
                         var ctor = builder.AddConstructor();
 
                         ctor.ArgumentParameters.Add("MGen.ISupportConversion", "obj")
@@ -41,7 +39,7 @@ public class ConversionSupport : IHandleOnInit, IHandleOnTypeCreated
                         ctor.Modifiers.IsProtected = true;
                         ctor.State[InterfaceName] = true;
 
-                        args.GenerateCode(ctor);
+                        ctor.GenerateCode();
 
                         return;
                     }

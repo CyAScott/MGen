@@ -1,8 +1,10 @@
 ﻿using MGen.Abstractions.Builders.Components;
 using MGen.Abstractions.Builders.Members;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using MGen.Abstractions.Generators.Extensions.Abstractions;
 
 namespace MGen.Abstractions.Builders;
 
@@ -13,8 +15,12 @@ public interface IHaveInterfaces : IHaveAName, IHaveMembers
 public static partial class MembersExtensions
 {
     [DebuggerStepThrough]
-    public static InterfaceBuilder AddInterface(this IHaveInterfaces members, string name) => members
-        .Add(new InterfaceBuilder(members, name));
+    public static InterfaceBuilder AddInterface(this IHaveTypes members, string name)
+    {
+        var type = members.Add(new InterfaceBuilder(members, name));
+        members.Handlers.TypeCreated(members, type);
+        return type;
+    }
 }
 
 /// <summary>
@@ -27,23 +33,20 @@ public sealed class InterfaceBuilder : BlockOfMembers,
     IHaveADeclarationKeyword,
     IHaveAStaticConstructor,
     IHaveAttributes,
-    IHaveClasses,
     IHaveDelegates,
     IHaveEvents,
     IHaveGenericParameters,
     IHaveInheritance,
-    IHaveInterfaces,
     IHaveMethods,
-    IHaveProperties,
-    IHaveRecords,
-    IHaveStructs
+    IHaveProperties
 {
-    internal InterfaceBuilder(IHaveInterfaces parent, string name)
+    internal InterfaceBuilder(IHaveTypes parent, string name)
         : base(parent.IndentLevel + 1)
     {
         Attributes = new(this, true);
         XmlComments = new(this);
         GenericParameters = new(this);
+        Handlers = parent.Handlers;
         Inheritance = new(this);
         Modifiers = parent is NamespaceBuilder ?
             new(Modifier.Internal, Modifier.Partial, Modifier.Public, Modifier.Static) :
@@ -57,9 +60,14 @@ public sealed class InterfaceBuilder : BlockOfMembers,
     public Components.Attributes Attributes { get; }
 
     [ExcludeFromCodeCoverage]
-    public IAmIndentedCode Parent { get; }
+    public Dictionary<string, object> State { get; } = new();
 
     public GenericParameters GenericParameters { get; }
+
+    public HandlerCollection Handlers { get; }
+
+    [ExcludeFromCodeCoverage]
+    public IAmIndentedCode Parent { get; }
 
     public Modifiers Modifiers { get; }
 

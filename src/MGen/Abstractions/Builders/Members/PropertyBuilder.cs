@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace MGen.Abstractions.Builders.Members;
 
-public interface IHaveProperties : IHaveAName, IHaveMembers, IHaveModifiers
+public interface IHaveProperties : IHaveModifiers, IHaveTypes
 {
 }
 
@@ -73,6 +73,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
     {
         var property = properties[0];
 
+        _parent = parent;
         ArgumentParameters = new(this, '[', ']', property.IsIndexer ? property.Parameters : null);
         Attributes = new(this, true, property);
         ExplicitDeclaration = new(property);
@@ -81,7 +82,6 @@ public sealed class PropertyBuilder : BlockOfMembers,
             IsPublic = true
         };
         Name = property.Name;
-        Parent = parent;
         PropertySymbols = properties;
         ReturnType = new CodeType(property.Type);
         XmlComments = new(this, property);
@@ -117,6 +117,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
     internal PropertyBuilder(IHaveProperties parent, Code type, string name, bool generateField = true)
         : base(parent.IndentLevel + 1)
     {
+        _parent = parent;
         ArgumentParameters = new(this, '[', ']');
         Attributes = new(this, true);
         ExplicitDeclaration = new();
@@ -130,7 +131,6 @@ public sealed class PropertyBuilder : BlockOfMembers,
             Modifiers = new(Modifier.Internal, Modifier.Private, Modifier.Protected, Modifier.Public, Modifier.Sealed, Modifier.Static);
         }
         Name = name;
-        Parent = parent;
         PropertySymbols = Array.Empty<IPropertySymbol>();
         ReturnType = type;
 
@@ -234,7 +234,8 @@ public sealed class PropertyBuilder : BlockOfMembers,
 
     public FieldBuilder? Field { get; }
 
-    public IAmIndentedCode Parent { get; }
+    public IAmIndentedCode Parent => _parent;
+    readonly IHaveProperties _parent;
 
     public IPropertySymbol[] PropertySymbols { get; }
 
@@ -267,6 +268,8 @@ public sealed class PropertyBuilder : BlockOfMembers,
 
     public string Name { get; }
     string IHaveAName.Name => ArgumentParameters.Count == 0 ? Name : "this";
+
+    public void GenerateCode() => _parent.Handlers.GenerateCode(this);
 }
 
 [DebuggerStepThrough]

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MGen.Abstractions.Builders.Members;
 
-public interface IHaveMethods : IHaveAName, IHaveMembers, IHaveModifiers
+public interface IHaveMethods : IHaveModifiers, IHaveTypes
 {
 }
 
@@ -36,6 +36,7 @@ public class MethodBuilder : BlockOfCode<IHaveMethods>,
     internal MethodBuilder(IHaveMethods parent, IMethodSymbol method)
         : base(parent, parent.IndentLevel + 1)
     {
+        _parent = parent;
         ArgumentParameters = new(this, parameters: method.Parameters);
         Attributes = new(this, true, method);
         ExplicitDeclaration = new(method);
@@ -59,6 +60,7 @@ public class MethodBuilder : BlockOfCode<IHaveMethods>,
     internal MethodBuilder(IHaveMethods parent, Code returnType, string name)
         : base(parent, parent.IndentLevel + 1)
     {
+        _parent = parent;
         ArgumentParameters = new(this);
         Attributes = new(this, true);
         ExplicitDeclaration = new();
@@ -140,4 +142,8 @@ public class MethodBuilder : BlockOfCode<IHaveMethods>,
     public bool ArgumentsEnabled => true;
 
     public string Name { get; }
+
+    public void GenerateCode() => _parent.Handlers.GenerateCode(this);
+
+    readonly IHaveMethods _parent;
 }

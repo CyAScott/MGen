@@ -24,26 +24,20 @@ public class MembersWithCodeDeclaration : IHandleOnFileCreated
         var declaredType = candidate.Types[candidate.Types.Count - 1];
         var name = generator.GenerateAttribute.GetDestinationName(generator.Type);
 
-        var type = DeclareType(candidate, generator.Type, declaredType.Modifiers, builder, name);
-        if (type == null)
+        if (!TryToDeclareType(candidate, generator.Type, declaredType.Modifiers, builder, name))
         {
             args.Context.GeneratorExecutionContext.ReportDiagnostic(Diagnostic.Create(
                 new DiagnosticDescriptor(
-                    "MG_Class_0001",
-                    "Unable to generate class",
-                    "Unable to generate class for: {0}",
+                    "MG_Type_0001",
+                    "Unable to generate type",
+                    "Unable to generate type for: {0}",
                     "CompileError",
                     DiagnosticSeverity.Error,
                     true), generator.Type.Locations.First(), generator.Type.ToCsString()));
         }
-        else
-        {
-            args.CreateType(type);
-        }
     }
 
-    IHaveMembers? DeclareType<T>(Candidate candidate, ITypeSymbol symbol, SyntaxTokenList modifiers, T builder, string name, int index = 0)
-        where T : IHaveClasses, IHaveInterfaces, IHaveRecords, IHaveStructs
+    bool TryToDeclareType(Candidate candidate, ITypeSymbol symbol, SyntaxTokenList modifiers, IHaveTypes builder, string name, int index = 0)
     {
         if (index == candidate.Types.Count - 1)
         {
@@ -51,7 +45,9 @@ public class MembersWithCodeDeclaration : IHandleOnFileCreated
 
             //todo: record
 
-            return builder.AddClass(name, symbol, modifiers);
+            builder.AddClass(name, symbol, modifiers);
+
+            return true;
         }
 
         var type = candidate.Types[index];
@@ -60,29 +56,29 @@ public class MembersWithCodeDeclaration : IHandleOnFileCreated
 
         if (type is ClassDeclarationSyntax)
         {
-            return DeclareType(candidate, symbol, modifiers, type, builder.AddClass(parentName), name, index + 1);
+            return TryToDeclareType(candidate, symbol, modifiers, type, builder.AddClass(parentName), name, index + 1);
         }
 
         if (type is InterfaceDeclarationSyntax)
         {
-            return DeclareType(candidate, symbol, modifiers, type, builder.AddInterface(parentName), name, index + 1);
+            return TryToDeclareType(candidate, symbol, modifiers, type, builder.AddInterface(parentName), name, index + 1);
         }
 
         if (type is RecordDeclarationSyntax)
         {
-            return DeclareType(candidate, symbol, modifiers, type, builder.AddRecord(parentName), name, index + 1);
+            return TryToDeclareType(candidate, symbol, modifiers, type, builder.AddRecord(parentName), name, index + 1);
         }
 
         if (type is StructDeclarationSyntax)
         {
-            return DeclareType(candidate, symbol, modifiers, type, builder.AddStruct(parentName), name, index + 1);
+            return TryToDeclareType(candidate, symbol, modifiers, type, builder.AddStruct(parentName), name, index + 1);
         }
 
-        return null;
+        return false;
     }
 
-    IHaveMembers? DeclareType<T>(Candidate candidate, ITypeSymbol symbol, SyntaxTokenList modifiers, TypeDeclarationSyntax type, T builder, string name, int index = 0)
-        where T : IHaveClasses, IHaveGenericParameters, IHaveInterfaces, IHaveModifiers, IHaveRecords, IHaveStructs
+    bool TryToDeclareType<T>(Candidate candidate, ITypeSymbol symbol, SyntaxTokenList modifiers, TypeDeclarationSyntax type, T builder, string name, int index = 0)
+        where T : IHaveGenericParameters, IHaveModifiers, IHaveTypes
     {
         builder.Modifiers.IsPartial = true;
 
@@ -94,6 +90,6 @@ public class MembersWithCodeDeclaration : IHandleOnFileCreated
             }
         }
 
-        return DeclareType(candidate, symbol, modifiers, builder, name, index);
+        return TryToDeclareType(candidate, symbol, modifiers, builder, name, index);
     }
 }

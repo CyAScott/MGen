@@ -12,18 +12,15 @@ public interface IHandleMethodCodeGeneration : IHandleCodeGeneration
 [DebuggerStepThrough]
 public class MethodCodeGenerationArgs
 {
-    public MethodCodeGenerationArgs(GeneratorContext context, FileGenerator generator, MethodBuilder builder)
+    public MethodCodeGenerationArgs(GeneratorContext context, MethodBuilder builder)
     {
         Builder = builder;
         Context = context;
-        Generator = generator;
     }
 
     public GeneratorContext Context { get; }
 
     public MethodBuilder Builder { get; }
-
-    public FileGenerator Generator { get; }
 
     /// <summary>
     /// If true then additional invocations of <see cref="IHandleMethodCodeGeneration"/> will be blocked.
@@ -31,22 +28,25 @@ public class MethodCodeGenerationArgs
     public bool Handled { get; set; }
 }
 
-partial class TypeCreatedArgs
+partial class HandlerCollection
 {
-    public IReadOnlyList<IHandleMethodCodeGeneration> MethodCodeGenerators { get; }
+    readonly IReadOnlyList<IHandleMethodCodeGeneration>? _methodCodeGenerators;
 
-    public void GenerateCode(MethodBuilder builder)
+    internal void GenerateCode(MethodBuilder builder)
     {
-        var args = new MethodCodeGenerationArgs(Context, Generator, builder);
-
-        foreach (var generator in MethodCodeGenerators)
+        if (_context != null && _methodCodeGenerators != null)
         {
-            if (generator.Enabled)
+            var args = new MethodCodeGenerationArgs(_context, builder);
+
+            foreach (var generator in _methodCodeGenerators)
             {
-                generator.Handle(args);
-                if (args.Handled)
+                if (generator.Enabled)
                 {
-                    break;
+                    generator.Handle(args);
+                    if (args.Handled)
+                    {
+                        break;
+                    }
                 }
             }
         }

@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using MGen.Abstractions.Builders.Members;
+﻿using System.Diagnostics;
+using MGen.Abstractions.Builders;
 
 namespace MGen.Abstractions.Generators.Extensions.Abstractions;
 
@@ -10,33 +9,19 @@ public interface IHandleOnTypeCreated : IAmAMGenExtension
 }
 
 [DebuggerStepThrough]
-public partial class TypeCreatedArgs
+public class TypeCreatedArgs
 {
-    public TypeCreatedArgs(GeneratorContext context, FileGenerator generator,
-        IHaveMembers builder,
-        IReadOnlyList<IHandleConstructorCodeGeneration> constructorCodeGenerators,
-        IReadOnlyList<IHandleMethodCodeGeneration> methodCodeGenerators,
-        IReadOnlyList<IHandlePropertyGetCodeGeneration> propertyGetCodeGenerators,
-        IReadOnlyList<IHandlePropertySetCodeGeneration> propertySetCodeGenerators)
+    public TypeCreatedArgs(GeneratorContext context,
+        IHaveTypes container, IHaveMembers builder)
     {
         Builder = builder;
-        ConstructorCodeGenerators = constructorCodeGenerators;
+        Container = container;
         Context = context;
-        Generator = generator;
-        MethodCodeGenerators = methodCodeGenerators;
-        PropertyGetCodeGenerators = propertyGetCodeGenerators;
-        PropertySetCodeGenerators = propertySetCodeGenerators;
     }
 
     public GeneratorContext Context { get; }
 
-    public FileGenerator Generator { get; }
+    public IHaveTypes Container { get; }
 
     public IHaveMembers Builder { get; }
-
-    public void GenerateCode(PropertyBuilder builder)
-    {
-        GeneratePropertyGetCode(builder);
-        GeneratePropertySetCode(builder);
-    }
 }
