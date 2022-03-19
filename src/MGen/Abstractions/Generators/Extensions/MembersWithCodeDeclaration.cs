@@ -28,7 +28,7 @@ public class MembersWithCodeDeclaration : IHandleOnFileCreated
         {
             args.Context.GeneratorExecutionContext.ReportDiagnostic(Diagnostic.Create(
                 new DiagnosticDescriptor(
-                    "MG_Type_0001",
+                    "MG_Type_0000",
                     "Unable to generate type",
                     "Unable to generate type for: {0}",
                     "CompileError",
