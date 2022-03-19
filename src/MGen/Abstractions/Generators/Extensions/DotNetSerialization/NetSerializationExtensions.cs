@@ -7,8 +7,7 @@ static class NetSerializationExtensions
     public static bool IsSerializable(this ITypeSymbol type)
     {
         if (type.IsValueType ||
-            type.SpecialType == SpecialType.System_String ||
-            type.SpecialType == SpecialType.System_Array)
+            type.SpecialType is SpecialType.System_String or SpecialType.System_Array)
         {
             return true;
         }
