@@ -2,7 +2,6 @@
 
 namespace MGen.Abstractions.Builders;
 
-public interface IHaveTypes : IHaveClasses, IHaveInterfaces, IHaveRecords, IHaveState, IHaveStructs
+public interface IHaveTypes : IHaveClasses, IHaveCodeGenerators, IHaveInterfaces, IHaveRecords, IHaveState, IHaveStructs
 {
-    HandlerCollection Handlers { get; }
 }

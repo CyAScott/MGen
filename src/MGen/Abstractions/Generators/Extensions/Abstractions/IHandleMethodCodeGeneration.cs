@@ -28,7 +28,7 @@ public class MethodCodeGenerationArgs
     public bool Handled { get; set; }
 }
 
-partial class HandlerCollection
+partial class CodeGenerators
 {
     readonly IReadOnlyList<IHandleMethodCodeGeneration>? _methodCodeGenerators;
 

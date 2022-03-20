@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using MGen.Abstractions.Generators.Extensions.Abstractions;
 
 namespace MGen.Abstractions.Builders.Members;
 
@@ -65,6 +66,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
     IHaveArgumentParameters,
     IHaveAttributes,
     IHaveAName,
+    IHaveCodeGenerators,
     IHaveModifiers,
     IHaveState
 {
@@ -227,6 +229,8 @@ public sealed class PropertyBuilder : BlockOfMembers,
 
     public Code ReturnType { get; set; }
 
+    public CodeGenerators CodeGenerators => _parent.CodeGenerators;
+
     [ExcludeFromCodeCoverage]
     public Dictionary<string, object> State { get; } = new();
 
@@ -269,7 +273,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
     public string Name { get; }
     string IHaveAName.Name => ArgumentParameters.Count == 0 ? Name : "this";
 
-    public void GenerateCode() => _parent.Handlers.GenerateCode(this);
+    public void GenerateCode() => _parent.CodeGenerators.GenerateCode(this);
 }
 
 [DebuggerStepThrough]

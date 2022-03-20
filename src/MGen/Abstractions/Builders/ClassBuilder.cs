@@ -19,7 +19,7 @@ public static partial class MembersExtensions
     public static ClassBuilder AddClass(this IHaveTypes members, string name, ITypeSymbol? inheritedTypeSymbol = null, SyntaxTokenList? modifiers = null)
     {
         var type = members.Add(new ClassBuilder(members, name, inheritedTypeSymbol, modifiers));
-        members.Handlers.TypeCreated(members, type);
+        members.CodeGenerators.TypeCreated(members, type);
         return type;
     }
 }
@@ -45,7 +45,7 @@ public sealed class ClassBuilder : BlockOfMembers,
         Attributes = new(this, true, inheritedTypeSymbol);
         XmlComments = new(this, inheritedTypeSymbol);
         GenericParameters = new(this, (inheritedTypeSymbol as INamedTypeSymbol)?.TypeArguments);
-        Handlers = parent.Handlers;
+        CodeGenerators = parent.CodeGenerators;
         Inheritance = new(this, inheritedTypeSymbol);
         Modifiers = parent is NamespaceBuilder ?
             new(modifiers, Modifier.Abstract, Modifier.Internal, Modifier.Partial, Modifier.Public, Modifier.Sealed, Modifier.Static) :
@@ -63,7 +63,7 @@ public sealed class ClassBuilder : BlockOfMembers,
 
     public GenericParameters GenericParameters { get; }
 
-    public HandlerCollection Handlers { get; }
+    public CodeGenerators CodeGenerators { get; }
 
     [ExcludeFromCodeCoverage]
     public IAmIndentedCode Parent { get; }

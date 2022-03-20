@@ -5,13 +5,18 @@ using MGen.Abstractions.Builders.Members;
 
 namespace MGen.Abstractions.Generators.Extensions.Abstractions;
 
+public interface IHaveCodeGenerators
+{
+    CodeGenerators CodeGenerators { get; }
+}
+
 [DebuggerStepThrough]
-public partial class HandlerCollection
+public partial class CodeGenerators
 {
     readonly GeneratorContext? _context;
     readonly IReadOnlyList<IHandleOnTypeCreated>? _typeCreatedHandlers;
 
-    internal HandlerCollection()
+    internal CodeGenerators()
     {
         _constructorCodeGenerators = null;
         _context = null;
@@ -21,7 +26,7 @@ public partial class HandlerCollection
         _typeCreatedHandlers = null;
     }
 
-    internal HandlerCollection(GeneratorContext context,
+    internal CodeGenerators(GeneratorContext context,
         IReadOnlyList<IHandleCodeGeneration> codeGenerators,
         IReadOnlyList<IHandleOnTypeCreated> typeCreatedHandlers)
     {

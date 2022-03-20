@@ -67,7 +67,7 @@ public class ConstructorBuilder : BlockOfCode<IHaveConstructors>,
 
     public string Name => _parent.Name;
 
-    public void GenerateCode() => _parent.Handlers.GenerateCode(this);
+    public void GenerateCode() => _parent.CodeGenerators.GenerateCode(this);
 
     readonly IHaveConstructors _parent;
 }

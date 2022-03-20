@@ -143,7 +143,7 @@ public class MethodBuilder : BlockOfCode<IHaveMethods>,
 
     public string Name { get; }
 
-    public void GenerateCode() => _parent.Handlers.GenerateCode(this);
+    public void GenerateCode() => _parent.CodeGenerators.GenerateCode(this);
 
     readonly IHaveMethods _parent;
 }

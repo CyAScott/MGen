@@ -22,24 +22,24 @@ public class NamespaceBuilder : BlockOfMembers,
     internal NamespaceBuilder(NamespaceBuilder parent, string name)
         : base(parent.IndentLevel + 1)
     {
-        Handlers = parent.Handlers;
+        CodeGenerators = parent.CodeGenerators;
         Name = name ?? throw new ArgumentNullException(nameof(name));
         Parent = parent;
         Usings = new(this);
     }
 
-    internal NamespaceBuilder(string name, HandlerCollection? handlers = null)
+    internal NamespaceBuilder(string name, CodeGenerators? codeGenerators = null)
         : base(0)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
-        Handlers = handlers ?? new();
+        CodeGenerators = codeGenerators ?? new();
         Usings = new(this);
     }
 
     [ExcludeFromCodeCoverage]
     public Dictionary<string, object> State { get; } = new();
 
-    public HandlerCollection Handlers { get; }
+    public CodeGenerators CodeGenerators { get; }
 
     public NamespaceBuilder AddNamespace(string name) => Add(new NamespaceBuilder(this, name));
 

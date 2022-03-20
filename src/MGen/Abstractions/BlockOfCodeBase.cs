@@ -1,22 +1,24 @@
 ﻿using System.Diagnostics;
+using MGen.Abstractions.Generators.Extensions.Abstractions;
 
 namespace MGen.Abstractions;
 
 [DebuggerStepThrough]
-public abstract class BlockOfCodeBase : CodeCollection
+public abstract class BlockOfCodeBase : CodeCollection, IHaveCodeGenerators
 {
-    protected BlockOfCodeBase(int indentLevel)
-        : base(indentLevel)
-    {
-    }
+    protected BlockOfCodeBase(CodeGenerators codeGenerators, int indentLevel)
+        : base(indentLevel) =>
+        CodeGenerators = codeGenerators;
+
+    public CodeGenerators CodeGenerators { get; }
 }
 
 [DebuggerStepThrough]
 public abstract class BlockOfCode<TParent> : BlockOfCodeBase
-    where TParent : IAmIndentedCode
+    where TParent : IAmIndentedCode, IHaveCodeGenerators
 {
     protected BlockOfCode(TParent parent, int? indentLevel = null)
-        : base(indentLevel ?? parent.IndentLevel + 1) =>
+        : base(parent.CodeGenerators, indentLevel ?? parent.IndentLevel + 1) =>
         Parent = parent;
 
     public TParent Parent { get; }

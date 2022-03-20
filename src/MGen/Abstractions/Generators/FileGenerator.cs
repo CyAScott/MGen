@@ -12,7 +12,7 @@ namespace MGen.Abstractions.Generators;
 
 public class FileGenerator : IHaveState
 {
-    internal static bool TryToCreate(GeneratorContext context, Candidate candidate, HandlerCollection handlers, out FileGenerator generator)
+    internal static bool TryToCreate(GeneratorContext context, Candidate candidate, CodeGenerators codeGenerators, out FileGenerator generator)
     {
         if (candidate.Member is not TypeDeclarationSyntax typeDeclarationSyntax)
         {
@@ -76,7 +76,7 @@ public class FileGenerator : IHaveState
             context,
             attributes,
             symbol,
-            new(@namespace, handlers),
+            new(@namespace, codeGenerators),
             filePath);
 
         return true;

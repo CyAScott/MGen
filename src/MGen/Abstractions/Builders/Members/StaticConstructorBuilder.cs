@@ -3,10 +3,11 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using MGen.Abstractions.Builders.Components;
 using System.Text;
+using MGen.Abstractions.Generators.Extensions.Abstractions;
 
 namespace MGen.Abstractions.Builders.Members;
 
-public interface IHaveAStaticConstructor : IHaveAName, IHaveMembers
+public interface IHaveAStaticConstructor : IHaveAName, IHaveCodeGenerators, IHaveMembers
 {
     StaticConstructorBuilder StaticConstructor { get; }
 }

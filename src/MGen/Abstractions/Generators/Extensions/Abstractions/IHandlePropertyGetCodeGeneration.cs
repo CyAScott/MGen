@@ -28,7 +28,7 @@ public class PropertyGetCodeGenerationArgs
     public bool Handled { get; set; }
 }
 
-partial class HandlerCollection
+partial class CodeGenerators
 {
     readonly IReadOnlyList<IHandlePropertyGetCodeGeneration>? _propertyGetCodeGenerators;
 

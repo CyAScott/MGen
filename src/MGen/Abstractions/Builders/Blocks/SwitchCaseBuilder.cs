@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using MGen.Abstractions.Generators.Extensions.Abstractions;
 
 namespace MGen.Abstractions.Builders.Blocks;
 
@@ -20,11 +21,12 @@ public static partial class CodeBlockExtensions
 /// </see>
 /// </summary>
 [DebuggerStepThrough]
-public class SwitchCaseBuilder : IAmIndentedCode, IHaveEnabled
+public class SwitchCaseBuilder : IAmIndentedCode, IHaveCodeGenerators, IHaveEnabled
 {
     internal SwitchCaseBuilder(BlockOfCodeBase parent, Code expression)
     {
         Cases = new(this);
+        CodeGenerators = parent.CodeGenerators;
         Expression = expression ?? throw new ArgumentNullException(nameof(expression));
         IndentLevel = parent.IndentLevel + 1;
     }
@@ -33,6 +35,8 @@ public class SwitchCaseBuilder : IAmIndentedCode, IHaveEnabled
     /// The expression that produces the variable to perform the switch on.
     /// </summary>
     public Code Expression { get; }
+
+    public CodeGenerators CodeGenerators { get; }
 
     public CaseCollection Cases { get; }
 

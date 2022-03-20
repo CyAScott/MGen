@@ -55,11 +55,11 @@ public class GeneratorContext
             extension.Init(initArgs);
         }
 
-        var handlers = new HandlerCollection(this, CodeGenerators, Extensions.OfType<IHandleOnTypeCreated>().ToList());
+        var codeGenerators = new CodeGenerators(this, CodeGenerators, Extensions.OfType<IHandleOnTypeCreated>().ToList());
 
         foreach (var candidate in Candidates)
         {
-            if (FileGenerator.TryToCreate(this, candidate, handlers, out var generator))
+            if (FileGenerator.TryToCreate(this, candidate, codeGenerators, out var generator))
             {
                 _files.Add(generator);
 

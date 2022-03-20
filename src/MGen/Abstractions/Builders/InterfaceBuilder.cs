@@ -18,7 +18,7 @@ public static partial class MembersExtensions
     public static InterfaceBuilder AddInterface(this IHaveTypes members, string name)
     {
         var type = members.Add(new InterfaceBuilder(members, name));
-        members.Handlers.TypeCreated(members, type);
+        members.CodeGenerators.TypeCreated(members, type);
         return type;
     }
 }
@@ -46,7 +46,7 @@ public sealed class InterfaceBuilder : BlockOfMembers,
         Attributes = new(this, true);
         XmlComments = new(this);
         GenericParameters = new(this);
-        Handlers = parent.Handlers;
+        CodeGenerators = parent.CodeGenerators;
         Inheritance = new(this);
         Modifiers = parent is NamespaceBuilder ?
             new(Modifier.Internal, Modifier.Partial, Modifier.Public, Modifier.Static) :
@@ -64,7 +64,7 @@ public sealed class InterfaceBuilder : BlockOfMembers,
 
     public GenericParameters GenericParameters { get; }
 
-    public HandlerCollection Handlers { get; }
+    public CodeGenerators CodeGenerators { get; }
 
     [ExcludeFromCodeCoverage]
     public IAmIndentedCode Parent { get; }
