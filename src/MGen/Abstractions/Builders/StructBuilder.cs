@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using MGen.Abstractions.Generators.Extensions.Abstractions;
+using Microsoft.CodeAnalysis;
 
 namespace MGen.Abstractions.Builders;
 
@@ -15,9 +16,9 @@ public interface IHaveStructs : IHaveAName, IHaveMembers
 public static partial class MembersExtensions
 {
     [DebuggerStepThrough]
-    public static StructBuilder AddStruct(this IHaveTypes members, string name)
+    public static StructBuilder AddStruct(this IHaveTypes members, string name, ITypeSymbol? inheritedTypeSymbol = null, SyntaxTokenList? modifiers = null)
     {
-        var type = members.Add(new StructBuilder(members, name));
+        var type = members.Add(new StructBuilder(members, name, inheritedTypeSymbol, modifiers));
         members.CodeGenerators.TypeCreated(members, type);
         return type;
     }
@@ -38,17 +39,17 @@ public sealed class StructBuilder : BlockOfMembers,
     IHaveInheritance,
     IHaveMembersWithCode
 {
-    internal StructBuilder(IHaveTypes parent, string name)
+    internal StructBuilder(IHaveTypes parent, string name, ITypeSymbol? inheritedTypeSymbol = null, SyntaxTokenList? modifiers = null)
         : base(parent.IndentLevel + 1)
     {
-        Attributes = new(this, true);
-        XmlComments = new(this);
-        GenericParameters = new(this);
+        Attributes = new(this, true, inheritedTypeSymbol);
+        XmlComments = new(this, inheritedTypeSymbol);
+        GenericParameters = new(this, (inheritedTypeSymbol as INamedTypeSymbol)?.TypeArguments);
         CodeGenerators = parent.CodeGenerators;
-        Inheritance = new(this);
+        Inheritance = new(this, inheritedTypeSymbol);
         Modifiers = parent is NamespaceBuilder ?
-            new(Modifier.Internal, Modifier.Partial, Modifier.Public, Modifier.Static) :
-            new(Modifier.Internal, Modifier.Partial, Modifier.Private, Modifier.Protected, Modifier.Public, Modifier.Static);
+            new(modifiers, Modifier.Internal, Modifier.Partial, Modifier.Public, Modifier.Static) :
+            new(modifiers, Modifier.Internal, Modifier.Partial, Modifier.Private, Modifier.Protected, Modifier.Public, Modifier.Static);
         Name = name ?? throw new ArgumentNullException(nameof(name));
         Parent = parent;
         StaticConstructor = new(this)
