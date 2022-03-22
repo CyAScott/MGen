@@ -11,9 +11,9 @@ namespace MGen.Abstractions.Generators.Extensions;
 /// Handles generating code for class declaration.
 /// </summary>
 [MGenExtension(Id)]
-public class MembersWithCodeDeclaration : IHandleOnFileCreated
+public partial class TypeCreator : IHandleOnFileCreated
 {
-    public const string Id = "MGen." + nameof(MembersWithCodeDeclaration);
+    public const string Id = "MGen." + nameof(TypeCreator);
 
     public void FileCreated(FileCreatedArgs args)
     {
@@ -45,7 +45,9 @@ public class MembersWithCodeDeclaration : IHandleOnFileCreated
 
             //todo: record
 
-            builder.AddClass(name, symbol, modifiers);
+            var @class = builder.AddClass(name, symbol, modifiers);
+            _generatedType[@class.GetFullPath()] = @class;
+            @class.GenerateCode();
 
             return true;
         }
@@ -54,27 +56,14 @@ public class MembersWithCodeDeclaration : IHandleOnFileCreated
 
         var parentName = type.Identifier.Text.TrimEnd();
 
-        if (type is ClassDeclarationSyntax)
+        return type switch
         {
-            return TryToDeclareType(candidate, symbol, modifiers, type, builder.AddClass(parentName), name, index + 1);
-        }
-
-        if (type is InterfaceDeclarationSyntax)
-        {
-            return TryToDeclareType(candidate, symbol, modifiers, type, builder.AddInterface(parentName), name, index + 1);
-        }
-
-        if (type is RecordDeclarationSyntax)
-        {
-            return TryToDeclareType(candidate, symbol, modifiers, type, builder.AddRecord(parentName), name, index + 1);
-        }
-
-        if (type is StructDeclarationSyntax)
-        {
-            return TryToDeclareType(candidate, symbol, modifiers, type, builder.AddStruct(parentName), name, index + 1);
-        }
-
-        return false;
+            ClassDeclarationSyntax => TryToDeclareType(candidate, symbol, modifiers, type, builder.AddClass(parentName), name, index + 1),
+            InterfaceDeclarationSyntax => TryToDeclareType(candidate, symbol, modifiers, type, builder.AddInterface(parentName), name, index + 1),
+            RecordDeclarationSyntax => TryToDeclareType(candidate, symbol, modifiers, type, builder.AddRecord(parentName), name, index + 1),
+            StructDeclarationSyntax => TryToDeclareType(candidate, symbol, modifiers, type, builder.AddStruct(parentName), name, index + 1),
+            _ => false
+        };
     }
 
     bool TryToDeclareType<T>(Candidate candidate, ITypeSymbol symbol, SyntaxTokenList modifiers, TypeDeclarationSyntax type, T builder, string name, int index = 0)

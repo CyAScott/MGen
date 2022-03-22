@@ -48,7 +48,7 @@ public class ConversionSupport : IHandleOnInit, IHandleOnTypeCreated
         }
     }
 }
-
+ 
 [MGenExtension(Id, before: new [] { DefaultCodeGenerator.Id }), DebuggerStepThrough]
 public partial class ConversionCodeGenerator : IHandleMethodCodeGeneration
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using NUnit.Framework;
 using static MGen.Abstractions.Generators.Conversion.ConversionSupportTestResults;
 
@@ -35,6 +36,13 @@ class ConversionSupportTestResults
     public ConversionSupportTestResults TryGetValue(params string[] lines)
     {
         _tryGetValue = lines;
+        return this;
+    }
+
+    string[] _secondClass = Array.Empty<string>();
+    public ConversionSupportTestResults SecondClass(params string[] lines)
+    {
+        _secondClass = lines;
         return this;
     }
 
@@ -154,9 +162,16 @@ class ConversionSupportTestResults
 
         lines.AddRange(_ctor);
 
-        lines.AddRange(new []
+        lines.Add("    }");
+
+        if (_secondClass.Any())
         {
-            "    }",
+            lines.Add("");
+            lines.AddRange(_secondClass);
+        }
+
+        lines.AddRange(new[]
+        {
             "}",
             ""
         });
@@ -167,7 +182,201 @@ class ConversionSupportTestResults
 
 class ConversionSupportTests
 {
-    //todo: when nested class generation is supported, test nested class convert type
+    [Test]
+    public void TestConvertNestedType() =>
+        Compile(
+                "using MGen;",
+                "using System;",
+                "",
+                "namespace Example;",
+                "",
+                "[Generate]",
+                "interface IExample : ISupportConversion",
+                "{",
+                "    ISettings Settings { get; set; }",
+                "}",
+                "",
+                "interface ISettings : ISupportConversion",
+                "{",
+                "    string Name { get; set; }",
+                "}")
+            .Properties(
+                "        public Example.ISettings Settings",
+                "        {",
+                "            get",
+                "            {",
+                "                return _settings;",
+                "            }",
+                "            set",
+                "            {",
+                "                _settings = value;",
+                "            }",
+                "        }",
+                "",
+                "        Example.ISettings _settings;")
+            .TryGetValue(
+                "        bool MGen.ISupportConversion.TryGetValue(string name, out object? value)",
+                "        {",
+                "            switch (name)",
+                "            {",
+                "                default:",
+                "                    {",
+                "                        value = null;",
+                "                        return false;",
+                "                    }",
+                "                case \"Settings\":",
+                "                    {",
+                "                        value = _settings;",
+                "                        return true;",
+                "                    }",
+                "            }",
+                "        }")
+            .Ctor(
+                "        protected ExampleModel([System.Diagnostics.CodeAnalysis.NotNullAttribute]MGen.ISupportConversion obj)",
+                "        {",
+                "            if (obj == null) throw new System.ArgumentNullException(\"obj\");",
+                "",
+                "            object? value;",
+                "",
+                "            _settings = !obj.TryGetValue(\"Settings\", out value) || value == null ? default : (Example.ISettings)System.Convert.ChangeType(value, typeof(Example.SettingsModel));",
+                "        }")
+            .SecondClass(
+                "    class SettingsModel : ISettings",
+                "    {",
+                "        public string Name",
+                "        {",
+                "            get",
+                "            {",
+                "                return _name;",
+                "            }",
+                "            set",
+                "            {",
+                "                _name = value;",
+                "            }",
+                "        }",
+                "",
+                "        string _name;",
+                "",
+                "        bool MGen.ISupportConversion.TryGetValue(string name, out object? value)",
+                "        {",
+                "            switch (name)",
+                "            {",
+                "                default:",
+                "                    {",
+                "                        value = null;",
+                "                        return false;",
+                "                    }",
+                "                case \"Name\":",
+                "                    {",
+                "                        value = _name;",
+                "                        return true;",
+                "                    }",
+                "            }",
+                "        }",
+                "",
+                "        System.TypeCode System.IConvertible.GetTypeCode()",
+                "        {",
+                "            return System.TypeCode.Object;",
+                "        }",
+                "",
+                "        bool System.IConvertible.ToBoolean(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        char System.IConvertible.ToChar(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        sbyte System.IConvertible.ToSByte(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        byte System.IConvertible.ToByte(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        short System.IConvertible.ToInt16(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        ushort System.IConvertible.ToUInt16(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        int System.IConvertible.ToInt32(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        uint System.IConvertible.ToUInt32(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        long System.IConvertible.ToInt64(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        ulong System.IConvertible.ToUInt64(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        float System.IConvertible.ToSingle(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        double System.IConvertible.ToDouble(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        decimal System.IConvertible.ToDecimal(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        System.DateTime System.IConvertible.ToDateTime(System.IFormatProvider? provider)",
+                "        {",
+                "            throw new System.NotSupportedException();",
+                "        }",
+                "",
+                "        string System.IConvertible.ToString(System.IFormatProvider? provider)",
+                "        {",
+                "            return ToString()!;",
+                "        }",
+                "",
+                "        object System.IConvertible.ToType(System.Type conversionType, System.IFormatProvider? provider)",
+                "        {",
+                "            foreach (var constructor in conversionType.GetConstructors(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))",
+                "            {",
+                "                var parameters = constructor.GetParameters();",
+                "                if (parameters.Length == 1 && parameters[0].ParameterType.IsAssignableFrom(typeof(MGen.ISupportConversion)))",
+                "                {",
+                "                    return constructor.Invoke(new object[] { this });",
+                "                }",
+                "            }",
+                "            throw new System.InvalidCastException();",
+                "        }",
+                "",
+                "        protected SettingsModel([System.Diagnostics.CodeAnalysis.NotNullAttribute]MGen.ISupportConversion obj)",
+                "        {",
+                "            if (obj == null) throw new System.ArgumentNullException(\"obj\");",
+                "",
+                "            object? value;",
+                "",
+                "            _name = !obj.TryGetValue(\"Name\", out value) ? default : value as string ?? value?.ToString();",
+                "        }",
+                "    }")
+            .ValidateCode();
 
     [Test]
     public void TestConvertRefType() =>

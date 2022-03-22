@@ -59,8 +59,12 @@ public class GeneratorContext
 
         foreach (var candidate in Candidates)
         {
+            codeGenerators.CurrentCandidate = candidate;
+
             if (FileGenerator.TryToCreate(this, candidate, codeGenerators, out var generator))
             {
+                codeGenerators.CurrentFile = generator;
+
                 _files.Add(generator);
 
                 var fileCreatedArgs = new FileCreatedArgs(this, generator);
@@ -70,6 +74,9 @@ public class GeneratorContext
                 }
             }
         }
+
+        codeGenerators.CurrentCandidate = null;
+        codeGenerators.CurrentFile = null;
 
         var filesCreatedArgs = new FilesCreatedArgs(this);
         foreach (var extension in Extensions.OfType<IHandleOnFilesCreated>())

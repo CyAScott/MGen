@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using MGen.Abstractions.Builders.Components;
 using System.Text;
+using MGen.Abstractions.Generators.Extensions.Abstractions;
 
 namespace MGen.Abstractions.Builders.Members;
 
@@ -23,7 +24,8 @@ public class ConstructorBuilder : BlockOfCode<IHaveConstructors>,
     IHaveArgumentParameters,
     IHaveAttributes,
     IHaveModifiers,
-    IHaveState
+    IHaveState,
+    IInvokeCodeGenerators
 {
     internal ConstructorBuilder(IHaveConstructors parent)
         : base(parent, parent.IndentLevel + 1)

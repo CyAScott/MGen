@@ -15,12 +15,8 @@ public interface IHaveInterfaces : IHaveAName, IHaveMembers
 public static partial class MembersExtensions
 {
     [DebuggerStepThrough]
-    public static InterfaceBuilder AddInterface(this IHaveTypes members, string name)
-    {
-        var type = members.Add(new InterfaceBuilder(members, name));
-        members.CodeGenerators.TypeCreated(members, type);
-        return type;
-    }
+    public static InterfaceBuilder AddInterface(this IHaveTypes members, string name) =>
+        members.Add(new InterfaceBuilder(members, name));
 }
 
 /// <summary>
@@ -38,7 +34,8 @@ public sealed class InterfaceBuilder : BlockOfMembers,
     IHaveGenericParameters,
     IHaveInheritance,
     IHaveMethods,
-    IHaveProperties
+    IHaveProperties,
+    IInvokeCodeGenerators
 {
     internal InterfaceBuilder(IHaveTypes parent, string name)
         : base(parent.IndentLevel + 1)
@@ -67,7 +64,7 @@ public sealed class InterfaceBuilder : BlockOfMembers,
     public CodeGenerators CodeGenerators { get; }
 
     [ExcludeFromCodeCoverage]
-    public IAmIndentedCode Parent { get; }
+    public IHaveTypes Parent { get; }
 
     public Modifiers Modifiers { get; }
 
@@ -77,7 +74,24 @@ public sealed class InterfaceBuilder : BlockOfMembers,
 
     public XmlCommentsBuilder XmlComments { get; }
 
+    public string GetFullPath(bool includeSelf = true)
+    {
+        if (!includeSelf)
+        {
+            return Parent.GetFullPath();
+        }
+
+        if (GenericParameters.Count == 0)
+        {
+            return Parent.GetFullPath() + "." + Name;
+        }
+
+        return Parent.GetFullPath() + "." + Name + "<" + string.Join(", ", GenericParameters.Keys) + ">";
+    }
+
     public string Keyword => "interface";
 
     public string Name { get; }
+
+    public void GenerateCode() => Parent.CodeGenerators.TypeCreated(Parent, this);
 }

@@ -52,6 +52,7 @@ public partial class Modifiers : IReadOnlyCollection<Modifier>
     internal Modifiers(SyntaxTokenList? modifiers, params Modifier[] allowedModifiers)
         : this(allowedModifiers)
     {
+        OriginalModifers = modifiers;
         if (modifiers != null)
         {
             foreach (var modifer in modifiers)
@@ -81,6 +82,8 @@ public partial class Modifiers : IReadOnlyCollection<Modifier>
     
     [ExcludeFromCodeCoverage]
     public IEnumerator<Modifier> GetEnumerator() => _modifiers.GetEnumerator();
+
+    public SyntaxTokenList? OriginalModifers { get; }
 
     public bool Add(Modifier modifier)
     {

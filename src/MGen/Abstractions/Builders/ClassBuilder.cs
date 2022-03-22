@@ -16,12 +16,8 @@ public interface IHaveClasses : IHaveAName, IHaveMembers
 public static partial class MembersExtensions
 {
     [DebuggerStepThrough]
-    public static ClassBuilder AddClass(this IHaveTypes members, string name, ITypeSymbol? inheritedTypeSymbol = null, SyntaxTokenList? modifiers = null)
-    {
-        var type = members.Add(new ClassBuilder(members, name, inheritedTypeSymbol, modifiers));
-        members.CodeGenerators.TypeCreated(members, type);
-        return type;
-    }
+    public static ClassBuilder AddClass(this IHaveTypes members, string name, ITypeSymbol? inheritedTypeSymbol = null, SyntaxTokenList? modifiers = null) =>
+        members.Add(new ClassBuilder(members, name, inheritedTypeSymbol, modifiers));
 }
 
 /// <summary>
@@ -37,7 +33,8 @@ public sealed class ClassBuilder : BlockOfMembers,
     IHaveDelegates,
     IHaveGenericParameters,
     IHaveInheritance,
-    IHaveMembersWithCode
+    IHaveMembersWithCode,
+    IInvokeCodeGenerators
 {
     internal ClassBuilder(IHaveTypes parent, string name, ITypeSymbol? inheritedTypeSymbol = null, SyntaxTokenList? modifiers = null)
         : base(parent.IndentLevel + 1)
@@ -66,7 +63,7 @@ public sealed class ClassBuilder : BlockOfMembers,
     public CodeGenerators CodeGenerators { get; }
 
     [ExcludeFromCodeCoverage]
-    public IAmIndentedCode Parent { get; }
+    public IHaveTypes Parent { get; }
 
     public Modifiers Modifiers { get; }
 
@@ -76,7 +73,24 @@ public sealed class ClassBuilder : BlockOfMembers,
 
     public XmlCommentsBuilder XmlComments { get; }
 
+    public string GetFullPath(bool includeSelf = true)
+    {
+        if (!includeSelf)
+        {
+            return Parent.GetFullPath();
+        }
+
+        if (GenericParameters.Count == 0)
+        {
+            return Parent.GetFullPath() + "." + Name;
+        }
+
+        return Parent.GetFullPath() + "." + Name + "<" + string.Join(", ", GenericParameters.Keys) + ">";
+    }
+
     public string Keyword => "class";
 
     public string Name { get; }
+
+    public void GenerateCode() => Parent.CodeGenerators.TypeCreated(Parent, this);
 }

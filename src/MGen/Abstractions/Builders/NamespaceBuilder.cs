@@ -48,6 +48,16 @@ public class NamespaceBuilder : BlockOfMembers,
 
     public UsingsBuilder Usings { get; }
 
+    public string GetFullPath(bool includeSelf = true)
+    {
+        if (!includeSelf)
+        {
+            return Parent?.GetFullPath() ?? string.Empty;
+        }
+
+        return Parent == null ? Name : Parent.GetFullPath() + "." + Name;
+    }
+
     public string Keyword => "namespace";
 
     public string Name { get; }

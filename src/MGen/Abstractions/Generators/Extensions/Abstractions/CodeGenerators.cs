@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using MGen.Abstractions.Builders;
-using MGen.Abstractions.Builders.Members;
 
 namespace MGen.Abstractions.Generators.Extensions.Abstractions;
 
 public interface IHaveCodeGenerators
 {
     CodeGenerators CodeGenerators { get; }
+}
+
+public interface IInvokeCodeGenerators
+{
+    void GenerateCode();
 }
 
 [DebuggerStepThrough]
@@ -21,6 +25,7 @@ public partial class CodeGenerators
         _constructorCodeGenerators = null;
         _context = null;
         _methodCodeGenerators = null;
+        _propertyCodeGeneration = null;
         _propertyGetCodeGenerators = null;
         _propertySetCodeGenerators = null;
         _typeCreatedHandlers = null;
@@ -32,6 +37,7 @@ public partial class CodeGenerators
     {
         var constructorCodeGeneratorCollection = new ExtensionsCollection<IHandleConstructorCodeGeneration>();
         var methodCodeGeneratorCollection = new ExtensionsCollection<IHandleMethodCodeGeneration>();
+        var propertyCodeGeneratorCollection = new ExtensionsCollection<IHandlePropertyCodeGeneration>();
         var propertyGetCodeGeneratorCollection = new ExtensionsCollection<IHandlePropertyGetCodeGeneration>();
         var propertySetCodeGeneratorCollection = new ExtensionsCollection<IHandlePropertySetCodeGeneration>();
 
@@ -45,6 +51,11 @@ public partial class CodeGenerators
             if (codeGenerator is IHandleMethodCodeGeneration methodCodeGenerator)
             {
                 methodCodeGeneratorCollection.Add(methodCodeGenerator);
+            }
+
+            if (codeGenerator is IHandlePropertyCodeGeneration propertyCodeGenerator)
+            {
+                propertyCodeGeneratorCollection.Add(propertyCodeGenerator);
             }
 
             if (codeGenerator is IHandlePropertyGetCodeGeneration propertyGetCodeGenerator)
@@ -61,15 +72,10 @@ public partial class CodeGenerators
         _constructorCodeGenerators = constructorCodeGeneratorCollection.ToSortedList();
         _context = context;
         _methodCodeGenerators = methodCodeGeneratorCollection.ToSortedList();
+        _propertyCodeGeneration = propertyCodeGeneratorCollection.ToSortedList();
         _propertyGetCodeGenerators = propertyGetCodeGeneratorCollection.ToSortedList();
         _propertySetCodeGenerators = propertySetCodeGeneratorCollection.ToSortedList();
         _typeCreatedHandlers = typeCreatedHandlers;
-    }
-
-    internal void GenerateCode(PropertyBuilder builder)
-    {
-        GeneratePropertyGetCode(builder);
-        GeneratePropertySetCode(builder);
     }
 
     internal void TypeCreated(IHaveTypes container, IHaveMembers type)
@@ -84,4 +90,8 @@ public partial class CodeGenerators
             }
         }
     }
+
+    public Candidate? CurrentCandidate { get; internal set; }
+
+    public FileGenerator? CurrentFile { get; internal set; }
 }

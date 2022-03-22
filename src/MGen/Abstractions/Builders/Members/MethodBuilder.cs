@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using MGen.Abstractions.Builders.Components;
 using Microsoft.CodeAnalysis;
 using System.Text;
+using MGen.Abstractions.Generators.Extensions.Abstractions;
 
 namespace MGen.Abstractions.Builders.Members;
 
@@ -31,7 +32,8 @@ public class MethodBuilder : BlockOfCode<IHaveMethods>,
     IHaveAName,
     IHaveGenericParameters,
     IHaveModifiers,
-    IHaveState
+    IHaveState,
+    IInvokeCodeGenerators
 {
     internal MethodBuilder(IHaveMethods parent, IMethodSymbol method)
         : base(parent, parent.IndentLevel + 1)

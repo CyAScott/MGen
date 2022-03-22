@@ -52,12 +52,26 @@ partial class ConversionCodeGenerator : IHandleConstructorCodeGeneration
         }
     }
 
-    void ConvertRefType(ConstructorBuilder ctor, PropertyBuilder property, string fieldName, ITypeSymbol type) =>
-        ctor.AddLine(new(sb => sb
-            .Append(fieldName)
-            .Append(" = !obj.TryGetValue(\"").Append(property.Name).Append("\", out value) || value == null ? default : (")
-            //todo: when nested class generation is supported, pass the generated class type for "type" to the "ChangeType" method
-            .AppendType(type).Append(")System.Convert.ChangeType(value, typeof(").AppendType(type).Append("))")));
+    void ConvertRefType(ConstructorBuilder ctor, PropertyBuilder property, string fieldName, ITypeSymbol type)
+    {
+        ctor.AddLine(new(sb =>
+        {
+            sb
+                .Append(fieldName)
+                .Append(" = !obj.TryGetValue(\"").Append(property.Name)
+                .Append("\", out value) || value == null ? default : (")
+                .AppendType(type).Append(")System.Convert.ChangeType(value, typeof(");
+            if (property.TryToGetNestedType(out var nestedType))
+            {
+                sb.Append(nestedType.GetFullPath());
+            }
+            else
+            {
+                sb.AppendType(type);
+            }
+            sb.Append("))");
+        }));
+    }
 
     void ConvertStringType(ConstructorBuilder ctor, PropertyBuilder property, string fieldName) =>
         ctor.AddLine(new(sb => sb

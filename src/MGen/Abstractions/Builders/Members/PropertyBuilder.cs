@@ -68,14 +68,14 @@ public sealed class PropertyBuilder : BlockOfMembers,
     IHaveAName,
     IHaveCodeGenerators,
     IHaveModifiers,
-    IHaveState
+    IHaveState,
+    IInvokeCodeGenerators
 {
     internal PropertyBuilder(IHaveProperties parent, params IPropertySymbol[] properties)
         : base(parent.IndentLevel + 1)
     {
         var property = properties[0];
-
-        _parent = parent;
+        
         ArgumentParameters = new(this, '[', ']', property.IsIndexer ? property.Parameters : null);
         Attributes = new(this, true, property);
         ExplicitDeclaration = new(property);
@@ -84,6 +84,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
             IsPublic = true
         };
         Name = property.Name;
+        Parent = parent;
         PropertySymbols = properties;
         ReturnType = new CodeType(property.Type);
         XmlComments = new(this, property);
@@ -119,7 +120,6 @@ public sealed class PropertyBuilder : BlockOfMembers,
     internal PropertyBuilder(IHaveProperties parent, Code type, string name, bool generateField = true)
         : base(parent.IndentLevel + 1)
     {
-        _parent = parent;
         ArgumentParameters = new(this, '[', ']');
         Attributes = new(this, true);
         ExplicitDeclaration = new();
@@ -133,6 +133,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
             Modifiers = new(Modifier.Internal, Modifier.Private, Modifier.Protected, Modifier.Public, Modifier.Sealed, Modifier.Static);
         }
         Name = name;
+        Parent = parent;
         PropertySymbols = Array.Empty<IPropertySymbol>();
         ReturnType = type;
 
@@ -229,7 +230,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
 
     public Code ReturnType { get; set; }
 
-    public CodeGenerators CodeGenerators => _parent.CodeGenerators;
+    public CodeGenerators CodeGenerators => Parent.CodeGenerators;
 
     [ExcludeFromCodeCoverage]
     public Dictionary<string, object> State { get; } = new();
@@ -238,8 +239,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
 
     public FieldBuilder? Field { get; }
 
-    public IAmIndentedCode Parent => _parent;
-    readonly IHaveProperties _parent;
+    public IHaveProperties Parent { get; }
 
     public IPropertySymbol[] PropertySymbols { get; }
 
@@ -273,7 +273,7 @@ public sealed class PropertyBuilder : BlockOfMembers,
     public string Name { get; }
     string IHaveAName.Name => ArgumentParameters.Count == 0 ? Name : "this";
 
-    public void GenerateCode() => _parent.CodeGenerators.GenerateCode(this);
+    public void GenerateCode() => Parent.CodeGenerators.GenerateCode(this);
 }
 
 [DebuggerStepThrough]
