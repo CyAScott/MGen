@@ -39,7 +39,7 @@ class LocalVariableBuilderTests
 
         var method = @class.AddMethod("void", "Test");
 
-        method.AddVariable("index", 0);
+        method.AddVariable("var", "index", 0);
 
         @namespace.ToCode().ShouldBe(
             "namespace Test",
